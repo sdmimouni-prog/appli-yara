@@ -2,7 +2,7 @@
 
 Source references:
 - WhatsApp Accueil du jour screenshot provided by the user.
-- WhatsApp login / activation screenshot provided by the user.
+- WhatsApp login screenshot provided by the user.
 
 Prototype checked:
 - Activation
@@ -15,8 +15,9 @@ Prototype checked:
 - Synchronisation
 
 Checks performed:
-- First screen is now the login / terminal activation interface.
-- Activation accepts any temporary code/PIN and enters the app.
+- First screen is now the compact login interface.
+- The activation terminal block has been removed.
+- Login fits in one phone screen with no scroll overflow.
 - PIN keypad accepts digits and can enter the app.
 - Logout is available from the in-app Plus / Synchronisation area and returns to login.
 - Dark premium YARA visual language applied across all routes.

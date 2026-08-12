@@ -4125,9 +4125,10 @@
   --login-gold: #ffbd54;
   --login-cream: #fffaf3;
   --login-border: rgba(255, 138, 31, 0.58);
-  gap: 13px;
+  justify-content: space-between;
+  gap: 9px;
   min-height: 100%;
-  padding: 0 12px calc(var(--mobile-safe-area-height) + 24px);
+  padding: 0 12px calc(var(--mobile-safe-area-height) + 12px);
   background:
     radial-gradient(circle at 18% 0%, rgba(255, 138, 31, 0.15), transparent 27%),
     radial-gradient(circle at 95% 20%, rgba(255, 189, 84, 0.08), transparent 28%),
@@ -4137,7 +4138,7 @@
 
 .login-topbar {
   display: flex;
-  min-height: 64px;
+  min-height: 58px;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
@@ -4146,7 +4147,7 @@
 .login-brand-lockup {
   display: grid;
   min-width: 0;
-  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-columns: 38px minmax(0, 1fr);
   align-items: center;
   gap: 9px;
 }
@@ -4160,20 +4161,20 @@
 }
 
 .login-brand-mark {
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   border-radius: 12px;
 }
 
 .login-brand-mark svg {
-  width: 22px;
-  height: 22px;
+  width: 19px;
+  height: 19px;
 }
 
 .login-brand-lockup strong {
   display: block;
   color: var(--login-gold);
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 900;
   line-height: 0.96;
   letter-spacing: 0;
@@ -4183,7 +4184,7 @@
   display: block;
   margin-top: 3px;
   color: rgba(255, 255, 255, 0.86);
-  font-size: 11px;
+  font-size: 9px;
   font-weight: 900;
   line-height: 1;
   text-transform: uppercase;
@@ -4198,8 +4199,8 @@
 
 .login-theme-toggle {
   display: grid;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   place-items: center;
   border: 1px solid rgba(255, 189, 84, 0.32);
   border-radius: 999px;
@@ -4214,7 +4215,7 @@
 
 .secure-terminal-chip {
   display: inline-flex;
-  min-height: 31px;
+  min-height: 28px;
   align-items: center;
   gap: 5px;
   padding: 0 9px;
@@ -4222,7 +4223,7 @@
   border-radius: 9px;
   background: rgba(28, 87, 20, 0.72);
   color: #85ee7e;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 900;
   line-height: 1;
   white-space: nowrap;
@@ -4240,7 +4241,7 @@
 .login-welcome h1 {
   margin: 0;
   color: #ffffff;
-  font-size: 29px;
+  font-size: 26px;
   font-weight: 900;
   line-height: 1.08;
   letter-spacing: 0;
@@ -4251,20 +4252,20 @@
 }
 
 .login-welcome p {
-  margin: 7px 6px 0;
+  margin: 5px 6px 0;
   color: rgba(255, 255, 255, 0.78);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 1.25;
 }
 
 .rs-profile-card {
   display: grid;
-  min-height: 118px;
-  grid-template-columns: 78px minmax(0, 1fr);
+  min-height: 100px;
+  grid-template-columns: 62px minmax(0, 1fr);
   align-items: center;
   gap: 14px;
-  padding: 14px 16px;
+  padding: 11px 12px;
   border: 1px solid var(--login-border);
   border-radius: 8px;
   background:
@@ -4273,16 +4274,16 @@
 }
 
 .rs-profile-badge {
-  width: 64px;
-  height: 64px;
+  width: 50px;
+  height: 50px;
   border-radius: 999px;
   background: rgba(255, 138, 31, 0.06);
-  box-shadow: 0 0 0 11px rgba(255, 138, 31, 0.045);
+  box-shadow: 0 0 0 8px rgba(255, 138, 31, 0.045);
 }
 
 .rs-profile-badge svg {
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
 }
 
 .rs-profile-copy {
@@ -4301,7 +4302,7 @@
 .rs-profile-copy h2 {
   margin: 0;
   color: #ffffff;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 900;
   line-height: 1.05;
   letter-spacing: 0;
@@ -4309,8 +4310,8 @@
 
 .rs-profile-list {
   display: grid;
-  gap: 5px;
-  margin-top: 9px;
+  gap: 4px;
+  margin-top: 7px;
 }
 
 .rs-profile-list span {
@@ -4319,7 +4320,7 @@
   align-items: center;
   gap: 6px;
   color: rgba(255, 255, 255, 0.84);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   line-height: 1.14;
 }
@@ -4477,7 +4478,7 @@
 }
 
 .pin-login-card {
-  padding: 14px 16px 15px;
+  padding: 13px 16px 14px;
   border: 1px solid var(--login-border);
   border-radius: 8px;
   background:
@@ -4498,7 +4499,7 @@
   display: flex;
   justify-content: center;
   gap: 21px;
-  margin: 15px 0 12px;
+  margin: 13px 0 11px;
 }
 
 .pin-dot {
@@ -4516,15 +4517,15 @@
 
 .pin-keypad {
   display: grid;
-  grid-template-columns: repeat(3, 54px);
+  grid-template-columns: repeat(3, 52px);
   justify-content: center;
-  gap: 9px 29px;
+  gap: 8px 28px;
 }
 
 .pin-key {
   display: grid;
-  width: 54px;
-  height: 54px;
+  width: 52px;
+  height: 52px;
   place-items: center;
   border: 1px solid rgba(255, 138, 31, 0.76);
   border-radius: 999px;
@@ -4553,8 +4554,8 @@
 }
 
 .pin-login-button {
-  min-height: 48px;
-  margin-top: 12px;
+  min-height: 46px;
+  margin-top: 11px;
   border: 1px solid rgba(255, 138, 31, 0.76);
   background: transparent;
   color: var(--login-orange);
@@ -4566,23 +4567,23 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin: 13px 0 0;
+  margin: 10px 0 0;
   color: rgba(255, 255, 255, 0.9);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1;
 }
 
 .fingerprint-note svg {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   color: var(--login-orange);
 }
 
 .login-footer {
   display: grid;
-  gap: 9px;
-  padding: 4px 10px 0;
+  gap: 6px;
+  padding: 0 8px;
   color: rgba(255, 255, 255, 0.88);
   text-align: center;
 }
@@ -4592,17 +4593,17 @@
   min-width: 0;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   margin: 0;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 700;
   line-height: 1.25;
 }
 
 .login-footer svg {
   flex: 0 0 auto;
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
   color: var(--login-orange);
 }
 

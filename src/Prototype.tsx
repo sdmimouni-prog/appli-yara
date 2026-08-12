@@ -488,9 +488,6 @@ function ActivationScreen({
   onToggleTheme: () => void;
   onActivate: () => void;
 }) {
-  const [activationCode, setActivationCode] = useState("");
-  const [pinSetup, setPinSetup] = useState("");
-  const [pinConfirm, setPinConfirm] = useState("");
   const [pinLogin, setPinLogin] = useState("");
   const pinKeys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "fingerprint", "0", "delete"];
 
@@ -549,7 +546,7 @@ function ActivationScreen({
         <h1 id="activation-title">
           Bienvenue chez <span>YARA</span>
         </h1>
-        <p>Activez votre terminal avant de commencer votre tournée.</p>
+        <p>Connectez-vous pour commencer votre tournée.</p>
       </section>
 
       <section className="rs-profile-card" aria-label="Responsable de secteur">
@@ -569,76 +566,6 @@ function ActivationScreen({
           </div>
         </div>
       </section>
-
-      <form
-        className="terminal-activation-card"
-        aria-label="Activation du terminal"
-        onSubmit={(event) => {
-          event.preventDefault();
-          submitLogin();
-        }}
-      >
-        <div className="terminal-card-title">
-          <CheckCircledIcon />
-          <h2>Activation du terminal</h2>
-        </div>
-
-        <label className="terminal-input-row" htmlFor="activation-code">
-          <ValueIcon aria-hidden="true" />
-          <KeyboardInput
-            id="activation-code"
-            aria-label="Code d'activation temporaire"
-            placeholder="Code d'activation temporaire"
-            value={activationCode}
-            onChange={(event) => setActivationCode(event.currentTarget.value)}
-            data-testid="activation-code"
-          />
-          <CrossCircledIcon aria-hidden="true" />
-        </label>
-
-        <label className="terminal-input-row" htmlFor="pin-setup">
-          <GearIcon aria-hidden="true" />
-          <KeyboardInput
-            id="pin-setup"
-            aria-label="Créer mon code PIN"
-            placeholder="Créer mon code PIN"
-            value={pinSetup}
-            onChange={(event) => setPinSetup(event.currentTarget.value)}
-            inputMode="numeric"
-            data-testid="pin-setup"
-          />
-          <CrossCircledIcon aria-hidden="true" />
-        </label>
-
-        <label className="terminal-input-row" htmlFor="pin-confirm">
-          <GearIcon aria-hidden="true" />
-          <KeyboardInput
-            id="pin-confirm"
-            aria-label="Confirmer mon code PIN"
-            placeholder="Confirmer mon code PIN"
-            value={pinConfirm}
-            onChange={(event) => setPinConfirm(event.currentTarget.value)}
-            inputMode="numeric"
-            data-testid="pin-confirm"
-          />
-          <CrossCircledIcon aria-hidden="true" />
-        </label>
-
-        <p className="terminal-link-note">
-          <GearIcon />
-          Ce terminal sera lié à votre profil RS et à votre véhicule.
-        </p>
-
-        <button className="terminal-activate-button" type="submit" data-scroll-drag="ignore">
-          Activer ce terminal
-        </button>
-      </form>
-
-      <div className="terminal-divider" aria-hidden="true">
-        <span />
-        <p>Terminal déjà activé ?</p>
-        <span />
-      </div>
 
       <section className="pin-login-card" aria-label="Connexion par code PIN">
         <h2>Entrez votre code PIN</h2>
