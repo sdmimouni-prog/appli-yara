@@ -49,9 +49,12 @@ type ScreenName =
   | "catalogue"
   | "panier"
   | "livraison"
+  | "historique"
   | "synchronisation";
 
 const yaraLogoLockup = "/assets/yara/logo-yara-lockup.png";
+
+type SalesHistoryFilter = "all" | "today" | "receipts" | "canceled";
 
 const activationRows = [
   {
@@ -318,6 +321,152 @@ const pendingSyncItems = [
   },
 ];
 
+const salesHistoryFilters = [
+  { key: "all", label: "Toutes", count: 9 },
+  { key: "today", label: "Aujourd'hui", count: 6 },
+  { key: "receipts", label: "Reçus", count: 7 },
+  { key: "canceled", label: "Annulations", count: 2 },
+] satisfies Array<{
+  key: SalesHistoryFilter;
+  label: string;
+  count: number;
+}>;
+
+const salesHistoryItems = [
+  {
+    id: "VNT-20260812-014",
+    date: "12/08/2026",
+    time: "12:46",
+    client: "Épicerie Al Manar",
+    locality: "Ain Sebaâ",
+    amount: "330 DH",
+    payment: "Espèces",
+    products: "Blue VIP x2 · Boous x1 · Miniatures Blue VIP x3",
+    receipt: "RC-2026-0812-014",
+    status: "Reçu généré",
+    type: "receipt",
+  },
+  {
+    id: "VNT-20260812-013",
+    date: "12/08/2026",
+    time: "11:58",
+    client: "Bazar Saada",
+    locality: "Hay Mohammadi",
+    amount: "210 DH",
+    payment: "Espèces",
+    products: "Monsieur x1 · Blue VIP x2",
+    receipt: "RC-2026-0812-013",
+    status: "Reçu envoyé",
+    type: "receipt",
+  },
+  {
+    id: "VNT-20260812-012",
+    date: "12/08/2026",
+    time: "10:34",
+    client: "Supérette Al Amal",
+    locality: "Sidi Moumen",
+    amount: "480 DH",
+    payment: "Chèque",
+    products: "Miniatures Al Anama x4 · Boous x4",
+    receipt: "RC-2026-0812-012",
+    status: "À synchroniser",
+    type: "sale",
+  },
+  {
+    id: "ANN-20260812-002",
+    date: "12/08/2026",
+    time: "09:50",
+    client: "Kiosque El Fath",
+    locality: "Roches Noires",
+    amount: "-120 DH",
+    payment: "Annulation",
+    products: "Blue VIP x1 · Boous x1",
+    receipt: "Aucun reçu",
+    reason: "Client absent à la livraison",
+    status: "Annulée",
+    type: "canceled",
+  },
+  {
+    id: "VNT-20260812-011",
+    date: "12/08/2026",
+    time: "09:12",
+    client: "Épicerie Badr",
+    locality: "Oulfa",
+    amount: "560 DH",
+    payment: "Espèces",
+    products: "Monsieur x2 · Miniatures Blue VIP x5",
+    receipt: "RC-2026-0812-011",
+    status: "Reçu généré",
+    type: "receipt",
+  },
+  {
+    id: "VNT-20260811-010",
+    date: "11/08/2026",
+    time: "17:22",
+    client: "Parfumerie Noor",
+    locality: "Casa Centre",
+    amount: "1 240 DH",
+    payment: "Espèces",
+    products: "Mix S/K/V · 18 unités",
+    receipt: "RC-2026-0811-010",
+    status: "Synchronisée",
+    type: "receipt",
+  },
+  {
+    id: "ANN-20260811-001",
+    date: "11/08/2026",
+    time: "15:08",
+    client: "Market Salam",
+    locality: "Ain Sebaâ",
+    amount: "-300 DH",
+    payment: "Annulation",
+    products: "Monsieur x3 · Blue VIP x1",
+    receipt: "Reçu annulé RC-2026-0811-008",
+    reason: "Erreur de quantité saisie",
+    status: "Annulée",
+    type: "canceled",
+  },
+  {
+    id: "VNT-20260811-009",
+    date: "11/08/2026",
+    time: "13:40",
+    client: "Épicerie Al Manar",
+    locality: "Ain Sebaâ",
+    amount: "2 450 DH",
+    payment: "Chèque",
+    products: "Commande complète · 42 unités",
+    receipt: "RC-2026-0811-009",
+    status: "Synchronisée",
+    type: "receipt",
+  },
+  {
+    id: "VNT-20260810-006",
+    date: "10/08/2026",
+    time: "16:05",
+    client: "Bazar Atlas",
+    locality: "Tit Mellil",
+    amount: "980 DH",
+    payment: "Espèces",
+    products: "Blue VIP x8 · Miniatures Al Anama x5",
+    receipt: "RC-2026-0810-006",
+    status: "Synchronisée",
+    type: "receipt",
+  },
+] satisfies Array<{
+  id: string;
+  date: string;
+  time: string;
+  client: string;
+  locality: string;
+  amount: string;
+  payment: string;
+  products: string;
+  receipt: string;
+  reason?: string;
+  status: string;
+  type: "sale" | "receipt" | "canceled";
+}>;
+
 function parseDhAmount(value: string) {
   return Number(value.replace(/\D/g, "")) || 0;
 }
@@ -341,6 +490,7 @@ export default function Prototype() {
       initialScreen === "catalogue" ||
       initialScreen === "panier" ||
       initialScreen === "livraison" ||
+      initialScreen === "historique" ||
       initialScreen === "synchronisation"
     ) {
       return initialScreen;
@@ -383,7 +533,13 @@ export default function Prototype() {
   const visibleScreen = isAuthenticated ? screen : "activation";
   const hasBottomNavigation = isAuthenticated && visibleScreen !== "activation";
   const activeBottomScreen =
-    visibleScreen === "client" ? "clients" : visibleScreen === "livraison" ? "panier" : visibleScreen;
+    visibleScreen === "client"
+      ? "clients"
+      : visibleScreen === "livraison"
+        ? "panier"
+        : visibleScreen === "historique"
+          ? "synchronisation"
+          : visibleScreen;
 
   return (
     <div className={`seller-app-shell seller-screen theme-${theme} ${hasBottomNavigation ? "seller-app-shell-with-nav" : ""}`}>
@@ -425,6 +581,13 @@ export default function Prototype() {
           />
         ) : visibleScreen === "livraison" ? (
           <DeliveryPaymentScreen
+            theme={theme}
+            themeLabel={themeLabel}
+            onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
+            onNavigate={showScreen}
+          />
+        ) : visibleScreen === "historique" ? (
+          <SalesHistoryScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
@@ -1488,6 +1651,183 @@ function DeliveryPaymentScreen({
   );
 }
 
+function SalesHistoryScreen({
+  theme,
+  themeLabel,
+  onToggleTheme,
+  onNavigate,
+}: {
+  theme: "light" | "dark";
+  themeLabel: string;
+  onToggleTheme: () => void;
+  onNavigate: (screen: ScreenName) => void;
+}) {
+  const [activeFilter, setActiveFilter] = useState<SalesHistoryFilter>("all");
+  const filteredItems = salesHistoryItems.filter((item) => {
+    if (activeFilter === "today") return item.date === "12/08/2026";
+    if (activeFilter === "receipts") return item.type === "receipt";
+    if (activeFilter === "canceled") return item.type === "canceled";
+    return true;
+  });
+  const todaySalesCount = salesHistoryItems.filter((item) => item.date === "12/08/2026" && item.type !== "canceled").length;
+  const receiptCount = salesHistoryItems.filter((item) => item.type === "receipt").length;
+  const canceledCount = salesHistoryItems.filter((item) => item.type === "canceled").length;
+
+  return (
+    <main className="history-shell" aria-label="Historique ventes">
+      <header className="detail-header">
+        <button
+          className="header-icon-button"
+          type="button"
+          aria-label="Retour à Plus"
+          onClick={() => onNavigate("synchronisation")}
+          data-scroll-drag="ignore"
+        >
+          <ArrowLeftIcon />
+        </button>
+        <img className="detail-logo" src={yaraLogoLockup} alt="YARA" draggable={false} />
+        <div className="header-actions">
+          <button
+            className="header-icon-button"
+            type="button"
+            aria-label={themeLabel}
+            onClick={onToggleTheme}
+            data-scroll-drag="ignore"
+          >
+            {theme === "light" ? <MoonIcon /> : <SunIcon />}
+          </button>
+          <button className="header-icon-button" type="button" aria-label="Rechercher une vente" data-scroll-drag="ignore">
+            <MagnifyingGlassIcon />
+          </button>
+        </div>
+      </header>
+
+      <section className="history-content">
+        <div className="history-topline">
+          <div>
+            <p className="eyebrow">Journal commercial</p>
+            <h1>Historique ventes</h1>
+            <p className="assignment-summary">Karim Bennani · Casa Nord</p>
+          </div>
+          <span className="history-date-chip">
+            <CalendarIcon />
+            12 août
+          </span>
+        </div>
+
+        <section className="history-hero-card" aria-label="Résumé des ventes">
+          <span className="history-hero-icon" aria-hidden="true">
+            <FileTextIcon />
+          </span>
+          <div>
+            <span className="detail-eyebrow">Aujourd'hui</span>
+            <strong>19 650 DH</strong>
+            <p>{todaySalesCount} ventes validées · {receiptCount} reçus disponibles · {canceledCount} annulations</p>
+          </div>
+        </section>
+
+        <section className="history-stat-grid" aria-label="Indicateurs historique">
+          <article className="history-stat-card history-stat-sales">
+            <CheckCircledIcon />
+            <strong>{todaySalesCount}</strong>
+            <span>Ventes du jour</span>
+          </article>
+          <article className="history-stat-card history-stat-receipts">
+            <FileTextIcon />
+            <strong>{receiptCount}</strong>
+            <span>Reçus émis</span>
+          </article>
+          <article className="history-stat-card history-stat-canceled">
+            <CrossCircledIcon />
+            <strong>{canceledCount}</strong>
+            <span>Annulations</span>
+          </article>
+        </section>
+
+        <div className="history-filter-row" aria-label="Filtres historique ventes">
+          {salesHistoryFilters.map((filter) => (
+            <button
+              className={`history-filter ${filter.key === activeFilter ? "history-filter-active" : ""}`}
+              type="button"
+              key={filter.key}
+              onClick={() => setActiveFilter(filter.key)}
+              data-scroll-drag="ignore"
+            >
+              {filter.label}
+              <strong>{filter.count}</strong>
+            </button>
+          ))}
+        </div>
+
+        <section className="history-list-card" aria-label="Liste des ventes">
+          <div className="history-list-title">
+            <div>
+              <span className="detail-eyebrow">Transactions</span>
+              <h2>{filteredItems.length} opération(s)</h2>
+            </div>
+            <em>{activeFilter === "all" ? "Toutes" : salesHistoryFilters.find((filter) => filter.key === activeFilter)?.label}</em>
+          </div>
+
+          <div className="history-sale-list">
+            {filteredItems.map((item) => {
+              const isCanceled = item.type === "canceled";
+              const isReceipt = item.type === "receipt";
+              const StatusIcon = isCanceled ? CrossCircledIcon : isReceipt ? FileTextIcon : CheckCircledIcon;
+
+              return (
+                <article className={`history-sale-card history-sale-${item.type}`} key={item.id}>
+                  <div className="history-sale-head">
+                    <span className="history-sale-icon" aria-hidden="true">
+                      <StatusIcon />
+                    </span>
+                    <div>
+                      <span>{item.id}</span>
+                      <h2>{item.client}</h2>
+                      <p>{item.locality} · {item.time}</p>
+                    </div>
+                    <strong>{item.amount}</strong>
+                  </div>
+
+                  <div className="history-sale-products">
+                    <span>Produits</span>
+                    <p>{item.products}</p>
+                  </div>
+
+                  <div className="history-sale-meta">
+                    <span>
+                      <CardStackIcon />
+                      {item.payment}
+                    </span>
+                    <span>
+                      <FileTextIcon />
+                      {item.receipt}
+                    </span>
+                  </div>
+
+                  {item.reason ? (
+                    <div className="history-cancel-reason">
+                      <ExclamationTriangleIcon />
+                      {item.reason}
+                    </div>
+                  ) : null}
+
+                  <div className="history-sale-footer">
+                    <em>{item.status}</em>
+                    <button type="button" data-scroll-drag="ignore">
+                      {isCanceled ? "Voir annulation" : "Voir reçu"}
+                      <ChevronRightIcon />
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      </section>
+    </main>
+  );
+}
+
 function SynchronisationScreen({
   theme,
   themeLabel,
@@ -1549,6 +1889,17 @@ function SynchronisationScreen({
             </article>
           ))}
         </section>
+
+        <button className="sync-history-shortcut" type="button" onClick={() => onNavigate("historique")} data-scroll-drag="ignore">
+          <span className="sync-history-icon" aria-hidden="true">
+            <FileTextIcon />
+          </span>
+          <span>
+            <strong>Historique ventes</strong>
+            <small>Ventes faites, reçus et annulations</small>
+          </span>
+          <ChevronRightIcon />
+        </button>
 
         <section className="sync-queue-card" aria-label="Opérations en attente">
           <div className="sync-section-title">

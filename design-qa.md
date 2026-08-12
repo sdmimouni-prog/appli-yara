@@ -13,6 +13,7 @@ Prototype checked:
 - Catalogue / Produits
 - Panier / Vente
 - Livraison + Encaissement
+- Historique ventes
 - Synchronisation
 
 Checks performed:
@@ -29,6 +30,8 @@ Checks performed:
 - Accueil "Prochain niveau" has a gamified glow: card pulse, shine sweep, rail comet, active-level halo.
 - Accueil content remains scrollable when the game progression card needs more breathing room.
 - Official cropped YARA logo asset is used in login, Accueil, and app headers.
+- Historique ventes shows completed sales, receipts, canceled sales, payment mode, receipt references, and cancellation reasons.
+- Historique ventes is reachable from Plus / Synchronisation and keeps Plus active in the bottom navigation.
 - Main CTAs remain dominant and readable.
 - Static data remains visible in the Pixel 10 mobile frame.
 - Runtime integrity and production build passed.
@@ -38,6 +41,7 @@ Build verification:
 - Mobile runtime integrity check passed.
 - Browser measurement passed: level animations active, Accueil scroll enabled, bottom navigation fixed.
 - Browser measurement passed: official YARA logo loads from `/assets/yara/logo-yara-lockup.png` on login and Accueil.
+- Browser flow passed: login -> Plus -> Historique ventes -> Annulations filter.
 - Browser flow passed: login -> Accueil -> Synchronisation -> logout -> login.
 - Cart flow passed: login -> Panier -> quantity update -> client change -> confirmation -> empty cart.
 
