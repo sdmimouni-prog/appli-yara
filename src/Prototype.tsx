@@ -52,7 +52,21 @@ type ScreenName =
   | "historique"
   | "synchronisation";
 
+type SaleCycleStep = "commande" | "livraison" | "encaissement" | "recu";
+type DeliveryCycleState = "livraison" | "encaissement" | "recu" | "termine";
+
 const yaraLogoLockup = "/assets/yara/logo-yara-lockup.png";
+
+const saleCycleSteps = [
+  { key: "commande", label: "Commande", icon: CardStackIcon },
+  { key: "livraison", label: "Livraison", icon: RocketIcon },
+  { key: "encaissement", label: "Encaissement", icon: ValueIcon },
+  { key: "recu", label: "Reçu", icon: FileTextIcon },
+] satisfies Array<{
+  key: SaleCycleStep;
+  label: string;
+  icon: typeof CardStackIcon;
+}>;
 
 type SalesHistoryFilter = "all" | "today" | "receipts" | "canceled";
 
@@ -1355,9 +1369,9 @@ function CartScreen({
       <section className="cart-content">
         <div className="cart-topline">
           <div>
-            <p className="eyebrow">Vente en cours</p>
-            <h1>Panier / Vente</h1>
-            <p className="assignment-summary">Dernière vérification avant validation</p>
+            <p className="eyebrow">Étape 1 sur 4</p>
+            <h1>Commande</h1>
+            <p className="assignment-summary">Préparez la commande avant livraison</p>
           </div>
           <button
             className="cart-trash-button"
@@ -1387,6 +1401,26 @@ function CartScreen({
           >
             Changer
           </button>
+        </section>
+
+        <section className="sale-cycle-card" aria-label="Cycle commande livraison encaissement reçu">
+          <div className="sale-cycle-title">
+            <span className="detail-eyebrow">Cycle de vente</span>
+            <strong>Commande → Livraison → Encaissement → Reçu</strong>
+          </div>
+          <div className="sale-cycle-steps">
+            {saleCycleSteps.map(({ key, label, icon: Icon }) => (
+              <span
+                className={`sale-cycle-step ${
+                  key === "commande" ? "sale-cycle-step-active" : "sale-cycle-step-pending"
+                }`}
+                key={key}
+              >
+                <Icon />
+                {label}
+              </span>
+            ))}
+          </div>
         </section>
 
         <section className="cart-items" aria-label="Produits ajoutés">
@@ -1486,7 +1520,7 @@ function CartScreen({
           disabled={!hasItems}
           data-scroll-drag="ignore"
         >
-          Confirmer vente
+          Enregistrer commande
         </button>
       </section>
     </main>
@@ -1504,6 +1538,50 @@ function DeliveryPaymentScreen({
   onToggleTheme: () => void;
   onNavigate: (screen: ScreenName) => void;
 }) {
+  const [cycleState, setCycleState] = useState<DeliveryCycleState>("livraison");
+  const currentCycleStep: SaleCycleStep = cycleState === "termine" ? "recu" : cycleState;
+  const currentCycleIndex = saleCycleSteps.findIndex((step) => step.key === currentCycleStep);
+  const deliveryDone = cycleState === "encaissement" || cycleState === "recu" || cycleState === "termine";
+  const paymentDone = cycleState === "recu" || cycleState === "termine";
+  const receiptDone = cycleState === "termine";
+
+  function getCycleStatus(step: SaleCycleStep) {
+    const stepIndex = saleCycleSteps.findIndex((item) => item.key === step);
+    if (step === "commande") return "done";
+    if (cycleState === "termine") return "done";
+    if (stepIndex < currentCycleIndex) return "done";
+    if (stepIndex === currentCycleIndex) return "current";
+    return "pending";
+  }
+
+  function handleCycleAction() {
+    if (cycleState === "livraison") {
+      setCycleState("encaissement");
+      return;
+    }
+
+    if (cycleState === "encaissement") {
+      setCycleState("recu");
+      return;
+    }
+
+    if (cycleState === "recu") {
+      setCycleState("termine");
+      return;
+    }
+
+    onNavigate("historique");
+  }
+
+  const primaryActionLabel =
+    cycleState === "livraison"
+      ? "Confirmer livraison"
+      : cycleState === "encaissement"
+        ? "Valider encaissement exact"
+        : cycleState === "recu"
+          ? "Générer reçu"
+          : "Voir historique ventes";
+
   return (
     <main className="delivery-shell" aria-label="Livraison et encaissement">
       <header className="detail-header">
@@ -1536,8 +1614,8 @@ function DeliveryPaymentScreen({
       <section className="delivery-content">
         <div className="delivery-topline">
           <div>
-            <p className="eyebrow">Validation finale</p>
-            <h1>Livraison + Encaissement</h1>
+            <p className="eyebrow">Cycle de vente</p>
+            <h1>Commande à reçu</h1>
             <p className="assignment-summary">CMD-20260812-014 · Épicerie Al Manar</p>
           </div>
           <span className="connection-chip delivery-online-chip">
@@ -1546,14 +1624,29 @@ function DeliveryPaymentScreen({
           </span>
         </div>
 
+        <section className="cycle-progress-card" aria-label="Progression commande livraison encaissement reçu">
+          {saleCycleSteps.map(({ key, label, icon: Icon }) => {
+            const status = getCycleStatus(key);
+
+            return (
+              <article className={`cycle-progress-step cycle-progress-${status}`} key={key}>
+                <span aria-hidden="true">
+                  {status === "done" ? <CheckCircledIcon /> : <Icon />}
+                </span>
+                <strong>{label}</strong>
+              </article>
+            );
+          })}
+        </section>
+
         <section className="delivery-summary-card" aria-label="Résumé vente">
           <div className="delivery-summary-head">
             <span className="delivery-summary-icon" aria-hidden="true">
               <CardStackIcon />
             </span>
             <div>
-              <span>Résumé vente</span>
-              <strong>3 produits validés</strong>
+              <span>Commande enregistrée</span>
+              <strong>CMD-20260812-014 · 3 produits</strong>
             </div>
             <em>330 DH</em>
           </div>
@@ -1568,17 +1661,31 @@ function DeliveryPaymentScreen({
           </div>
         </section>
 
-        <section className="delivery-confirmation-card" aria-label="Confirmation livraison">
+        <section
+          className={`delivery-confirmation-card cycle-stage-card ${
+            deliveryDone ? "cycle-stage-done" : "cycle-stage-current"
+          }`}
+          aria-label="Confirmation livraison"
+        >
           <span className="delivery-confirmation-icon" aria-hidden="true">
-            <CheckCircledIcon />
+            {deliveryDone ? <CheckCircledIcon /> : <RocketIcon />}
           </span>
           <div>
-            <strong>Livraison confirmée</strong>
-            <p>Commande remise au client à Ain Sebaâ · 12:45</p>
+            <strong>{deliveryDone ? "Livraison confirmée" : "Livraison à confirmer"}</strong>
+            <p>
+              {deliveryDone
+                ? "Commande remise au client à Ain Sebaâ · 12:45."
+                : "Remettez les produits au client avant de passer à l'encaissement."}
+            </p>
           </div>
         </section>
 
-        <section className="payment-check-card" aria-label="Validation de l'encaissement">
+        <section
+          className={`payment-check-card cycle-stage-card ${
+            !deliveryDone ? "cycle-stage-locked" : paymentDone ? "cycle-stage-done" : "cycle-stage-current"
+          }`}
+          aria-label="Validation de l'encaissement"
+        >
           <div className="amount-grid">
             <article className="amount-card amount-card-expected">
               <span>Montant TTC attendu</span>
@@ -1592,6 +1699,7 @@ function DeliveryPaymentScreen({
                   aria-label="Montant encaissé"
                   defaultValue="330"
                   inputMode="numeric"
+                  disabled={!deliveryDone || paymentDone}
                   data-testid="received-amount"
                 />
                 <em>DH</em>
@@ -1610,41 +1718,65 @@ function DeliveryPaymentScreen({
             <ChevronRightIcon />
           </button>
 
-          <div className="exact-amount-message" role="status">
-            <CheckCircledIcon />
-            <span>Le montant encaissé doit être exact : 330 DH attendus, 330 DH reçus.</span>
-          </div>
+          {!deliveryDone ? (
+            <div className="cycle-locked-message" role="status">
+              <ExclamationTriangleIcon />
+              <span>Confirmez d'abord la livraison pour ouvrir l'encaissement.</span>
+            </div>
+          ) : paymentDone ? (
+            <div className="exact-amount-message" role="status">
+              <CheckCircledIcon />
+              <span>Encaissement validé : 330 DH attendus, 330 DH reçus.</span>
+            </div>
+          ) : (
+            <div className="cycle-active-message" role="status">
+              <ValueIcon />
+              <span>Le montant encaissé doit être exact avant de générer le reçu.</span>
+            </div>
+          )}
         </section>
 
-        <section className="receipt-preview-card" aria-label="Aperçu du reçu numéroté">
+        <section
+          className={`receipt-preview-card cycle-stage-card ${
+            !paymentDone ? "cycle-stage-locked" : receiptDone ? "cycle-stage-done" : "cycle-stage-current"
+          }`}
+          aria-label="Aperçu du reçu numéroté"
+        >
           <div className="receipt-preview-head">
             <span className="receipt-preview-icon" aria-hidden="true">
-              <FileTextIcon />
+              {receiptDone ? <CheckCircledIcon /> : <FileTextIcon />}
             </span>
             <div>
-              <span>Aperçu du reçu</span>
-              <strong>Reçu N° RC-2026-0812-014</strong>
+              <span>{receiptDone ? "Reçu généré" : paymentDone ? "Reçu à générer" : "Reçu verrouillé"}</span>
+              <strong>{paymentDone ? "Reçu N° RC-2026-0812-014" : "Disponible après encaissement"}</strong>
             </div>
-            <em>12:46</em>
+            <em>{receiptDone ? "12:46" : paymentDone ? "Prêt" : "En attente"}</em>
           </div>
-          <div className="receipt-preview-list">
-            <div>
-              <span>Client</span>
-              <strong>Épicerie Al Manar</strong>
+          {paymentDone ? (
+            <div className="receipt-preview-list">
+              <div>
+                <span>Client</span>
+                <strong>Épicerie Al Manar</strong>
+              </div>
+              <div>
+                <span>Total TTC</span>
+                <strong>330 DH</strong>
+              </div>
+              <div>
+                <span>Payé</span>
+                <strong>Espèces · 330 DH</strong>
+              </div>
             </div>
-            <div>
-              <span>Total TTC</span>
-              <strong>330 DH</strong>
+          ) : (
+            <div className="cycle-locked-message cycle-locked-message-compact" role="status">
+              <ExclamationTriangleIcon />
+              <span>Validez l'encaissement exact pour préparer le reçu numéroté.</span>
             </div>
-            <div>
-              <span>Payé</span>
-              <strong>Espèces · 330 DH</strong>
-            </div>
-          </div>
+          )}
         </section>
 
-        <button className="generate-receipt-button" type="button" data-scroll-drag="ignore">
-          Générer reçu
+        <button className="generate-receipt-button" type="button" onClick={handleCycleAction} data-scroll-drag="ignore">
+          {primaryActionLabel}
         </button>
       </section>
     </main>
