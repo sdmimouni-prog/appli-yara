@@ -316,6 +316,14 @@ const pendingSyncItems = [
   },
 ];
 
+function parseDhAmount(value: string) {
+  return Number(value.replace(/\D/g, "")) || 0;
+}
+
+function formatDhAmount(value: number) {
+  return `${value.toLocaleString("fr-FR").replace(/\u202f/g, " ")} DH`;
+}
+
 // Build app-specific screens and flows in this file. The surrounding mobile
 // runtime is template-owned and intentionally lives outside this component.
 export default function Prototype() {
@@ -1158,6 +1166,33 @@ function CartScreen({
   onToggleTheme: () => void;
   onNavigate: (screen: ScreenName) => void;
 }) {
+  const [saleItems, setSaleItems] = useState(() => cartItems);
+  const subtotal = saleItems.reduce(
+    (sum, item) => sum + parseDhAmount(item.unitPrice) * item.quantity,
+    0,
+  );
+  const totalLabel = formatDhAmount(subtotal);
+  const stockNoticeItem = saleItems.find((item) => item.quantity >= item.stock);
+  const hasItems = saleItems.length > 0;
+
+  function updateQuantity(name: string, direction: "decrease" | "increase") {
+    setSaleItems((currentItems) =>
+      currentItems.map((item) => {
+        if (item.name !== name) return item;
+
+        const nextQuantity =
+          direction === "increase"
+            ? Math.min(item.stock, item.quantity + 1)
+            : Math.max(1, item.quantity - 1);
+
+        return {
+          ...item,
+          quantity: nextQuantity,
+        };
+      }),
+    );
+  }
+
   return (
     <main className="cart-shell" aria-label="Panier et vente">
       <BrandHeader theme={theme} themeLabel={themeLabel} onToggleTheme={onToggleTheme} compact />
@@ -1169,7 +1204,13 @@ function CartScreen({
             <h1>Panier / Vente</h1>
             <p className="assignment-summary">Dernière vérification avant validation</p>
           </div>
-          <button className="cart-trash-button" type="button" aria-label="Vider le panier" data-scroll-drag="ignore">
+          <button
+            className="cart-trash-button"
+            type="button"
+            aria-label="Vider le panier"
+            onClick={() => setSaleItems([])}
+            data-scroll-drag="ignore"
+          >
             <TrashIcon />
           </button>
         </div>
@@ -1183,13 +1224,21 @@ function CartScreen({
             <strong>Épicerie Al Manar</strong>
             <p>Ain Sebaâ · Code CLT-01452</p>
           </div>
-          <button type="button" className="change-client-button" data-scroll-drag="ignore">
+          <button
+            type="button"
+            className="change-client-button"
+            onClick={() => onNavigate("clients")}
+            data-scroll-drag="ignore"
+          >
             Changer
           </button>
         </section>
 
         <section className="cart-items" aria-label="Produits ajoutés">
-          {cartItems.map((item) => (
+          {hasItems ? saleItems.map((item) => {
+            const lineTotal = formatDhAmount(parseDhAmount(item.unitPrice) * item.quantity);
+
+            return (
             <article className={`cart-item ${item.adjusted ? "cart-item-adjusted" : ""}`} key={item.name}>
               <div className="cart-item-main">
                 <div className="cart-item-title">
@@ -1199,20 +1248,39 @@ function CartScreen({
                 <p>Prix TTC : <strong>{item.unitPrice}</strong> · Stock : <strong>{item.stock}</strong></p>
               </div>
               <div className="quantity-row" aria-label={`Quantité ${item.name}`}>
-                <button type="button" data-scroll-drag="ignore" aria-label={`Diminuer ${item.name}`}>
+                <button
+                  type="button"
+                  data-scroll-drag="ignore"
+                  aria-label={`Diminuer ${item.name}`}
+                  onClick={() => updateQuantity(item.name, "decrease")}
+                >
                   <MinusIcon />
                 </button>
                 <strong>{item.quantity}</strong>
-                <button type="button" data-scroll-drag="ignore" aria-label={`Augmenter ${item.name}`}>
+                <button
+                  type="button"
+                  data-scroll-drag="ignore"
+                  aria-label={`Augmenter ${item.name}`}
+                  onClick={() => updateQuantity(item.name, "increase")}
+                >
                   <PlusIcon />
                 </button>
               </div>
               <div className="cart-line-total">
                 <span>Total</span>
-                <strong>{item.total}</strong>
+                <strong>{lineTotal}</strong>
               </div>
             </article>
-          ))}
+            );
+          }) : (
+            <article className="empty-cart-card">
+              <strong>Panier vide</strong>
+              <p>Ajoutez des produits depuis le catalogue ou changez de client.</p>
+              <button type="button" onClick={() => onNavigate("catalogue")} data-scroll-drag="ignore">
+                Voir le stock
+              </button>
+            </article>
+          )}
         </section>
 
         <section className="stock-control-card" aria-label="Contrôle stock">
@@ -1221,20 +1289,28 @@ function CartScreen({
               <CheckCircledIcon />
             </span>
             <div>
-              <strong>Stock contrôlé</strong>
-              <p>Toutes les quantités validables sont disponibles dans le véhicule.</p>
+              <strong>{hasItems ? "Stock contrôlé" : "Aucun produit sélectionné"}</strong>
+              <p>
+                {hasItems
+                  ? "Toutes les quantités validables sont disponibles dans le véhicule."
+                  : "Le panier est vide, aucune vente à valider pour le moment."}
+              </p>
             </div>
           </div>
-          <div className="stock-warning-line">
-            <CrossCircledIcon />
-            <span>Miniatures Blue VIP : 4 demandés, 3 disponibles. Quantité limitée à 3.</span>
-          </div>
+          {stockNoticeItem ? (
+            <div className="stock-warning-line">
+              <CrossCircledIcon />
+              <span>
+                {stockNoticeItem.name} : stock maximum atteint ({stockNoticeItem.stock} disponibles).
+              </span>
+            </div>
+          ) : null}
         </section>
 
         <section className="cart-total-card" aria-label="Total de la vente">
           <div className="cart-total-row">
             <span>Sous-total TTC</span>
-            <strong>330 DH</strong>
+            <strong>{totalLabel}</strong>
           </div>
           <div className="cart-total-row">
             <span>Remise</span>
@@ -1242,14 +1318,17 @@ function CartScreen({
           </div>
           <div className="cart-grand-total">
             <span>Total TTC</span>
-            <strong>330 DH</strong>
+            <strong>{totalLabel}</strong>
           </div>
         </section>
 
         <button
           className="confirm-sale-button"
           type="button"
-          onClick={() => onNavigate("livraison")}
+          onClick={() => {
+            if (hasItems) onNavigate("livraison");
+          }}
+          disabled={!hasItems}
           data-scroll-drag="ignore"
         >
           Confirmer vente

@@ -2861,6 +2861,10 @@
   height: 14px;
 }
 
+.quantity-row button:disabled {
+  opacity: 0.38;
+}
+
 .quantity-row > strong {
   display: grid;
   height: 28px;
@@ -2890,6 +2894,44 @@
   font-size: 14px;
   font-weight: 900;
   line-height: 1.1;
+}
+
+.empty-cart-card {
+  display: grid;
+  min-height: 116px;
+  align-content: center;
+  gap: 8px;
+  padding: 16px;
+  border: 1px dashed rgba(255, 100, 0, 0.36);
+  border-radius: 8px;
+  background: var(--surface-soft);
+  text-align: center;
+}
+
+.empty-cart-card strong {
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.empty-cart-card p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.empty-cart-card button {
+  justify-self: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 100, 0, 0.32);
+  border-radius: 8px;
+  background: rgba(255, 100, 0, 0.1);
+  color: var(--brand-orange);
+  font-size: 11px;
+  font-weight: 900;
 }
 
 .stock-control-card {
@@ -3032,6 +3074,12 @@
   font-weight: 900;
   letter-spacing: 0;
   box-shadow: 0 12px 24px rgba(255, 100, 0, 0.24);
+}
+
+.confirm-sale-button:disabled {
+  background: var(--surface-muted);
+  color: var(--ink-muted);
+  box-shadow: none;
 }
 
 .delivery-shell {
@@ -3918,6 +3966,7 @@
 .theme-dark .product-card,
 .theme-dark .selected-client-card,
 .theme-dark .cart-item,
+.theme-dark .empty-cart-card,
 .theme-dark .cart-total-card,
 .theme-dark .delivery-summary-card,
 .theme-dark .payment-check-card,
@@ -3998,7 +4047,8 @@
 .theme-dark .sync-section-title > strong,
 .theme-dark .sync-queue-row em,
 .theme-dark .visit-status,
-.theme-dark .status-pill {
+.theme-dark .status-pill,
+.theme-dark .empty-cart-card button {
   border-color: rgba(255, 149, 31, 0.42);
   background: rgba(255, 122, 26, 0.12);
   color: #ff8a1f;
@@ -4016,6 +4066,7 @@
 .theme-dark .client-notes-card p,
 .theme-dark .product-name-row h2,
 .theme-dark .cart-item-title h2,
+.theme-dark .empty-cart-card strong,
 .theme-dark .cart-item-main p strong,
 .theme-dark .cart-line-total strong,
 .theme-dark .cart-total-row strong,
@@ -4074,6 +4125,7 @@
 }
 
 .theme-dark .stock-control-main p,
+.theme-dark .empty-cart-card p,
 .theme-dark .delivery-confirmation-card p,
 .theme-dark .sync-message-card p {
   color: rgba(255, 255, 255, 0.76);

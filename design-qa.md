@@ -19,6 +19,7 @@ Checks performed:
 - The activation terminal block has been removed.
 - Login fits in one phone screen with no scroll overflow.
 - PIN keypad accepts digits and can enter the app.
+- Cart controls are interactive: quantity +/-, client change, sale confirmation, and empty-cart state.
 - Logout is available from the in-app Plus / Synchronisation area and returns to login.
 - Dark premium YARA visual language applied across all routes.
 - Orange/gold accents, black panels, cream performance cards, green status states, and bottom navigation are consistent.
@@ -32,6 +33,7 @@ Build verification:
 - `npm run build` passed.
 - Mobile runtime integrity check passed.
 - Browser flow passed: login -> Accueil -> Synchronisation -> logout -> login.
+- Cart flow passed: login -> Panier -> quantity update -> client change -> confirmation -> empty cart.
 
 Visual verification:
 - Contact sheet: `implementation-yara-all-screens-contact-sheet.jpg`.
