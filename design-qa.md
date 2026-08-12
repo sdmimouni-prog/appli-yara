@@ -20,6 +20,7 @@ Prototype checked:
 - Caisse / Remise de caisse
 - Profil RS
 - Alertes détaillées
+- États dynamiques
 - Synchronisation
 
 Checks performed:
@@ -50,6 +51,8 @@ Checks performed:
 - Profil RS is reachable from Plus / Synchronisation and keeps Plus active in the bottom navigation.
 - Alertes détaillées shows stock faible, clients à risque, and synchro bloquée in separated action sections.
 - Alertes détaillées is reachable from Accueil and Plus / Synchronisation and keeps Plus active in the bottom navigation.
+- États dynamiques shows loading, erreur, offline, and données vides with clear copy and actions.
+- États dynamiques is reachable from Plus / Synchronisation and keeps Plus active in the bottom navigation.
 - Stock détaillé shows vehicle inventory, stock value, remaining units, low-stock references, ruptures, and movement history.
 - Stock détaillé is reachable from the bottom Stock tab, with filters for all inventory, stock faible, and ruptures.
 - Main CTAs remain dominant and readable.
@@ -69,6 +72,7 @@ Build verification:
 - Browser flow passed: login -> Plus -> Profil RS -> Voir ma tournée.
 - Browser flow passed: login -> Accueil -> Alertes détaillées -> Voir stock détaillé.
 - Browser flow passed: login -> Plus -> Alertes détaillées -> Voir carte tournée.
+- Browser flow passed: login -> Plus -> États dynamiques -> Erreur -> Offline -> Retour Plus.
 - Browser flow passed: login -> Stock -> Ruptures filter -> Ouvrir catalogue vente.
 - Browser flow passed: login -> Accueil -> Synchronisation -> logout -> login.
 - Cart flow passed: login -> Panier -> quantity update -> client change -> confirmation -> empty cart.

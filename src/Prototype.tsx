@@ -56,11 +56,13 @@ type ScreenName =
   | "caisse"
   | "profil"
   | "alertes"
+  | "etats"
   | "synchronisation";
 
 type SaleCycleStep = "commande" | "livraison" | "encaissement" | "recu";
 type DeliveryCycleState = "livraison" | "encaissement" | "recu" | "termine";
 type StockDetailFilter = "all" | "low" | "rupture";
+type DynamicStateKey = "loading" | "error" | "offline" | "empty";
 
 const yaraLogoLockup = "/assets/yara/logo-yara-lockup.png";
 
@@ -817,6 +819,88 @@ const blockedSyncItems = [
   status: string;
 }>;
 
+const dynamicStateTabs = [
+  {
+    key: "loading",
+    label: "Loading",
+    value: "Chargement",
+    detail: "Données en cours",
+    icon: ReloadIcon,
+  },
+  {
+    key: "error",
+    label: "Erreur",
+    value: "Blocage",
+    detail: "Action impossible",
+    icon: ExclamationTriangleIcon,
+  },
+  {
+    key: "offline",
+    label: "Offline",
+    value: "Hors ligne",
+    detail: "Mode terrain",
+    icon: GlobeIcon,
+  },
+  {
+    key: "empty",
+    label: "Données vides",
+    value: "Vide",
+    detail: "Aucun résultat",
+    icon: BoxIcon,
+  },
+] satisfies Array<{
+  key: DynamicStateKey;
+  label: string;
+  value: string;
+  detail: string;
+  icon: typeof ReloadIcon;
+}>;
+
+const dynamicStateContent = {
+  loading: {
+    eyebrow: "Chargement",
+    title: "Mise à jour en cours",
+    message: "Nous récupérons les dernières ventes, clients et stocks. Vous pouvez continuer dans quelques secondes.",
+    action: "Patienter",
+    helper: "Ne quittez pas l'écran pendant la préparation.",
+    icon: ReloadIcon,
+  },
+  error: {
+    eyebrow: "Erreur",
+    title: "Action impossible",
+    message: "La demande n'a pas abouti. Les données locales restent conservées, vous pouvez réessayer sans risque.",
+    action: "Réessayer",
+    helper: "Si l'erreur revient, contactez le superviseur.",
+    icon: ExclamationTriangleIcon,
+  },
+  offline: {
+    eyebrow: "Mode hors ligne",
+    title: "Réseau indisponible",
+    message: "Les ventes et visites sont gardées sur ce téléphone. Elles partiront dès que la connexion revient.",
+    action: "Voir synchronisation",
+    helper: "5 opérations attendent une connexion stable.",
+    icon: GlobeIcon,
+  },
+  empty: {
+    eyebrow: "Aucune donnée",
+    title: "Rien à afficher",
+    message: "Aucun résultat ne correspond au filtre actuel. Changez le filtre ou rechargez les données.",
+    action: "Réinitialiser",
+    helper: "État utile pour clients, produits, ventes et reçus.",
+    icon: BoxIcon,
+  },
+} satisfies Record<
+  DynamicStateKey,
+  {
+    eyebrow: string;
+    title: string;
+    message: string;
+    action: string;
+    helper: string;
+    icon: typeof ReloadIcon;
+  }
+>;
+
 const salesHistoryFilters = [
   { key: "all", label: "Toutes", count: 9 },
   { key: "today", label: "Aujourd'hui", count: 6 },
@@ -1085,6 +1169,7 @@ export default function Prototype() {
       initialScreen === "caisse" ||
       initialScreen === "profil" ||
       initialScreen === "alertes" ||
+      initialScreen === "etats" ||
       initialScreen === "synchronisation"
     ) {
       return initialScreen;
@@ -1129,7 +1214,7 @@ export default function Prototype() {
 
   function handleLogin() {
     setIsAuthenticated(true);
-    showScreen("accueil");
+    showScreen(screen === "activation" ? "accueil" : screen);
   }
 
   function handleLogout() {
@@ -1148,7 +1233,8 @@ export default function Prototype() {
             visibleScreen === "caisse" ||
             visibleScreen === "recu" ||
             visibleScreen === "profil" ||
-            visibleScreen === "alertes"
+            visibleScreen === "alertes" ||
+            visibleScreen === "etats"
           ? "synchronisation"
           : visibleScreen === "catalogue"
             ? "stock"
@@ -1243,6 +1329,13 @@ export default function Prototype() {
           />
         ) : visibleScreen === "alertes" ? (
           <AlertsDetailScreen
+            theme={theme}
+            themeLabel={themeLabel}
+            onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
+            onNavigate={showScreen}
+          />
+        ) : visibleScreen === "etats" ? (
+          <DynamicStatesScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
@@ -3763,6 +3856,189 @@ function ReceiptScreen({
   );
 }
 
+function DynamicStatesScreen({
+  theme,
+  themeLabel,
+  onToggleTheme,
+  onNavigate,
+}: {
+  theme: "light" | "dark";
+  themeLabel: string;
+  onToggleTheme: () => void;
+  onNavigate: (screen: ScreenName) => void;
+}) {
+  const [activeState, setActiveState] = useState<DynamicStateKey>("loading");
+  const state = dynamicStateContent[activeState];
+  const StateIcon = state.icon;
+
+  return (
+    <main className="dynamic-states-shell" aria-label="États dynamiques">
+      <header className="detail-header">
+        <button
+          className="header-icon-button"
+          type="button"
+          aria-label="Retour à Plus"
+          onClick={() => onNavigate("synchronisation")}
+          data-scroll-drag="ignore"
+        >
+          <ArrowLeftIcon />
+        </button>
+        <img className="detail-logo" src={yaraLogoLockup} alt="YARA" draggable={false} />
+        <div className="header-actions">
+          <button
+            className="header-icon-button"
+            type="button"
+            aria-label={themeLabel}
+            onClick={onToggleTheme}
+            data-scroll-drag="ignore"
+          >
+            {theme === "light" ? <MoonIcon /> : <SunIcon />}
+          </button>
+          <button
+            className="header-icon-button"
+            type="button"
+            aria-label="Retour synchronisation"
+            onClick={() => onNavigate("synchronisation")}
+            data-scroll-drag="ignore"
+          >
+            <ReloadIcon />
+          </button>
+        </div>
+      </header>
+
+      <section className="dynamic-states-content">
+        <div className="dynamic-states-topline">
+          <div>
+            <p className="eyebrow">Composants système</p>
+            <h1>États dynamiques</h1>
+            <p className="assignment-summary">Loading · erreur · offline · données vides</p>
+          </div>
+          <span className="dynamic-states-chip">
+            <DashboardIcon />
+            4 états
+          </span>
+        </div>
+
+        <section className="dynamic-states-hero" aria-label="Usage des états dynamiques">
+          <span className="dynamic-states-hero-icon" aria-hidden="true">
+            <DashboardIcon />
+          </span>
+          <div>
+            <span className="detail-eyebrow">Règle d'interface</span>
+            <strong>Un état clair = une action claire</strong>
+            <p>Chaque écran doit expliquer ce qui se passe et proposer une suite simple au commercial.</p>
+          </div>
+        </section>
+
+        <section className="dynamic-state-tabs" aria-label="Choisir un état">
+          {dynamicStateTabs.map(({ key, label, value, detail, icon: Icon }) => (
+            <button
+              className={`dynamic-state-tab ${activeState === key ? "dynamic-state-tab-active" : ""} dynamic-state-tab-${key}`}
+              type="button"
+              key={key}
+              onClick={() => setActiveState(key)}
+              data-scroll-drag="ignore"
+            >
+              <span className="dynamic-state-tab-icon" aria-hidden="true">
+                <Icon />
+              </span>
+              <strong>{label}</strong>
+              <span>{value}</span>
+              <small>{detail}</small>
+            </button>
+          ))}
+        </section>
+
+        <section className={`dynamic-preview-card dynamic-preview-${activeState}`} aria-label={`Aperçu état ${state.eyebrow}`}>
+          <div className="dynamic-preview-head">
+            <div>
+              <span className="detail-eyebrow">Aperçu mobile</span>
+              <h2>{state.eyebrow}</h2>
+            </div>
+            <em>{activeState === "loading" ? "Auto" : "Action"}</em>
+          </div>
+
+          <div className="dynamic-preview-body">
+            <span className={`dynamic-preview-icon ${activeState === "loading" ? "dynamic-preview-icon-loading" : ""}`} aria-hidden="true">
+              <StateIcon />
+            </span>
+            <strong>{state.title}</strong>
+            <p>{state.message}</p>
+
+            {activeState === "loading" ? (
+              <div className="dynamic-skeleton-list" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
+            ) : activeState === "offline" ? (
+              <div className="dynamic-offline-queue" aria-label="Opérations locales">
+                <span>Ventes gardées</span>
+                <strong>5</strong>
+                <em>Prêtes à envoyer</em>
+              </div>
+            ) : activeState === "empty" ? (
+              <div className="dynamic-empty-list" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
+            ) : (
+              <div className="dynamic-error-note" role="status">
+                <ExclamationTriangleIcon />
+                <span>Aucune donnée perdue. Dernière sauvegarde locale : 10:28.</span>
+              </div>
+            )}
+
+            <button
+              className="dynamic-preview-action"
+              type="button"
+              onClick={() => (activeState === "offline" ? onNavigate("synchronisation") : setActiveState("loading"))}
+              data-scroll-drag="ignore"
+            >
+              {state.action}
+            </button>
+            <small>{state.helper}</small>
+          </div>
+        </section>
+
+        <section className="dynamic-guidelines-card" aria-label="Bonnes pratiques états dynamiques">
+          <div className="dynamic-guidelines-title">
+            <span className="detail-eyebrow">À appliquer partout</span>
+            <h2>Règles UI</h2>
+          </div>
+          <div className="dynamic-guidelines-list">
+            <article>
+              <CheckCircledIcon />
+              <strong>Message court</strong>
+              <p>Le RS doit comprendre la situation en une phrase.</p>
+            </article>
+            <article>
+              <CheckCircledIcon />
+              <strong>Action visible</strong>
+              <p>Réessayer, synchroniser, vider filtre ou revenir.</p>
+            </article>
+            <article>
+              <CheckCircledIcon />
+              <strong>Aucun jargon</strong>
+              <p>On parle de sauvegarde, réseau, données et prochaine étape.</p>
+            </article>
+          </div>
+        </section>
+
+        <section className="dynamic-actions" aria-label="Actions états dynamiques">
+          <button className="dynamic-primary-action" type="button" onClick={() => setActiveState("offline")} data-scroll-drag="ignore">
+            Simuler offline
+          </button>
+          <button className="dynamic-secondary-action" type="button" onClick={() => onNavigate("synchronisation")} data-scroll-drag="ignore">
+            Retour Plus
+          </button>
+        </section>
+      </section>
+    </main>
+  );
+}
+
 function SynchronisationScreen({
   theme,
   themeLabel,
@@ -3843,6 +4119,17 @@ function SynchronisationScreen({
           <span>
             <strong>Alertes détaillées</strong>
             <small>Stock faible, clients à risque et synchro bloquée</small>
+          </span>
+          <ChevronRightIcon />
+        </button>
+
+        <button className="sync-history-shortcut sync-states-shortcut" type="button" onClick={() => onNavigate("etats")} data-scroll-drag="ignore">
+          <span className="sync-history-icon" aria-hidden="true">
+            <DashboardIcon />
+          </span>
+          <span>
+            <strong>États dynamiques</strong>
+            <small>Loading, erreur, offline et données vides</small>
           </span>
           <ChevronRightIcon />
         </button>
