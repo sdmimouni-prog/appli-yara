@@ -51,6 +51,8 @@ type ScreenName =
   | "livraison"
   | "synchronisation";
 
+const yaraLogoLockup = "/assets/yara/logo-yara-lockup.png";
+
 const activationRows = [
   {
     label: "Identifiant RS",
@@ -468,7 +470,7 @@ function BrandHeader({
     <header className={`brand-header ${compact ? "brand-header-compact" : ""}`}>
       <img
         className="brand-logo"
-        src="/assets/yara/logo-yara.png"
+        src={yaraLogoLockup}
         alt="YARA"
         draggable={false}
       />
@@ -524,13 +526,8 @@ function ActivationScreen({
     <main className="activation-shell activation-reference-shell" aria-label="Connexion et activation RS">
       <header className="login-topbar">
         <div className="login-brand-lockup" aria-label="YARA application RS">
-          <span className="login-brand-mark" aria-hidden="true">
-            <CheckCircledIcon />
-          </span>
-          <div>
-            <strong>YARA</strong>
-            <span>Application RS</span>
-          </div>
+          <img className="login-brand-logo" src={yaraLogoLockup} alt="YARA" draggable={false} />
+          <span className="login-brand-subtitle">Application RS</span>
         </div>
 
         <div className="login-security-actions">
@@ -642,13 +639,8 @@ function DashboardScreen({
       <section className="home-reference-content">
         <header className="home-reference-header">
           <div className="home-brand-lockup" aria-label="YARA">
-            <span className="home-brand-mark" aria-hidden="true">
-              <IdCardIcon />
-            </span>
-            <div>
-              <strong>YARA</strong>
-              <span>YARAA.MA</span>
-            </div>
+            <img className="home-brand-logo" src={yaraLogoLockup} alt="YARA" draggable={false} />
+            <span>YARAA.MA</span>
           </div>
 
           <div className="home-seller-copy">
@@ -967,7 +959,7 @@ function ClientDetailScreen({
         >
           <ArrowLeftIcon />
         </button>
-        <img className="detail-logo" src="/assets/yara/logo-yara.png" alt="YARA" draggable={false} />
+        <img className="detail-logo" src={yaraLogoLockup} alt="YARA" draggable={false} />
         <div className="header-actions">
           <button
             className="header-icon-button"
@@ -1361,7 +1353,7 @@ function DeliveryPaymentScreen({
         >
           <ArrowLeftIcon />
         </button>
-        <img className="detail-logo" src="/assets/yara/logo-yara.png" alt="YARA" draggable={false} />
+        <img className="detail-logo" src={yaraLogoLockup} alt="YARA" draggable={false} />
         <div className="header-actions">
           <button
             className="header-icon-button"

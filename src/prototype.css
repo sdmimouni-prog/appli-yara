@@ -109,9 +109,10 @@
 }
 
 .brand-logo {
-  width: 154px;
+  width: 176px;
   height: 58px;
   object-fit: contain;
+  object-position: left center;
 }
 
 .theme-toggle {
@@ -134,7 +135,7 @@
 }
 
 .brand-header-compact .brand-logo {
-  width: 116px;
+  width: 132px;
   height: 40px;
 }
 
@@ -614,40 +615,28 @@
 }
 
 .home-brand-lockup {
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr);
-  gap: 7px;
-  align-items: center;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
   color: var(--home-gold);
 }
 
-.home-brand-mark {
-  display: grid;
-  width: 38px;
-  height: 38px;
-  place-items: center;
-  border: 2px solid var(--home-gold);
-  border-radius: 12px;
-  color: var(--home-gold);
-}
-
-.home-brand-mark svg {
-  width: 22px;
-  height: 22px;
-}
-
-.home-brand-lockup strong {
+.home-brand-logo {
   display: block;
-  color: var(--home-gold);
-  font-size: 22px;
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: 0;
+  width: 92px;
+  height: 34px;
+  object-fit: contain;
+  object-position: left center;
+  filter:
+    drop-shadow(0 0 10px rgba(255, 167, 38, 0.24))
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.1));
 }
 
-.home-brand-lockup span:not(.home-brand-mark) {
+.home-brand-lockup span {
   display: block;
-  margin-top: 4px;
+  margin-top: -1px;
   color: rgba(255, 255, 255, 0.84);
   font-size: 10px;
   font-weight: 800;
@@ -1578,28 +1567,16 @@
 }
 
 .dashboard-reference-shell .home-brand-lockup {
-  grid-template-columns: 32px minmax(0, 1fr);
-  gap: 6px;
+  min-height: 35px;
 }
 
-.dashboard-reference-shell .home-brand-mark {
-  width: 30px;
-  height: 30px;
-  border-width: 1.5px;
-  border-radius: 9px;
+.dashboard-reference-shell .home-brand-logo {
+  width: 96px;
+  height: 29px;
 }
 
-.dashboard-reference-shell .home-brand-mark svg {
-  width: 17px;
-  height: 17px;
-}
-
-.dashboard-reference-shell .home-brand-lockup strong {
-  font-size: 19px;
-}
-
-.dashboard-reference-shell .home-brand-lockup span:not(.home-brand-mark) {
-  margin-top: 2px;
+.dashboard-reference-shell .home-brand-lockup span {
+  margin-top: 0;
   font-size: 8px;
 }
 
@@ -2226,9 +2203,10 @@
   position: absolute;
   left: 74px;
   bottom: 17px;
-  width: 116px;
+  width: 134px;
   height: 40px;
   object-fit: contain;
+  object-position: left center;
 }
 
 .header-actions {
@@ -4063,14 +4041,14 @@
 }
 
 .theme-dark .brand-logo {
-  width: 134px;
+  width: 168px;
   height: 48px;
   object-position: left center;
 }
 
 .theme-dark .brand-header-compact .brand-logo,
 .theme-dark .detail-logo {
-  width: 108px;
+  width: 132px;
   height: 38px;
 }
 
@@ -4372,21 +4350,21 @@
 
 .login-topbar {
   display: flex;
-  min-height: 58px;
+  min-height: 66px;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
 
 .login-brand-lockup {
-  display: grid;
+  display: flex;
   min-width: 0;
-  grid-template-columns: 38px minmax(0, 1fr);
-  align-items: center;
-  gap: 9px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
 }
 
-.login-brand-mark,
 .rs-profile-badge {
   display: grid;
   place-items: center;
@@ -4394,31 +4372,22 @@
   color: var(--login-gold);
 }
 
-.login-brand-mark {
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
-}
-
-.login-brand-mark svg {
-  width: 19px;
-  height: 19px;
-}
-
-.login-brand-lockup strong {
+.login-brand-logo {
   display: block;
-  color: var(--login-gold);
-  font-size: 22px;
-  font-weight: 900;
-  line-height: 0.96;
-  letter-spacing: 0;
+  width: 158px;
+  height: 50px;
+  object-fit: contain;
+  object-position: left center;
+  filter:
+    drop-shadow(0 0 10px rgba(255, 158, 31, 0.22))
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.1));
 }
 
-.login-brand-lockup span:not(.login-brand-mark) {
+.login-brand-subtitle {
   display: block;
-  margin-top: 3px;
+  padding-left: 1px;
   color: rgba(255, 255, 255, 0.86);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 900;
   line-height: 1;
   text-transform: uppercase;
@@ -4868,21 +4837,16 @@
   }
 
   .login-topbar {
-    min-height: 56px;
+    min-height: 62px;
   }
 
   .login-brand-lockup {
-    grid-template-columns: 38px minmax(0, 1fr);
-    gap: 7px;
+    gap: 1px;
   }
 
-  .login-brand-mark {
-    width: 35px;
-    height: 35px;
-  }
-
-  .login-brand-lockup strong {
-    font-size: 22px;
+  .login-brand-logo {
+    width: 148px;
+    height: 47px;
   }
 
   .login-welcome h1 {

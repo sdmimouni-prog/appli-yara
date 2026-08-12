@@ -3,6 +3,7 @@
 Source references:
 - WhatsApp Accueil du jour screenshot provided by the user.
 - WhatsApp login screenshot provided by the user.
+- Official YARA logo image provided by the user.
 
 Prototype checked:
 - Activation
@@ -27,6 +28,7 @@ Checks performed:
 - Top content is offset below the Pixel camera/status-bar safe area.
 - Accueil "Prochain niveau" has a gamified glow: card pulse, shine sweep, rail comet, active-level halo.
 - Accueil content remains scrollable when the game progression card needs more breathing room.
+- Official cropped YARA logo asset is used in login, Accueil, and app headers.
 - Main CTAs remain dominant and readable.
 - Static data remains visible in the Pixel 10 mobile frame.
 - Runtime integrity and production build passed.
@@ -35,6 +37,7 @@ Build verification:
 - `npm run build` passed.
 - Mobile runtime integrity check passed.
 - Browser measurement passed: level animations active, Accueil scroll enabled, bottom navigation fixed.
+- Browser measurement passed: official YARA logo loads from `/assets/yara/logo-yara-lockup.png` on login and Accueil.
 - Browser flow passed: login -> Accueil -> Synchronisation -> logout -> login.
 - Cart flow passed: login -> Panier -> quantity update -> client change -> confirmation -> empty cart.
 
