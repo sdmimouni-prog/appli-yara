@@ -24,6 +24,10 @@ Prototype checked:
 - Synchronisation
 
 Checks performed:
+- Light mode is now the default app theme.
+- Light mode uses white/ivory surfaces with dark readable text and orange YARA accents.
+- The YARA logo remains visible on light backgrounds through the light-theme logo treatment.
+- The theme toggle still switches back to the dark premium theme.
 - First screen is now the compact login interface.
 - The activation terminal block has been removed.
 - Login fits in one phone screen with no scroll overflow.
@@ -37,6 +41,7 @@ Checks performed:
 - Dark premium YARA visual language applied across all routes.
 - Orange/gold accents, black panels, cream performance cards, green status states, and bottom navigation are consistent.
 - Bottom navigation is fixed outside the scrollable content.
+- Scrollable screens reserve enough bottom space so CTAs and last list rows are not hidden by the fixed navigation.
 - Top content is offset below the Pixel camera/status-bar safe area.
 - Accueil "Prochain niveau" has a gamified glow: card pulse, shine sweep, rail comet, active-level halo.
 - Accueil content remains scrollable when the game progression card needs more breathing room.
@@ -75,6 +80,7 @@ Build verification:
 - Browser flow passed: login -> Plus -> États dynamiques -> Erreur -> Offline -> Retour Plus.
 - Browser flow passed: login -> Stock -> Ruptures filter -> Ouvrir catalogue vente.
 - Browser flow passed: login -> Accueil -> Synchronisation -> logout -> login.
+- Browser flow passed: light default -> login -> Accueil -> Plus -> États dynamiques -> toggle dark.
 - Cart flow passed: login -> Panier -> quantity update -> client change -> confirmation -> empty cart.
 - Browser flow passed: panier -> Enregistrer commande -> Confirmer livraison -> Valider encaissement exact -> Générer reçu.
 - Browser flow passed: panier -> Enregistrer commande -> Confirmer livraison -> Valider encaissement exact -> Générer reçu -> Voir reçu complet.

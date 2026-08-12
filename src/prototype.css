@@ -40,7 +40,7 @@
 }
 
 .seller-app-shell-with-nav .mobile-scroll-content {
-  padding-bottom: 86px;
+  padding-bottom: calc(var(--mobile-safe-area-height) + 128px);
 }
 
 .seller-app-shell > .bottom-nav {
@@ -9922,4 +9922,851 @@
     min-height: 43px;
     margin-top: 9px;
   }
+}
+
+/* Premium white light mode. */
+.seller-screen.theme-light {
+  --surface: #ffffff;
+  --surface-soft: #ffffff;
+  --surface-muted: #f4f1eb;
+  --ink: #11100e;
+  --ink-muted: #6f685f;
+  --hairline: rgba(29, 24, 19, 0.12);
+  --brand-black: #ffffff;
+  --brand-orange: #f46b00;
+  --brand-orange-strong: #d94d00;
+  --success: #23743a;
+  --success-soft: #e5f6e8;
+  --success-line: rgba(35, 116, 58, 0.2);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 138, 31, 0.12), transparent 28%),
+    linear-gradient(180deg, #ffffff, #fbf7f1);
+  color: var(--ink);
+}
+
+.seller-app-shell.theme-light {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 138, 31, 0.12), transparent 28%),
+    linear-gradient(180deg, #ffffff, #fbf7f1);
+}
+
+.device-screen:has(.seller-screen.theme-light) .status-time {
+  color: rgba(17, 16, 14, 0.82);
+}
+
+.device-screen:has(.seller-screen.theme-light) .status-indicator-svg {
+  filter: none;
+  opacity: 0.78;
+}
+
+.theme-light .activation-shell,
+.theme-light .clients-shell,
+.theme-light .tour-map-shell,
+.theme-light .client-detail-shell,
+.theme-light .catalogue-shell,
+.theme-light .stock-detail-shell,
+.theme-light .cart-shell,
+.theme-light .delivery-shell,
+.theme-light .receipt-shell,
+.theme-light .history-shell,
+.theme-light .cash-shell,
+.theme-light .profile-rs-shell,
+.theme-light .alerts-shell,
+.theme-light .dynamic-states-shell,
+.theme-light .sync-shell,
+.theme-light .dashboard-shell {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 138, 31, 0.1), transparent 26%),
+    linear-gradient(180deg, #ffffff, #fbf7f1 48%, #ffffff);
+  color: var(--ink);
+}
+
+.theme-light .brand-header,
+.theme-light .detail-header {
+  min-height: 84px;
+  align-items: flex-end;
+  border-bottom: 1px solid rgba(244, 107, 0, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 138, 31, 0.08), rgba(255, 255, 255, 0)),
+    #ffffff;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 10px 24px rgba(24, 16, 6, 0.06);
+}
+
+.theme-light .brand-header {
+  justify-content: flex-start;
+  padding: 26px 16px 11px;
+}
+
+.theme-light .brand-header-compact {
+  min-height: 74px;
+  padding: 24px 16px 10px;
+}
+
+.theme-light .brand-logo,
+.theme-light .detail-logo,
+.theme-light .home-brand-logo,
+.theme-light .login-brand-logo {
+  filter:
+    invert(1)
+    brightness(0.18)
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.65));
+}
+
+.theme-light .brand-header-compact .brand-logo,
+.theme-light .detail-logo {
+  width: 132px;
+  height: 38px;
+}
+
+.theme-light .detail-logo {
+  left: 70px;
+  bottom: 11px;
+}
+
+.theme-light .theme-toggle,
+.theme-light .header-icon-button,
+.theme-light .cart-trash-button,
+.theme-light .home-theme-button,
+.theme-light .login-theme-toggle {
+  border-color: rgba(244, 107, 0, 0.18);
+  background: rgba(255, 255, 255, 0.88);
+  color: #1b1814;
+  box-shadow:
+    0 8px 18px rgba(24, 16, 6, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.theme-light .clients-content,
+.theme-light .tour-map-content,
+.theme-light .catalogue-content,
+.theme-light .stock-detail-content,
+.theme-light .client-detail-content,
+.theme-light .cart-content,
+.theme-light .delivery-content,
+.theme-light .receipt-content,
+.theme-light .history-content,
+.theme-light .cash-content,
+.theme-light .profile-rs-content,
+.theme-light .alerts-content,
+.theme-light .dynamic-states-content,
+.theme-light .sync-content {
+  padding-right: 12px;
+  padding-left: 12px;
+}
+
+.theme-light .eyebrow,
+.theme-light .detail-eyebrow {
+  color: #c45100;
+  text-transform: uppercase;
+}
+
+.theme-light .identity-panel h1,
+.theme-light .clients-topline h1,
+.theme-light .tour-map-topline h1,
+.theme-light .catalogue-topline h1,
+.theme-light .stock-detail-topline h1,
+.theme-light .cart-topline h1,
+.theme-light .delivery-topline h1,
+.theme-light .receipt-topline h1,
+.theme-light .history-topline h1,
+.theme-light .cash-topline h1,
+.theme-light .profile-rs-topline h1,
+.theme-light .alerts-topline h1,
+.theme-light .dynamic-states-topline h1,
+.theme-light .sync-topline h1,
+.theme-light .client-heading-row h1,
+.theme-light .section-card-title h2,
+.theme-light .tour-stop-title h2,
+.theme-light .history-list-title h2,
+.theme-light .stock-detail-section-title h2,
+.theme-light .cash-section-title h2,
+.theme-light .alerts-section-title h2,
+.theme-light .dynamic-preview-head h2,
+.theme-light .dynamic-guidelines-title h2,
+.theme-light .sync-section-title h2 {
+  color: #11100e;
+  text-transform: uppercase;
+}
+
+.theme-light .assignment-summary,
+.theme-light .identity-panel p,
+.theme-light .sync-note {
+  color: #746b61;
+}
+
+.theme-light .assignment-row,
+.theme-light .client-search,
+.theme-light .product-search,
+.theme-light .client-filter,
+.theme-light .product-filter,
+.theme-light .tour-map-entry-card,
+.theme-light .tour-route-summary article,
+.theme-light .tour-map-card,
+.theme-light .next-stop-card,
+.theme-light .tour-gps-secondary,
+.theme-light .tour-stop-list-card,
+.theme-light .tour-stop-row,
+.theme-light .client-card,
+.theme-light .client-hero-card,
+.theme-light .client-info-card,
+.theme-light .client-section-card,
+.theme-light .client-notes-card,
+.theme-light .product-card,
+.theme-light .stock-detail-hero-card,
+.theme-light .stock-detail-kpi-card,
+.theme-light .stock-detail-search,
+.theme-light .stock-detail-filter,
+.theme-light .stock-inventory-card,
+.theme-light .stock-inventory-row,
+.theme-light .stock-movements-card,
+.theme-light .stock-ruptures-card,
+.theme-light .selected-client-card,
+.theme-light .cart-item,
+.theme-light .empty-cart-card,
+.theme-light .cart-total-card,
+.theme-light .delivery-summary-card,
+.theme-light .payment-check-card,
+.theme-light .receipt-preview-card,
+.theme-light .receipt-total-hero,
+.theme-light .receipt-action-button,
+.theme-light .receipt-document-card,
+.theme-light .receipt-status-card,
+.theme-light .receipt-safety-card,
+.theme-light .history-hero-card,
+.theme-light .history-stat-card,
+.theme-light .history-sale-card,
+.theme-light .cash-hero-card,
+.theme-light .cash-mode-card,
+.theme-light .cash-count-card,
+.theme-light .cheque-card,
+.theme-light .cash-closing-card,
+.theme-light .cash-check-card,
+.theme-light .cash-input-card,
+.theme-light .profile-hero-card,
+.theme-light .profile-info-card,
+.theme-light .profile-phone-card,
+.theme-light .profile-section-card,
+.theme-light .profile-security-card,
+.theme-light .profile-secondary-action,
+.theme-light .alerts-hero-card,
+.theme-light .alerts-summary-card,
+.theme-light .alerts-section-card,
+.theme-light .alerts-row,
+.theme-light .alerts-row-action,
+.theme-light .alerts-secondary-action,
+.theme-light .alerts-sync-message,
+.theme-light .dynamic-states-hero,
+.theme-light .dynamic-state-tab,
+.theme-light .dynamic-preview-card,
+.theme-light .dynamic-preview-body,
+.theme-light .dynamic-guidelines-card,
+.theme-light .dynamic-guidelines-list article,
+.theme-light .dynamic-secondary-action,
+.theme-light .sync-history-shortcut,
+.theme-light .sync-hero-card,
+.theme-light .last-sync-card,
+.theme-light .sync-stat-card,
+.theme-light .sync-queue-card,
+.theme-light .sync-message-card {
+  border-color: rgba(29, 24, 19, 0.12);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 250, 244, 0.92)),
+    #ffffff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 14px 28px rgba(28, 18, 8, 0.07);
+}
+
+.theme-light .client-search,
+.theme-light .product-search,
+.theme-light .stock-detail-search {
+  background: #ffffff;
+}
+
+.theme-light .client-filter-active,
+.theme-light .product-filter-active,
+.theme-light .history-filter-active,
+.theme-light .stock-detail-filter-active {
+  border-color: transparent;
+  background: linear-gradient(180deg, #ff8a1f, #f05a00);
+  color: #ffffff;
+  box-shadow: 0 10px 20px rgba(255, 100, 0, 0.24);
+}
+
+.theme-light .seller-mark,
+.theme-light .row-icon,
+.theme-light .sync-icon,
+.theme-light .notice-icon,
+.theme-light .info-card-icon,
+.theme-light .notes-icon,
+.theme-light .tour-map-entry-icon,
+.theme-light .next-stop-icon,
+.theme-light .stock-detail-hero-icon,
+.theme-light .stock-detail-kpi-icon,
+.theme-light .stock-movement-icon,
+.theme-light .delivery-summary-icon,
+.theme-light .payment-method-icon,
+.theme-light .receipt-preview-icon,
+.theme-light .receipt-hero-icon,
+.theme-light .receipt-action-button > span,
+.theme-light .history-hero-icon,
+.theme-light .history-sale-icon,
+.theme-light .cash-hero-icon,
+.theme-light .cheque-icon,
+.theme-light .profile-avatar,
+.theme-light .profile-info-icon,
+.theme-light .profile-phone-icon,
+.theme-light .alerts-hero-icon,
+.theme-light .alerts-summary-icon,
+.theme-light .alerts-row-icon,
+.theme-light .dynamic-states-hero-icon,
+.theme-light .dynamic-state-tab-icon,
+.theme-light .dynamic-preview-icon,
+.theme-light .sync-history-icon,
+.theme-light .sync-stat-icon {
+  border: 1px solid rgba(244, 107, 0, 0.18);
+  background: rgba(255, 122, 26, 0.1);
+  color: #d95600;
+}
+
+.theme-light .client-avatar,
+.theme-light .selected-client-icon,
+.theme-light .product-thumb,
+.theme-light .stock-inventory-thumb {
+  border-color: rgba(244, 107, 0, 0.18);
+  background:
+    radial-gradient(circle at 35% 22%, rgba(255, 122, 26, 0.12), transparent 42%),
+    #ffffff;
+}
+
+.theme-light .client-card-priority,
+.theme-light .tour-stop-priority,
+.theme-light .product-card-low,
+.theme-light .stock-inventory-low,
+.theme-light .cart-item-adjusted {
+  border-color: rgba(255, 138, 31, 0.5);
+  box-shadow:
+    inset 3px 0 0 rgba(255, 138, 31, 0.9),
+    0 14px 28px rgba(28, 18, 8, 0.07);
+}
+
+.theme-light .cart-summary,
+.theme-light .map-action,
+.theme-light .tour-map-toolbar strong,
+.theme-light .next-stop-card button,
+.theme-light .tour-stop-title button,
+.theme-light .last-sync-card em,
+.theme-light .receipt-ready-chip,
+.theme-light .history-date-chip,
+.theme-light .stock-status-chip,
+.theme-light .profile-status-chip,
+.theme-light .profile-phone-card em,
+.theme-light .stock-detail-hero-card > em,
+.theme-light .stock-detail-section-title > strong,
+.theme-light .stock-detail-filter strong,
+.theme-light .stock-rupture-need em,
+.theme-light .history-list-title em,
+.theme-light .history-sale-footer em,
+.theme-light .cash-status-chip,
+.theme-light .cash-section-title > strong,
+.theme-light .cheque-amount em,
+.theme-light .alerts-section-title > strong,
+.theme-light .alerts-row-action,
+.theme-light .alerts-risk-pill,
+.theme-light .alerts-row-status em,
+.theme-light .dynamic-states-chip,
+.theme-light .dynamic-preview-head em,
+.theme-light .sync-section-title > strong,
+.theme-light .sync-queue-row em,
+.theme-light .visit-status,
+.theme-light .status-pill,
+.theme-light .empty-cart-card button {
+  border-color: rgba(244, 107, 0, 0.18);
+  background: rgba(255, 122, 26, 0.1);
+  color: #d95600;
+}
+
+.theme-light .cart-summary strong,
+.theme-light .product-meta strong,
+.theme-light .row-value,
+.theme-light .row-label,
+.theme-light .client-title-row h2,
+.theme-light .client-purchase strong,
+.theme-light .client-info-card strong,
+.theme-light .tour-map-entry-card strong,
+.theme-light .tour-map-toolbar span,
+.theme-light .next-stop-card strong,
+.theme-light .tour-stop-row strong,
+.theme-light .history-row strong,
+.theme-light .history-row em,
+.theme-light .client-notes-card p,
+.theme-light .product-name-row h2,
+.theme-light .stock-inventory-head h2,
+.theme-light .stock-inventory-meta strong,
+.theme-light .stock-inventory-balance > strong,
+.theme-light .stock-movement-row strong,
+.theme-light .stock-rupture-row strong,
+.theme-light .cart-item-title h2,
+.theme-light .empty-cart-card strong,
+.theme-light .cart-item-main p strong,
+.theme-light .cart-line-total strong,
+.theme-light .cart-total-row strong,
+.theme-light .delivery-summary-head strong,
+.theme-light .delivery-line span,
+.theme-light .delivery-line em,
+.theme-light .payment-method-select strong,
+.theme-light .receipt-preview-head strong,
+.theme-light .receipt-preview-list strong,
+.theme-light .receipt-action-button strong,
+.theme-light .history-sale-head h2,
+.theme-light .history-sale-head > strong,
+.theme-light .history-sale-products p,
+.theme-light .history-sale-meta span,
+.theme-light .history-stat-card strong,
+.theme-light .cash-mode-card strong,
+.theme-light .cash-breakdown-row span,
+.theme-light .cash-breakdown-row strong,
+.theme-light .cheque-row strong,
+.theme-light .cash-check-card strong,
+.theme-light .cash-check-card span,
+.theme-light .profile-hero-card strong,
+.theme-light .profile-info-card strong,
+.theme-light .profile-phone-card strong,
+.theme-light .profile-section-title h2,
+.theme-light .profile-data-row strong,
+.theme-light .alerts-row-main strong,
+.theme-light .alerts-row-status strong,
+.theme-light .alerts-summary-card strong,
+.theme-light .alerts-summary-card > span:not(.alerts-summary-icon),
+.theme-light .alerts-sync-message strong,
+.theme-light .dynamic-states-hero strong,
+.theme-light .dynamic-state-tab strong,
+.theme-light .dynamic-preview-body > strong,
+.theme-light .dynamic-guidelines-list strong,
+.theme-light .sync-history-shortcut strong,
+.theme-light .last-sync-card strong,
+.theme-light .sync-stat-card strong,
+.theme-light .sync-stat-card > span:not(.sync-stat-icon),
+.theme-light .sync-queue-row strong {
+  color: #11100e;
+}
+
+.theme-light .product-meta span,
+.theme-light .tour-gps-secondary,
+.theme-light .stock-inventory-meta span,
+.theme-light .amount-card,
+.theme-light .quantity-row,
+.theme-light .change-client-button,
+.theme-light .secondary-detail-action,
+.theme-light .payment-method-select {
+  border-color: rgba(29, 24, 19, 0.12);
+  background: rgba(255, 255, 255, 0.82);
+  color: #11100e;
+}
+
+.theme-light .amount-card-expected,
+.theme-light .cart-total-card,
+.theme-light .tour-map-entry-card,
+.theme-light .next-stop-card,
+.theme-light .stock-detail-hero-card,
+.theme-light .receipt-total-hero,
+.theme-light .history-hero-card,
+.theme-light .profile-hero-card,
+.theme-light .alerts-hero-card,
+.theme-light .dynamic-states-hero,
+.theme-light .sync-history-shortcut,
+.theme-light .sync-hero-card {
+  background:
+    linear-gradient(135deg, rgba(255, 122, 26, 0.12), transparent 62%),
+    #ffffff;
+}
+
+.theme-light .cart-grand-total span,
+.theme-light .cart-grand-total strong,
+.theme-light .tour-route-summary strong,
+.theme-light .tour-stop-distance strong,
+.theme-light .delivery-summary-head em,
+.theme-light .amount-input-wrap input,
+.theme-light .amount-input-wrap em,
+.theme-light .amount-static-value strong,
+.theme-light .amount-static-value em,
+.theme-light .receipt-total-hero strong,
+.theme-light .history-hero-card strong,
+.theme-light .stock-detail-hero-card strong,
+.theme-light .stock-movement-row > em,
+.theme-light .cash-hero-card strong,
+.theme-light .cash-input-card input,
+.theme-light .cash-input-card em,
+.theme-light .sync-hero-card h2,
+.theme-light .alerts-hero-card strong,
+.theme-light .dynamic-state-tab span,
+.theme-light .dynamic-offline-queue strong,
+.theme-light .stock-value-low strong,
+.theme-light .product-meta .stock-value-low {
+  color: #f46b00;
+}
+
+.theme-light .stock-control-card,
+.theme-light .tour-gps-chip,
+.theme-light .stock-detail-status-ok,
+.theme-light .stock-movement-load .stock-movement-icon,
+.theme-light .stock-movement-check .stock-movement-icon,
+.theme-light .delivery-confirmation-card,
+.theme-light .exact-amount-message,
+.theme-light .receipt-ready-chip,
+.theme-light .receipt-status-step,
+.theme-light .receipt-safety-card,
+.theme-light .profile-status-chip,
+.theme-light .profile-info-success,
+.theme-light .profile-phone-card,
+.theme-light .profile-security-card,
+.theme-light .sync-message-card,
+.theme-light .cash-status-closed,
+.theme-light .cash-final-message-done,
+.theme-light .connection-chip,
+.theme-light .status-pill-active {
+  border-color: rgba(35, 116, 58, 0.2);
+  background: #e5f6e8;
+  color: #23743a;
+}
+
+.theme-light .stock-control-main p,
+.theme-light .stock-detail-hero-card p,
+.theme-light .tour-map-entry-card small,
+.theme-light .next-stop-card p,
+.theme-light .tour-stop-row p,
+.theme-light .tour-stop-distance em,
+.theme-light .stock-movement-row p,
+.theme-light .stock-rupture-row p,
+.theme-light .empty-cart-card p,
+.theme-light .delivery-confirmation-card p,
+.theme-light .receipt-total-hero p,
+.theme-light .receipt-safety-card p,
+.theme-light .cash-hero-card p,
+.theme-light .cash-check-card p,
+.theme-light .profile-hero-card p,
+.theme-light .profile-phone-card p,
+.theme-light .profile-security-card p,
+.theme-light .alerts-hero-card p,
+.theme-light .alerts-row-main p,
+.theme-light .alerts-summary-card small,
+.theme-light .alerts-sync-message p,
+.theme-light .dynamic-states-hero p,
+.theme-light .dynamic-state-tab small,
+.theme-light .dynamic-preview-body > p,
+.theme-light .dynamic-preview-body > small,
+.theme-light .dynamic-guidelines-list p,
+.theme-light .dynamic-offline-queue span,
+.theme-light .dynamic-offline-queue em,
+.theme-light .sync-message-card p {
+  color: #746b61;
+}
+
+.theme-light .stock-warning-line {
+  border-color: rgba(255, 149, 31, 0.32);
+  background: rgba(255, 122, 26, 0.1);
+  color: #d95600;
+}
+
+.theme-light .stock-detail-kpi-danger,
+.theme-light .stock-inventory-rupture,
+.theme-light .stock-ruptures-card,
+.theme-light .history-stat-canceled,
+.theme-light .history-sale-canceled,
+.theme-light .alerts-urgent-chip,
+.theme-light .alerts-summary-stock,
+.theme-light .alerts-summary-sync,
+.theme-light .alerts-row-danger,
+.theme-light .sync-alerts-shortcut,
+.theme-light .dynamic-state-tab-error,
+.theme-light .dynamic-preview-error,
+.theme-light .dynamic-error-note {
+  border-color: rgba(211, 74, 74, 0.24);
+  background:
+    linear-gradient(135deg, rgba(255, 70, 70, 0.09), transparent 64%),
+    #ffffff;
+}
+
+.theme-light .stock-detail-kpi-danger .stock-detail-kpi-icon,
+.theme-light .stock-detail-kpi-danger strong,
+.theme-light .stock-detail-status-rupture,
+.theme-light .stock-inventory-rupture .stock-inventory-balance > strong,
+.theme-light .stock-rupture-icon,
+.theme-light .stock-rupture-need strong,
+.theme-light .history-stat-canceled svg,
+.theme-light .history-stat-canceled strong,
+.theme-light .history-sale-canceled .history-sale-icon,
+.theme-light .history-sale-canceled .history-sale-head > strong,
+.theme-light .history-sale-canceled .history-sale-footer em,
+.theme-light .alerts-urgent-chip,
+.theme-light .alerts-summary-stock .alerts-summary-icon,
+.theme-light .alerts-summary-sync .alerts-summary-icon,
+.theme-light .alerts-row-danger .alerts-row-icon,
+.theme-light .alerts-row-danger .alerts-row-status em,
+.theme-light .sync-alerts-shortcut .sync-history-icon,
+.theme-light .dynamic-state-tab-error .dynamic-state-tab-icon,
+.theme-light .dynamic-preview-error .dynamic-preview-icon,
+.theme-light .dynamic-error-note {
+  color: #d34a4a;
+}
+
+.theme-light .alerts-summary-clients,
+.theme-light .alerts-clients-card,
+.theme-light .dynamic-state-tab-empty,
+.theme-light .dynamic-preview-empty {
+  border-color: rgba(110, 50, 181, 0.18);
+}
+
+.theme-light .alerts-summary-clients .alerts-summary-icon,
+.theme-light .alerts-summary-clients strong,
+.theme-light .alerts-client-row .alerts-row-icon,
+.theme-light .dynamic-state-tab-empty .dynamic-state-tab-icon,
+.theme-light .dynamic-preview-empty .dynamic-preview-icon {
+  color: #6e32b5;
+}
+
+.theme-light .bottom-nav {
+  border-top-color: rgba(29, 24, 19, 0.1);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 -14px 30px rgba(28, 18, 8, 0.08);
+}
+
+.theme-light .bottom-tab {
+  color: #746b61;
+}
+
+.theme-light .bottom-tab-active {
+  color: #f46b00;
+}
+
+.theme-light .bottom-tab-featured .bottom-icon {
+  color: #ffffff;
+}
+
+.theme-light .primary-action,
+.theme-light .compact-sale-button,
+.theme-light .tour-gps-primary,
+.theme-light .client-sale-action,
+.theme-light .add-product-action,
+.theme-light .confirm-sale-button,
+.theme-light .generate-receipt-button,
+.theme-light .receipt-primary-share,
+.theme-light .sync-now-button,
+.theme-light .history-filter-active,
+.theme-light .stock-detail-filter-active,
+.theme-light .stock-detail-primary-button,
+.theme-light .close-day-button,
+.theme-light .profile-primary-action,
+.theme-light .alerts-primary-action,
+.theme-light .dynamic-primary-action,
+.theme-light .dynamic-preview-action,
+.theme-light .primary-detail-action {
+  background: linear-gradient(180deg, #ff8a1f, #f05a00);
+  color: #ffffff;
+  box-shadow:
+    0 12px 24px rgba(255, 100, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+.theme-light .dashboard-reference-shell {
+  --home-bg: #ffffff;
+  --home-panel: #ffffff;
+  --home-border: rgba(244, 107, 0, 0.2);
+  --home-gold: #d17b00;
+  --home-orange: #f46b00;
+  --home-purple: #6e32b5;
+  --home-cream: #ffffff;
+  --home-muted: #746b61;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 138, 31, 0.12), transparent 26%),
+    linear-gradient(180deg, #ffffff, #fbf7f1 58%, #ffffff);
+  color: #11100e;
+}
+
+.theme-light .home-brand-lockup {
+  color: #11100e;
+}
+
+.theme-light .home-brand-lockup span,
+.theme-light .home-seller-copy h1,
+.theme-light .progress-gauge-card h3,
+.theme-light .retained-performance-card strong,
+.theme-light .retained-performance-card p {
+  color: #11100e;
+}
+
+.theme-light .home-seller-copy {
+  border-left-color: rgba(29, 24, 19, 0.14);
+}
+
+.theme-light .home-seller-copy p,
+.theme-light .home-sync-status,
+.theme-light .progress-gauge-card p,
+.theme-light .retained-performance-card small {
+  color: #746b61;
+}
+
+.theme-light .home-theme-button {
+  color: #11100e;
+}
+
+.theme-light .home-online-chip {
+  border-color: rgba(35, 116, 58, 0.2);
+  background: #e5f6e8;
+  color: #23743a;
+}
+
+.theme-light .progression-panel,
+.theme-light .retained-performance-card,
+.theme-light .remuneration-card,
+.theme-light .levers-card,
+.theme-light .home-summary-grid article,
+.theme-light .alerts-reference-button {
+  border-color: rgba(29, 24, 19, 0.12);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 250, 244, 0.92)),
+    #ffffff;
+  color: #11100e;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 12px 26px rgba(28, 18, 8, 0.07);
+}
+
+.theme-light .progress-gauge-card:first-child {
+  border-right-color: rgba(29, 24, 19, 0.12);
+}
+
+.theme-light .semi-gauge::before {
+  background:
+    conic-gradient(from 270deg, var(--home-orange) 0 var(--gauge-angle), rgba(29, 24, 19, 0.14) var(--gauge-angle) 180deg, transparent 180deg 360deg);
+}
+
+.theme-light .progress-gauge-card p strong,
+.theme-light .home-summary-grid strong,
+.theme-light .alerts-reference-button strong,
+.theme-light .light-section-title h2 {
+  color: #11100e;
+}
+
+.theme-light .alerts-reference-button small {
+  color: #746b61;
+}
+
+.theme-light .next-level-card {
+  border-color: rgba(255, 138, 31, 0.42);
+  background:
+    linear-gradient(115deg, transparent 0 38%, rgba(255, 255, 255, 0.7) 46%, transparent 56%),
+    linear-gradient(100deg, rgba(255, 138, 31, 0.24), rgba(255, 244, 230, 0.96) 52%, #ffffff),
+    #ffffff;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.85) inset,
+    0 0 24px rgba(255, 122, 26, 0.16),
+    0 14px 28px rgba(28, 18, 8, 0.08);
+}
+
+.theme-light .next-level-card::before {
+  opacity: 0.22;
+  mix-blend-mode: multiply;
+}
+
+.theme-light .next-level-label,
+.theme-light .next-level-card > div > strong,
+.theme-light .next-level-card p,
+.theme-light .next-level-card small {
+  color: #11100e;
+  text-shadow: none;
+}
+
+.theme-light .level-dot {
+  border-color: rgba(244, 107, 0, 0.34);
+  background: #ffffff;
+  color: #11100e;
+  box-shadow: 0 0 12px rgba(255, 122, 26, 0.15);
+}
+
+.theme-light .tour-button {
+  border-color: rgba(244, 107, 0, 0.28);
+  background: #ffffff;
+  color: #f46b00;
+}
+
+.theme-light .new-sale-reference-button {
+  background: linear-gradient(180deg, #ff8a1f, #f05a00);
+  color: #ffffff;
+}
+
+.theme-light .activation-reference-shell {
+  --login-bg: #ffffff;
+  --login-panel: #ffffff;
+  --login-orange: #f46b00;
+  --login-gold: #c77600;
+  --login-cream: #ffffff;
+  --login-border: rgba(244, 107, 0, 0.24);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 138, 31, 0.12), transparent 26%),
+    linear-gradient(180deg, #ffffff, #fbf7f1 58%, #ffffff);
+  color: #11100e;
+}
+
+.theme-light .login-topbar {
+  border-bottom-color: rgba(244, 107, 0, 0.12);
+}
+
+.theme-light .login-brand-subtitle,
+.theme-light .secure-terminal-chip,
+.theme-light .login-welcome h1,
+.theme-light .rs-profile-copy h2,
+.theme-light .rs-profile-list strong,
+.theme-light .pin-login-card h2,
+.theme-light .pin-key,
+.theme-light .fingerprint-note,
+.theme-light .login-footer {
+  color: #11100e;
+}
+
+.theme-light .login-welcome p,
+.theme-light .rs-profile-list,
+.theme-light .rs-profile-copy p,
+.theme-light .terminal-link-note,
+.theme-light .login-footer p {
+  color: #746b61;
+}
+
+.theme-light .secure-terminal-chip {
+  border-color: rgba(35, 116, 58, 0.2);
+  background: #e5f6e8;
+  color: #23743a;
+}
+
+.theme-light .rs-profile-card,
+.theme-light .pin-login-card,
+.theme-light .terminal-activation-card {
+  border-color: rgba(244, 107, 0, 0.2);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 250, 244, 0.92)),
+    #ffffff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 14px 28px rgba(28, 18, 8, 0.08);
+}
+
+.theme-light .rs-profile-badge,
+.theme-light .pin-key-action,
+.theme-light .fingerprint-note svg,
+.theme-light .login-footer svg,
+.theme-light .login-footer strong {
+  color: #f46b00;
+}
+
+.theme-light .pin-key {
+  border-color: rgba(244, 107, 0, 0.46);
+  background: #ffffff;
+}
+
+.theme-light .pin-login-button {
+  border-color: rgba(244, 107, 0, 0.36);
+  background: #ffffff;
+  color: #f46b00;
 }

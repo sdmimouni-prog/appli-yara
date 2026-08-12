@@ -1150,7 +1150,7 @@ function formatDhAmount(value: number) {
 // Build app-specific screens and flows in this file. The surrounding mobile
 // runtime is template-owned and intentionally lives outside this component.
 export default function Prototype() {
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [screen, setScreen] = useState<ScreenName>(() => {
     const params = new URLSearchParams(window.location.search);
