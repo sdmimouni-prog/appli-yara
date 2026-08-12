@@ -4751,6 +4751,504 @@
   color: var(--brand-orange);
 }
 
+.cash-shell {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  background: var(--surface);
+}
+
+.cash-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 12px 18px 10px;
+}
+
+.cash-topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.cash-topline h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.cash-status-chip {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  gap: 5px;
+  padding: 0 9px;
+  border: 1px solid rgba(255, 149, 31, 0.36);
+  border-radius: 999px;
+  background: rgba(255, 122, 26, 0.12);
+  color: var(--brand-orange);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.cash-status-chip svg {
+  width: 14px;
+  height: 14px;
+}
+
+.cash-status-closed {
+  border-color: var(--success-line);
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.cash-hero-card,
+.cash-mode-card,
+.cash-count-card,
+.cheque-card,
+.cash-closing-card,
+.cash-check-card {
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background: var(--surface-soft);
+}
+
+.cash-hero-card {
+  display: grid;
+  min-height: 118px;
+  grid-template-columns: 52px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 13px;
+  margin-bottom: 8px;
+  border-color: rgba(255, 149, 31, 0.42);
+  background:
+    radial-gradient(circle at 88% 0%, rgba(255, 189, 84, 0.18), transparent 32%),
+    linear-gradient(135deg, rgba(255, 122, 26, 0.18), transparent 62%),
+    var(--surface-soft);
+}
+
+.cash-hero-icon,
+.cheque-icon {
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255, 122, 26, 0.12);
+  color: var(--brand-orange);
+}
+
+.cash-hero-icon {
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(255, 149, 31, 0.34);
+  box-shadow: 0 0 20px rgba(255, 122, 26, 0.18);
+}
+
+.cash-hero-icon svg {
+  width: 23px;
+  height: 23px;
+}
+
+.cash-hero-card strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--brand-orange);
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 0.96;
+}
+
+.cash-hero-card p {
+  margin: 8px 0 0;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.22;
+}
+
+.cash-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin-bottom: 8px;
+}
+
+.cash-mode-card {
+  display: grid;
+  min-height: 76px;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  padding: 10px;
+}
+
+.cash-mode-card > span {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255, 122, 26, 0.12);
+  color: var(--brand-orange);
+}
+
+.cash-mode-card svg {
+  width: 17px;
+  height: 17px;
+}
+
+.cash-mode-card strong,
+.cash-mode-card p {
+  display: block;
+  margin: 0;
+}
+
+.cash-mode-card strong {
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.cash-mode-card p {
+  margin-top: 5px;
+  color: var(--ink-muted);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.12;
+}
+
+.cash-mode-cheque {
+  border-color: rgba(74, 202, 91, 0.3);
+}
+
+.cash-mode-cheque > span {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.cash-count-card,
+.cheque-card,
+.cash-closing-card {
+  padding: 11px;
+  margin-bottom: 8px;
+}
+
+.cash-section-title {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.cash-section-title h2 {
+  margin: 4px 0 0;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.cash-section-title > strong {
+  flex: 0 0 auto;
+  padding: 7px 9px;
+  border: 1px solid rgba(255, 149, 31, 0.36);
+  border-radius: 999px;
+  background: rgba(255, 122, 26, 0.12);
+  color: var(--brand-orange);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.cash-breakdown-list,
+.cheque-list {
+  display: grid;
+}
+
+.cash-breakdown-row {
+  display: grid;
+  min-height: 38px;
+  grid-template-columns: minmax(0, 1fr) 48px 84px;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--hairline);
+}
+
+.cash-breakdown-row:first-child,
+.cheque-row:first-child {
+  border-top: 0;
+}
+
+.cash-breakdown-row span,
+.cash-breakdown-row em,
+.cash-breakdown-row strong {
+  font-size: 12px;
+  line-height: 1.1;
+}
+
+.cash-breakdown-row span {
+  overflow: hidden;
+  color: var(--ink);
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cash-breakdown-row em {
+  color: var(--ink-muted);
+  font-style: normal;
+  font-weight: 800;
+  text-align: center;
+}
+
+.cash-breakdown-row strong {
+  color: var(--ink);
+  font-weight: 900;
+  text-align: right;
+}
+
+.cheque-row {
+  display: grid;
+  min-height: 58px;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  border-top: 1px solid var(--hairline);
+}
+
+.cheque-icon {
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(255, 149, 31, 0.28);
+}
+
+.cheque-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.cheque-row strong {
+  display: block;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.12;
+}
+
+.cheque-row p {
+  margin: 4px 0 0;
+  color: var(--ink-muted);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.12;
+}
+
+.cheque-amount {
+  display: grid;
+  justify-items: end;
+  gap: 5px;
+}
+
+.cheque-amount strong {
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.cheque-amount em {
+  padding: 5px 7px;
+  border-radius: 999px;
+  background: rgba(255, 122, 26, 0.12);
+  color: var(--brand-orange);
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.cash-input-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.8fr);
+  gap: 7px;
+  margin-bottom: 8px;
+}
+
+.cash-input-card {
+  display: grid;
+  min-height: 72px;
+  align-content: center;
+  gap: 7px;
+  padding: 10px;
+  border: 1px solid rgba(255, 149, 31, 0.28);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.cash-input-card span {
+  color: var(--ink-muted);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.cash-input-card div {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.cash-input-card input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--brand-orange);
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1;
+  outline: none;
+}
+
+.cash-input-card em {
+  color: var(--brand-orange);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.cash-gap-card strong {
+  color: var(--success);
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.cash-check-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-bottom: 8px;
+}
+
+.cash-check-card {
+  display: grid;
+  min-height: 86px;
+  justify-items: center;
+  align-content: center;
+  padding: 8px 5px;
+  text-align: center;
+}
+
+.cash-check-card svg {
+  width: 16px;
+  height: 16px;
+  color: var(--brand-orange);
+}
+
+.cash-check-card strong {
+  margin-top: 5px;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.cash-check-card span {
+  margin-top: 5px;
+  color: var(--ink);
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1.08;
+}
+
+.cash-check-card p {
+  margin: 4px 0 0;
+  color: var(--ink-muted);
+  font-size: 8px;
+  font-weight: 800;
+  line-height: 1.12;
+}
+
+.cash-check-success {
+  border-color: var(--success-line);
+}
+
+.cash-check-success svg,
+.cash-check-success strong {
+  color: var(--success);
+}
+
+.cash-final-message {
+  display: grid;
+  min-height: 44px;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  padding: 9px;
+  border: 1px solid rgba(255, 149, 31, 0.34);
+  border-radius: 8px;
+  background: rgba(255, 122, 26, 0.12);
+  color: var(--brand-orange);
+}
+
+.cash-final-message-done {
+  border-color: var(--success-line);
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.cash-final-message svg {
+  width: 18px;
+  height: 18px;
+}
+
+.cash-final-message span {
+  color: inherit;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.22;
+}
+
+.close-day-button {
+  display: inline-flex;
+  width: 100%;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: auto;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--brand-orange), var(--brand-orange-strong));
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0;
+  box-shadow: 0 12px 24px rgba(255, 100, 0, 0.24);
+}
+
+.sync-cash-shortcut {
+  border-color: rgba(74, 202, 91, 0.28);
+}
+
+.sync-cash-shortcut .sync-history-icon {
+  border-color: rgba(74, 202, 91, 0.28);
+  background: var(--success-soft);
+  color: var(--success);
+}
+
 /* YARA reference styling applied to every seller interface. */
 .seller-screen.theme-dark {
   --surface: #050504;
@@ -4778,6 +5276,7 @@
 .theme-dark .cart-shell,
 .theme-dark .delivery-shell,
 .theme-dark .history-shell,
+.theme-dark .cash-shell,
 .theme-dark .sync-shell {
   background:
     radial-gradient(circle at 12% 0%, rgba(255, 122, 26, 0.14), transparent 24%),
@@ -4849,6 +5348,7 @@
 .theme-dark .cart-content,
 .theme-dark .delivery-content,
 .theme-dark .history-content,
+.theme-dark .cash-content,
 .theme-dark .sync-content {
   padding-right: 12px;
   padding-left: 12px;
@@ -4866,10 +5366,12 @@
 .theme-dark .cart-topline h1,
 .theme-dark .delivery-topline h1,
 .theme-dark .history-topline h1,
+.theme-dark .cash-topline h1,
 .theme-dark .sync-topline h1,
 .theme-dark .client-heading-row h1,
 .theme-dark .section-card-title h2,
 .theme-dark .history-list-title h2,
+.theme-dark .cash-section-title h2,
 .theme-dark .sync-section-title h2 {
   color: #ffffff;
   text-transform: uppercase;
@@ -4902,6 +5404,13 @@
 .theme-dark .history-hero-card,
 .theme-dark .history-stat-card,
 .theme-dark .history-sale-card,
+.theme-dark .cash-hero-card,
+.theme-dark .cash-mode-card,
+.theme-dark .cash-count-card,
+.theme-dark .cheque-card,
+.theme-dark .cash-closing-card,
+.theme-dark .cash-check-card,
+.theme-dark .cash-input-card,
 .theme-dark .sync-history-shortcut,
 .theme-dark .sync-hero-card,
 .theme-dark .last-sync-card,
@@ -4951,6 +5460,8 @@
 .theme-dark .receipt-preview-icon,
 .theme-dark .history-hero-icon,
 .theme-dark .history-sale-icon,
+.theme-dark .cash-hero-icon,
+.theme-dark .cheque-icon,
 .theme-dark .sync-history-icon,
 .theme-dark .sync-stat-icon {
   border: 1px solid rgba(255, 149, 31, 0.24);
@@ -4982,6 +5493,9 @@
 .theme-dark .history-date-chip,
 .theme-dark .history-list-title em,
 .theme-dark .history-sale-footer em,
+.theme-dark .cash-status-chip,
+.theme-dark .cash-section-title > strong,
+.theme-dark .cheque-amount em,
 .theme-dark .sync-section-title > strong,
 .theme-dark .sync-queue-row em,
 .theme-dark .visit-status,
@@ -5019,6 +5533,12 @@
 .theme-dark .history-sale-products p,
 .theme-dark .history-sale-meta span,
 .theme-dark .history-stat-card strong,
+.theme-dark .cash-mode-card strong,
+.theme-dark .cash-breakdown-row span,
+.theme-dark .cash-breakdown-row strong,
+.theme-dark .cheque-row strong,
+.theme-dark .cash-check-card strong,
+.theme-dark .cash-check-card span,
 .theme-dark .sync-history-shortcut strong,
 .theme-dark .last-sync-card strong,
 .theme-dark .sync-stat-card strong,
@@ -5054,6 +5574,9 @@
 .theme-dark .amount-input-wrap input,
 .theme-dark .amount-input-wrap em,
 .theme-dark .history-hero-card strong,
+.theme-dark .cash-hero-card strong,
+.theme-dark .cash-input-card input,
+.theme-dark .cash-input-card em,
 .theme-dark .sync-hero-card h2,
 .theme-dark .stock-value-low strong,
 .theme-dark .product-meta .stock-value-low {
@@ -5064,6 +5587,8 @@
 .theme-dark .delivery-confirmation-card,
 .theme-dark .exact-amount-message,
 .theme-dark .sync-message-card,
+.theme-dark .cash-status-closed,
+.theme-dark .cash-final-message-done,
 .theme-dark .connection-chip,
 .theme-dark .status-pill-active {
   border-color: rgba(74, 202, 91, 0.3);
@@ -5074,6 +5599,8 @@
 .theme-dark .stock-control-main p,
 .theme-dark .empty-cart-card p,
 .theme-dark .delivery-confirmation-card p,
+.theme-dark .cash-hero-card p,
+.theme-dark .cash-check-card p,
 .theme-dark .sync-message-card p {
   color: rgba(255, 255, 255, 0.76);
 }
@@ -5125,6 +5652,7 @@
 .theme-dark .generate-receipt-button,
 .theme-dark .sync-now-button,
 .theme-dark .history-filter-active,
+.theme-dark .close-day-button,
 .theme-dark .primary-detail-action {
   background: linear-gradient(180deg, #ff8a1f, #f05a00);
   color: #ffffff;

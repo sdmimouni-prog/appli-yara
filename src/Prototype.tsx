@@ -50,6 +50,7 @@ type ScreenName =
   | "panier"
   | "livraison"
   | "historique"
+  | "caisse"
   | "synchronisation";
 
 type SaleCycleStep = "commande" | "livraison" | "encaissement" | "recu";
@@ -481,6 +482,65 @@ const salesHistoryItems = [
   type: "sale" | "receipt" | "canceled";
 }>;
 
+const cashBreakdownItems = [
+  { label: "Billets 200 DH", quantity: "31", amount: "6 200 DH" },
+  { label: "Billets 100 DH", quantity: "16", amount: "1 600 DH" },
+  { label: "Billets 50 DH", quantity: "20", amount: "1 000 DH" },
+  { label: "Monnaie", quantity: "lot", amount: "400 DH" },
+] satisfies Array<{
+  label: string;
+  quantity: string;
+  amount: string;
+}>;
+
+const chequeRemittanceItems = [
+  {
+    reference: "CHQ-7841",
+    client: "Bazar Saada",
+    bank: "Attijariwafa",
+    amount: "3 120 DH",
+    status: "Signé",
+  },
+  {
+    reference: "CHQ-7839",
+    client: "Épicerie Al Manar",
+    bank: "BMCE",
+    amount: "2 450 DH",
+    status: "Signé",
+  },
+  {
+    reference: "CHQ-7837",
+    client: "Pharmacie Hay Nour",
+    bank: "CIH",
+    amount: "2 990 DH",
+    status: "Signé",
+  },
+  {
+    reference: "CHQ-7835",
+    client: "Supérette Al Amal",
+    bank: "SGMB",
+    amount: "1 890 DH",
+    status: "À vérifier",
+  },
+] satisfies Array<{
+  reference: string;
+  client: string;
+  bank: string;
+  amount: string;
+  status: string;
+}>;
+
+const cashClosingChecks = [
+  { label: "Ventes du jour", value: "8", detail: "Toutes dans la caisse" },
+  { label: "Reçus générés", value: "8", detail: "Aucun reçu manquant" },
+  { label: "Écart constaté", value: "0 DH", detail: "Caisse équilibrée", success: true },
+] satisfies Array<{
+  label: string;
+  value: string;
+  detail: string;
+  success?: boolean;
+}>;
+
 function parseDhAmount(value: string) {
   return Number(value.replace(/\D/g, "")) || 0;
 }
@@ -505,6 +565,7 @@ export default function Prototype() {
       initialScreen === "panier" ||
       initialScreen === "livraison" ||
       initialScreen === "historique" ||
+      initialScreen === "caisse" ||
       initialScreen === "synchronisation"
     ) {
       return initialScreen;
@@ -553,6 +614,8 @@ export default function Prototype() {
         ? "panier"
         : visibleScreen === "historique"
           ? "synchronisation"
+          : visibleScreen === "caisse"
+            ? "synchronisation"
           : visibleScreen;
 
   return (
@@ -602,6 +665,13 @@ export default function Prototype() {
           />
         ) : visibleScreen === "historique" ? (
           <SalesHistoryScreen
+            theme={theme}
+            themeLabel={themeLabel}
+            onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
+            onNavigate={showScreen}
+          />
+        ) : visibleScreen === "caisse" ? (
+          <CashClosingScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
@@ -1960,6 +2030,193 @@ function SalesHistoryScreen({
   );
 }
 
+function CashClosingScreen({
+  theme,
+  themeLabel,
+  onToggleTheme,
+  onNavigate,
+}: {
+  theme: "light" | "dark";
+  themeLabel: string;
+  onToggleTheme: () => void;
+  onNavigate: (screen: ScreenName) => void;
+}) {
+  const [isClosed, setIsClosed] = useState(false);
+
+  return (
+    <main className="cash-shell" aria-label="Caisse et remise de caisse">
+      <header className="detail-header">
+        <button
+          className="header-icon-button"
+          type="button"
+          aria-label="Retour à Plus"
+          onClick={() => onNavigate("synchronisation")}
+          data-scroll-drag="ignore"
+        >
+          <ArrowLeftIcon />
+        </button>
+        <img className="detail-logo" src={yaraLogoLockup} alt="YARA" draggable={false} />
+        <div className="header-actions">
+          <button
+            className="header-icon-button"
+            type="button"
+            aria-label={themeLabel}
+            onClick={onToggleTheme}
+            data-scroll-drag="ignore"
+          >
+            {theme === "light" ? <MoonIcon /> : <SunIcon />}
+          </button>
+          <button className="header-icon-button" type="button" aria-label="Reçu de remise" data-scroll-drag="ignore">
+            <FileTextIcon />
+          </button>
+        </div>
+      </header>
+
+      <section className="cash-content">
+        <div className="cash-topline">
+          <div>
+            <p className="eyebrow">Clôture journée</p>
+            <h1>Caisse / Remise</h1>
+            <p className="assignment-summary">Karim Bennani · Sprinter V-204</p>
+          </div>
+          <span className={`cash-status-chip ${isClosed ? "cash-status-closed" : ""}`}>
+            {isClosed ? <CheckCircledIcon /> : <ClockIcon />}
+            {isClosed ? "Clôturée" : "À remettre"}
+          </span>
+        </div>
+
+        <section className="cash-hero-card" aria-label="Montant à remettre">
+          <span className="cash-hero-icon" aria-hidden="true">
+            <ValueIcon />
+          </span>
+          <div>
+            <span className="detail-eyebrow">Montant à remettre</span>
+            <strong>19 650 DH</strong>
+            <p>Espèces 9 200 DH · Chèques 10 450 DH · Écart 0 DH</p>
+          </div>
+        </section>
+
+        <section className="cash-mode-grid" aria-label="Répartition de la caisse">
+          <article className="cash-mode-card cash-mode-cash">
+            <span aria-hidden="true">
+              <ValueIcon />
+            </span>
+            <div>
+              <strong>9 200 DH</strong>
+              <p>Espèces</p>
+            </div>
+          </article>
+          <article className="cash-mode-card cash-mode-cheque">
+            <span aria-hidden="true">
+              <FileTextIcon />
+            </span>
+            <div>
+              <strong>10 450 DH</strong>
+              <p>Chèques · 4 pièces</p>
+            </div>
+          </article>
+        </section>
+
+        <section className="cash-count-card" aria-label="Détail espèces">
+          <div className="cash-section-title">
+            <div>
+              <span className="detail-eyebrow">Détail espèces</span>
+              <h2>Comptage rapide</h2>
+            </div>
+            <strong>9 200 DH</strong>
+          </div>
+
+          <div className="cash-breakdown-list">
+            {cashBreakdownItems.map((item) => (
+              <article className="cash-breakdown-row" key={item.label}>
+                <span>{item.label}</span>
+                <em>{item.quantity}</em>
+                <strong>{item.amount}</strong>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="cheque-card" aria-label="Détail chèques">
+          <div className="cash-section-title">
+            <div>
+              <span className="detail-eyebrow">Détail chèques</span>
+              <h2>À déposer</h2>
+            </div>
+            <strong>10 450 DH</strong>
+          </div>
+
+          <div className="cheque-list">
+            {chequeRemittanceItems.map((item) => (
+              <article className="cheque-row" key={item.reference}>
+                <span className="cheque-icon" aria-hidden="true">
+                  <FileTextIcon />
+                </span>
+                <div>
+                  <strong>{item.client}</strong>
+                  <p>{item.reference} · {item.bank}</p>
+                </div>
+                <div className="cheque-amount">
+                  <strong>{item.amount}</strong>
+                  <em>{item.status}</em>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="cash-closing-card" aria-label="Clôture de la journée">
+          <div className="cash-section-title">
+            <div>
+              <span className="detail-eyebrow">Validation</span>
+              <h2>Clôture journée</h2>
+            </div>
+            <strong>{isClosed ? "OK" : "Prêt"}</strong>
+          </div>
+
+          <div className="cash-input-grid">
+            <label className="cash-input-card" htmlFor="cash-counted-amount">
+              <span>Montant compté</span>
+              <div>
+                <KeyboardInput id="cash-counted-amount" defaultValue="19650" inputMode="numeric" aria-label="Montant compté" />
+                <em>DH</em>
+              </div>
+            </label>
+            <article className="cash-input-card cash-gap-card">
+              <span>Écart</span>
+              <strong>0 DH</strong>
+            </article>
+          </div>
+
+          <div className="cash-check-grid">
+            {cashClosingChecks.map((item) => (
+              <article className={`cash-check-card ${item.success ? "cash-check-success" : ""}`} key={item.label}>
+                {item.success ? <CheckCircledIcon /> : <CardStackIcon />}
+                <strong>{item.value}</strong>
+                <span>{item.label}</span>
+                <p>{item.detail}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className={isClosed ? "cash-final-message cash-final-message-done" : "cash-final-message"}>
+            {isClosed ? <CheckCircledIcon /> : <ExclamationTriangleIcon />}
+            <span>
+              {isClosed
+                ? "Journée clôturée. La remise peut être déposée au responsable."
+                : "Vérifiez espèces et chèques avant de clôturer la journée."}
+            </span>
+          </div>
+        </section>
+
+        <button className="close-day-button" type="button" onClick={() => setIsClosed(true)} data-scroll-drag="ignore">
+          {isClosed ? "Journée clôturée" : "Clôturer la journée"}
+        </button>
+      </section>
+    </main>
+  );
+}
+
 function SynchronisationScreen({
   theme,
   themeLabel,
@@ -2021,6 +2278,17 @@ function SynchronisationScreen({
             </article>
           ))}
         </section>
+
+        <button className="sync-history-shortcut sync-cash-shortcut" type="button" onClick={() => onNavigate("caisse")} data-scroll-drag="ignore">
+          <span className="sync-history-icon" aria-hidden="true">
+            <ValueIcon />
+          </span>
+          <span>
+            <strong>Caisse / Remise de caisse</strong>
+            <small>Espèces, chèques et clôture journée</small>
+          </span>
+          <ChevronRightIcon />
+        </button>
 
         <button className="sync-history-shortcut" type="button" onClick={() => onNavigate("historique")} data-scroll-drag="ignore">
           <span className="sync-history-icon" aria-hidden="true">
