@@ -1955,6 +1955,66 @@
   height: 16px;
 }
 
+.tour-map-entry-card {
+  display: grid;
+  width: 100%;
+  min-height: 66px;
+  grid-template-columns: 38px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 11px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 149, 31, 0.42);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(255, 122, 26, 0.16), transparent 62%),
+    var(--surface-soft);
+  color: var(--ink);
+  text-align: left;
+}
+
+.tour-map-entry-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid rgba(255, 149, 31, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 122, 26, 0.12);
+  color: var(--brand-orange);
+}
+
+.tour-map-entry-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.tour-map-entry-card strong,
+.tour-map-entry-card small {
+  display: block;
+}
+
+.tour-map-entry-card strong {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.tour-map-entry-card small {
+  margin-top: 4px;
+  color: var(--ink-muted);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.12;
+}
+
+.tour-map-entry-card > svg {
+  width: 16px;
+  height: 16px;
+  color: var(--brand-orange);
+}
+
 .client-search {
   display: grid;
   min-height: 50px;
@@ -2177,6 +2237,476 @@
 .client-sale-action svg {
   width: 20px;
   height: 20px;
+}
+
+.tour-map-shell {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  background: var(--surface);
+}
+
+.tour-map-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 12px 18px 10px;
+}
+
+.tour-map-topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.tour-map-topline h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.tour-gps-chip {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  gap: 5px;
+  padding: 0 9px;
+  border: 1px solid var(--success-line);
+  border-radius: 999px;
+  background: var(--success-soft);
+  color: var(--success);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.tour-gps-chip svg {
+  width: 14px;
+  height: 14px;
+}
+
+.tour-route-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-bottom: 8px;
+}
+
+.tour-route-summary article,
+.tour-map-card,
+.next-stop-card,
+.tour-gps-secondary,
+.tour-stop-list-card,
+.tour-stop-row {
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background: var(--surface-soft);
+}
+
+.tour-route-summary article {
+  display: grid;
+  min-height: 66px;
+  justify-items: center;
+  align-content: center;
+  padding: 8px 5px;
+  text-align: center;
+}
+
+.tour-route-summary strong {
+  color: var(--brand-orange);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.tour-route-summary span {
+  margin-top: 6px;
+  color: var(--ink-muted);
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1.08;
+}
+
+.tour-map-card {
+  padding: 10px;
+  margin-bottom: 8px;
+  border-color: rgba(255, 149, 31, 0.42);
+  background:
+    linear-gradient(135deg, rgba(255, 122, 26, 0.12), transparent 64%),
+    var(--surface-soft);
+}
+
+.tour-map-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.tour-map-toolbar span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.tour-map-toolbar svg {
+  width: 15px;
+  height: 15px;
+  color: var(--brand-orange);
+}
+
+.tour-map-toolbar strong {
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: rgba(255, 122, 26, 0.12);
+  color: var(--brand-orange);
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.tour-map-canvas {
+  position: relative;
+  height: 326px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 149, 31, 0.28);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 22% 28%, rgba(255, 122, 26, 0.18), transparent 18%),
+    radial-gradient(circle at 74% 42%, rgba(74, 202, 91, 0.12), transparent 17%),
+    radial-gradient(circle at 38% 76%, rgba(255, 98, 98, 0.12), transparent 18%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.045), transparent 34%),
+    #080705;
+}
+
+.tour-map-grid {
+  position: absolute;
+  inset: -22px;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(rgba(255, 189, 84, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 189, 84, 0.22) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+.tour-map-grid-b {
+  transform: rotate(34deg) scale(1.08);
+  opacity: 0.12;
+}
+
+.tour-map-road {
+  position: absolute;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  transform-origin: left center;
+}
+
+.tour-map-road-main {
+  width: 360px;
+  left: -20px;
+  top: 170px;
+  transform: rotate(-12deg);
+}
+
+.tour-map-road-second {
+  width: 280px;
+  left: 68px;
+  top: 82px;
+  transform: rotate(42deg);
+}
+
+.tour-map-road-third {
+  width: 280px;
+  left: 42px;
+  top: 262px;
+  transform: rotate(-39deg);
+}
+
+.tour-route-segment {
+  position: absolute;
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff8a1f, #ffbd54);
+  box-shadow:
+    0 0 14px rgba(255, 122, 26, 0.44),
+    0 0 0 1px rgba(255, 242, 185, 0.12) inset;
+  transform-origin: left center;
+}
+
+.tour-vehicle-marker {
+  position: absolute;
+  left: 12%;
+  top: 82%;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 2px solid rgba(255, 242, 185, 0.62);
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--brand-orange), var(--brand-orange-strong));
+  color: #ffffff;
+  box-shadow: 0 0 22px rgba(255, 122, 26, 0.5);
+  transform: translate(-50%, -50%);
+}
+
+.tour-vehicle-marker svg {
+  width: 17px;
+  height: 17px;
+}
+
+.tour-client-marker {
+  position: absolute;
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 2px solid rgba(255, 242, 185, 0.46);
+  border-radius: 999px;
+  background: #0f0d09;
+  color: #ffbd54;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 0 16px rgba(255, 122, 26, 0.28);
+  transform: translate(-50%, -50%);
+}
+
+.tour-client-marker-priority {
+  background: linear-gradient(180deg, var(--brand-orange), var(--brand-orange-strong));
+  color: #ffffff;
+  box-shadow: 0 0 22px rgba(255, 122, 26, 0.48);
+}
+
+.tour-map-zone {
+  position: absolute;
+  padding: 5px 7px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.36);
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.tour-map-zone-north {
+  left: 16px;
+  top: 16px;
+}
+
+.tour-map-zone-east {
+  right: 14px;
+  top: 112px;
+}
+
+.tour-map-zone-south {
+  left: 110px;
+  bottom: 14px;
+}
+
+.next-stop-card {
+  display: grid;
+  min-height: 82px;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 11px;
+  margin-bottom: 8px;
+  border-color: rgba(255, 149, 31, 0.42);
+  background:
+    linear-gradient(135deg, rgba(255, 122, 26, 0.16), transparent 62%),
+    var(--surface-soft);
+}
+
+.next-stop-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid rgba(255, 149, 31, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 122, 26, 0.12);
+  color: var(--brand-orange);
+}
+
+.next-stop-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.next-stop-card strong {
+  display: block;
+  margin-top: 3px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.12;
+}
+
+.next-stop-card p {
+  margin: 4px 0 0;
+  color: var(--ink-muted);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.16;
+}
+
+.next-stop-card button {
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 149, 31, 0.34);
+  border-radius: 999px;
+  background: rgba(255, 122, 26, 0.12);
+  color: var(--brand-orange);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.tour-map-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tour-gps-primary,
+.tour-gps-secondary {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.tour-gps-primary {
+  border: 0;
+  background: linear-gradient(180deg, var(--brand-orange), var(--brand-orange-strong));
+  color: #ffffff;
+  box-shadow: 0 12px 24px rgba(255, 100, 0, 0.24);
+}
+
+.tour-gps-secondary {
+  color: var(--ink);
+}
+
+.tour-gps-primary svg,
+.tour-gps-secondary svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tour-stop-list-card {
+  padding: 11px;
+  margin-bottom: 8px;
+}
+
+.tour-stop-title {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.tour-stop-title h2 {
+  margin: 4px 0 0;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.tour-stop-title button {
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 149, 31, 0.34);
+  border-radius: 999px;
+  background: rgba(255, 122, 26, 0.12);
+  color: var(--brand-orange);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.tour-stop-list {
+  display: grid;
+  gap: 7px;
+}
+
+.tour-stop-row {
+  display: grid;
+  min-height: 62px;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 9px;
+}
+
+.tour-stop-priority {
+  border-color: rgba(255, 149, 31, 0.52);
+  box-shadow: inset 3px 0 0 rgba(255, 138, 31, 0.9);
+}
+
+.tour-stop-number {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255, 122, 26, 0.12);
+  color: var(--brand-orange);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.tour-stop-row strong {
+  display: block;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.12;
+}
+
+.tour-stop-row p {
+  margin: 4px 0 0;
+  color: var(--ink-muted);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.14;
+}
+
+.tour-stop-distance {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+}
+
+.tour-stop-distance strong {
+  color: var(--brand-orange);
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.tour-stop-distance em {
+  color: var(--ink-muted);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 1;
 }
 
 .client-detail-shell {
@@ -5911,6 +6441,7 @@
 
 .theme-dark .activation-shell,
 .theme-dark .clients-shell,
+.theme-dark .tour-map-shell,
 .theme-dark .client-detail-shell,
 .theme-dark .catalogue-shell,
 .theme-dark .stock-detail-shell,
@@ -5984,6 +6515,7 @@
 }
 
 .theme-dark .clients-content,
+.theme-dark .tour-map-content,
 .theme-dark .catalogue-content,
 .theme-dark .stock-detail-content,
 .theme-dark .client-detail-content,
@@ -6004,6 +6536,7 @@
 
 .theme-dark .identity-panel h1,
 .theme-dark .clients-topline h1,
+.theme-dark .tour-map-topline h1,
 .theme-dark .catalogue-topline h1,
 .theme-dark .stock-detail-topline h1,
 .theme-dark .cart-topline h1,
@@ -6013,6 +6546,7 @@
 .theme-dark .sync-topline h1,
 .theme-dark .client-heading-row h1,
 .theme-dark .section-card-title h2,
+.theme-dark .tour-stop-title h2,
 .theme-dark .history-list-title h2,
 .theme-dark .stock-detail-section-title h2,
 .theme-dark .cash-section-title h2,
@@ -6032,6 +6566,13 @@
 .theme-dark .product-search,
 .theme-dark .client-filter,
 .theme-dark .product-filter,
+.theme-dark .tour-map-entry-card,
+.theme-dark .tour-route-summary article,
+.theme-dark .tour-map-card,
+.theme-dark .next-stop-card,
+.theme-dark .tour-gps-secondary,
+.theme-dark .tour-stop-list-card,
+.theme-dark .tour-stop-row,
 .theme-dark .client-card,
 .theme-dark .client-hero-card,
 .theme-dark .client-info-card,
@@ -6107,6 +6648,8 @@
 .theme-dark .notice-icon,
 .theme-dark .info-card-icon,
 .theme-dark .notes-icon,
+.theme-dark .tour-map-entry-icon,
+.theme-dark .next-stop-icon,
 .theme-dark .stock-detail-hero-icon,
 .theme-dark .stock-detail-kpi-icon,
 .theme-dark .stock-movement-icon,
@@ -6135,6 +6678,7 @@
 }
 
 .theme-dark .client-card-priority,
+.theme-dark .tour-stop-priority,
 .theme-dark .product-card-low,
 .theme-dark .stock-inventory-low,
 .theme-dark .cart-item-adjusted {
@@ -6146,6 +6690,9 @@
 
 .theme-dark .cart-summary,
 .theme-dark .map-action,
+.theme-dark .tour-map-toolbar strong,
+.theme-dark .next-stop-card button,
+.theme-dark .tour-stop-title button,
 .theme-dark .last-sync-card em,
 .theme-dark .history-date-chip,
 .theme-dark .stock-status-chip,
@@ -6175,6 +6722,10 @@
 .theme-dark .client-title-row h2,
 .theme-dark .client-purchase strong,
 .theme-dark .client-info-card strong,
+.theme-dark .tour-map-entry-card strong,
+.theme-dark .tour-map-toolbar span,
+.theme-dark .next-stop-card strong,
+.theme-dark .tour-stop-row strong,
 .theme-dark .history-row strong,
 .theme-dark .history-row em,
 .theme-dark .client-notes-card p,
@@ -6215,6 +6766,7 @@
 }
 
 .theme-dark .product-meta span,
+.theme-dark .tour-gps-secondary,
 .theme-dark .stock-inventory-meta span,
 .theme-dark .amount-card,
 .theme-dark .quantity-row,
@@ -6228,6 +6780,8 @@
 
 .theme-dark .amount-card-expected,
 .theme-dark .cart-total-card,
+.theme-dark .tour-map-entry-card,
+.theme-dark .next-stop-card,
 .theme-dark .stock-detail-hero-card,
 .theme-dark .history-hero-card,
 .theme-dark .sync-history-shortcut,
@@ -6239,6 +6793,8 @@
 
 .theme-dark .cart-grand-total span,
 .theme-dark .cart-grand-total strong,
+.theme-dark .tour-route-summary strong,
+.theme-dark .tour-stop-distance strong,
 .theme-dark .delivery-summary-head em,
 .theme-dark .amount-input-wrap input,
 .theme-dark .amount-input-wrap em,
@@ -6255,6 +6811,7 @@
 }
 
 .theme-dark .stock-control-card,
+.theme-dark .tour-gps-chip,
 .theme-dark .stock-detail-status-ok,
 .theme-dark .stock-movement-load .stock-movement-icon,
 .theme-dark .stock-movement-check .stock-movement-icon,
@@ -6272,6 +6829,10 @@
 
 .theme-dark .stock-control-main p,
 .theme-dark .stock-detail-hero-card p,
+.theme-dark .tour-map-entry-card small,
+.theme-dark .next-stop-card p,
+.theme-dark .tour-stop-row p,
+.theme-dark .tour-stop-distance em,
 .theme-dark .stock-movement-row p,
 .theme-dark .stock-rupture-row p,
 .theme-dark .empty-cart-card p,
@@ -6365,6 +6926,7 @@
 
 .theme-dark .primary-action,
 .theme-dark .compact-sale-button,
+.theme-dark .tour-gps-primary,
 .theme-dark .client-sale-action,
 .theme-dark .add-product-action,
 .theme-dark .confirm-sale-button,

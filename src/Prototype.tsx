@@ -45,6 +45,7 @@ type ScreenName =
   | "activation"
   | "accueil"
   | "clients"
+  | "carte"
   | "client"
   | "catalogue"
   | "stock"
@@ -182,6 +183,96 @@ const sectorClients = [
     priority: true,
   },
 ];
+
+const tourMapStops = [
+  {
+    index: 1,
+    name: "Épicerie Al Manar",
+    locality: "Ain Sebaâ",
+    distance: "1,2 km",
+    eta: "6 min",
+    status: "À visiter",
+    priority: true,
+    x: 24,
+    y: 34,
+  },
+  {
+    index: 2,
+    name: "Bazar Saada",
+    locality: "Hay Mohammadi",
+    distance: "2,1 km",
+    eta: "11 min",
+    status: "À visiter",
+    priority: true,
+    x: 52,
+    y: 24,
+  },
+  {
+    index: 3,
+    name: "Supérette Al Amal",
+    locality: "Sidi Moumen",
+    distance: "3,0 km",
+    eta: "16 min",
+    status: "À visiter",
+    priority: false,
+    x: 74,
+    y: 45,
+  },
+  {
+    index: 4,
+    name: "Kiosque El Fath",
+    locality: "Roches Noires",
+    distance: "3,4 km",
+    eta: "18 min",
+    status: "À visiter",
+    priority: false,
+    x: 61,
+    y: 70,
+  },
+  {
+    index: 5,
+    name: "Épicerie Badr",
+    locality: "Oulfa",
+    distance: "3,8 km",
+    eta: "22 min",
+    status: "À relancer",
+    priority: true,
+    x: 28,
+    y: 72,
+  },
+] satisfies Array<{
+  index: number;
+  name: string;
+  locality: string;
+  distance: string;
+  eta: string;
+  status: string;
+  priority: boolean;
+  x: number;
+  y: number;
+}>;
+
+const routeSegments = [
+  { width: 92, left: 22, top: 118, rotate: -18 },
+  { width: 82, left: 135, top: 118, rotate: 30 },
+  { width: 96, left: 194, top: 188, rotate: 73 },
+  { width: 82, left: 132, top: 280, rotate: 158 },
+  { width: 88, left: 70, top: 274, rotate: -76 },
+] satisfies Array<{
+  width: number;
+  left: number;
+  top: number;
+  rotate: number;
+}>;
+
+const tourDistanceStats = [
+  { label: "Distance totale", value: "13,5 km" },
+  { label: "Temps estimé", value: "1h14" },
+  { label: "Clients restants", value: "5" },
+] satisfies Array<{
+  label: string;
+  value: string;
+}>;
 
 const clientInfo = [
   {
@@ -757,6 +848,7 @@ export default function Prototype() {
     if (
       initialScreen === "activation" ||
       initialScreen === "clients" ||
+      initialScreen === "carte" ||
       initialScreen === "client" ||
       initialScreen === "catalogue" ||
       initialScreen === "stock" ||
@@ -808,6 +900,8 @@ export default function Prototype() {
   const activeBottomScreen =
     visibleScreen === "client"
       ? "clients"
+      : visibleScreen === "carte"
+        ? "clients"
       : visibleScreen === "livraison"
         ? "panier"
         : visibleScreen === "historique"
@@ -830,6 +924,13 @@ export default function Prototype() {
           />
         ) : visibleScreen === "clients" ? (
           <ClientsScreen
+            theme={theme}
+            themeLabel={themeLabel}
+            onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
+            onNavigate={showScreen}
+          />
+        ) : visibleScreen === "carte" ? (
+          <TourMapScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
@@ -1318,6 +1419,17 @@ function ClientsScreen({
           </button>
         </div>
 
+        <button className="tour-map-entry-card" type="button" onClick={() => onNavigate("carte")} data-scroll-drag="ignore">
+          <span className="tour-map-entry-icon" aria-hidden="true">
+            <GlobeIcon />
+          </span>
+          <span>
+            <strong>Carte tournée / GPS</strong>
+            <small>5 clients · 13,5 km · prochain arrêt dans 6 min</small>
+          </span>
+          <ChevronRightIcon />
+        </button>
+
         <label className="client-search" htmlFor="client-search">
           <MagnifyingGlassIcon aria-hidden="true" />
           <KeyboardInput
@@ -1384,6 +1496,172 @@ function ClientsScreen({
               </button>
             </article>
           ))}
+        </section>
+      </section>
+    </main>
+  );
+}
+
+function TourMapScreen({
+  theme,
+  themeLabel,
+  onToggleTheme,
+  onNavigate,
+}: {
+  theme: "light" | "dark";
+  themeLabel: string;
+  onToggleTheme: () => void;
+  onNavigate: (screen: ScreenName) => void;
+}) {
+  const nextStop = tourMapStops[0];
+
+  return (
+    <main className="tour-map-shell" aria-label="Carte tournée GPS">
+      <header className="detail-header">
+        <button
+          className="header-icon-button"
+          type="button"
+          aria-label="Retour aux clients"
+          onClick={() => onNavigate("clients")}
+          data-scroll-drag="ignore"
+        >
+          <ArrowLeftIcon />
+        </button>
+        <img className="detail-logo" src={yaraLogoLockup} alt="YARA" draggable={false} />
+        <div className="header-actions">
+          <button
+            className="header-icon-button"
+            type="button"
+            aria-label={themeLabel}
+            onClick={onToggleTheme}
+            data-scroll-drag="ignore"
+          >
+            {theme === "light" ? <MoonIcon /> : <SunIcon />}
+          </button>
+          <button className="header-icon-button" type="button" aria-label="Recentrer carte" data-scroll-drag="ignore">
+            <DrawingPinFilledIcon />
+          </button>
+        </div>
+      </header>
+
+      <section className="tour-map-content">
+        <div className="tour-map-topline">
+          <div>
+            <p className="eyebrow">Tournée GPS</p>
+            <h1>Carte tournée</h1>
+            <p className="assignment-summary">Casa Nord · Départ dépôt 08:30</p>
+          </div>
+          <span className="tour-gps-chip">
+            <GlobeIcon />
+            GPS actif
+          </span>
+        </div>
+
+        <section className="tour-route-summary" aria-label="Résumé itinéraire">
+          {tourDistanceStats.map((item) => (
+            <article key={item.label}>
+              <strong>{item.value}</strong>
+              <span>{item.label}</span>
+            </article>
+          ))}
+        </section>
+
+        <section className="tour-map-card" aria-label="Carte des clients">
+          <div className="tour-map-toolbar">
+            <span>
+              <SewingPinIcon />
+              Itinéraire optimisé
+            </span>
+            <strong>+18 % rapide</strong>
+          </div>
+
+          <div className="tour-map-canvas" aria-hidden="true">
+            <div className="tour-map-grid tour-map-grid-a" />
+            <div className="tour-map-grid tour-map-grid-b" />
+            <div className="tour-map-road tour-map-road-main" />
+            <div className="tour-map-road tour-map-road-second" />
+            <div className="tour-map-road tour-map-road-third" />
+            {routeSegments.map((segment, index) => (
+              <span
+                className="tour-route-segment"
+                style={{
+                  width: `${segment.width}px`,
+                  left: `${segment.left}px`,
+                  top: `${segment.top}px`,
+                  transform: `rotate(${segment.rotate}deg)`,
+                }}
+                key={`${segment.left}-${index}`}
+              />
+            ))}
+            <span className="tour-vehicle-marker">
+              <RocketIcon />
+            </span>
+            {tourMapStops.map((stop) => (
+              <span
+                className={`tour-client-marker ${stop.priority ? "tour-client-marker-priority" : ""}`}
+                style={{ left: `${stop.x}%`, top: `${stop.y}%` }}
+                key={stop.name}
+              >
+                {stop.index}
+              </span>
+            ))}
+            <div className="tour-map-zone tour-map-zone-north">Casa Nord</div>
+            <div className="tour-map-zone tour-map-zone-east">Sidi Moumen</div>
+            <div className="tour-map-zone tour-map-zone-south">Roches Noires</div>
+          </div>
+        </section>
+
+        <section className="next-stop-card" aria-label="Prochain client">
+          <span className="next-stop-icon" aria-hidden="true">
+            <DrawingPinFilledIcon />
+          </span>
+          <div>
+            <span className="detail-eyebrow">Prochain arrêt</span>
+            <strong>{nextStop.name}</strong>
+            <p>{nextStop.locality} · {nextStop.distance} · arrivée estimée {nextStop.eta}</p>
+          </div>
+          <button type="button" onClick={() => onNavigate("client")} data-scroll-drag="ignore">
+            Ouvrir
+          </button>
+        </section>
+
+        <section className="tour-map-actions" aria-label="Actions GPS">
+          <button className="tour-gps-primary" type="button" data-scroll-drag="ignore">
+            <RocketIcon />
+            Démarrer GPS
+          </button>
+          <button className="tour-gps-secondary" type="button" data-scroll-drag="ignore">
+            <ReloadIcon />
+            Optimiser
+          </button>
+        </section>
+
+        <section className="tour-stop-list-card" aria-label="Itinéraire clients">
+          <div className="tour-stop-title">
+            <div>
+              <span className="detail-eyebrow">Itinéraire</span>
+              <h2>5 arrêts programmés</h2>
+            </div>
+            <button type="button" onClick={() => onNavigate("clients")} data-scroll-drag="ignore">
+              Liste
+            </button>
+          </div>
+
+          <div className="tour-stop-list">
+            {tourMapStops.map((stop) => (
+              <article className={`tour-stop-row ${stop.priority ? "tour-stop-priority" : ""}`} key={stop.name}>
+                <span className="tour-stop-number">{stop.index}</span>
+                <div>
+                  <strong>{stop.name}</strong>
+                  <p>{stop.locality} · {stop.status}</p>
+                </div>
+                <div className="tour-stop-distance">
+                  <strong>{stop.distance}</strong>
+                  <em>{stop.eta}</em>
+                </div>
+              </article>
+            ))}
+          </div>
         </section>
       </section>
     </main>
@@ -1466,7 +1744,7 @@ function ClientDetailScreen({
           ))}
         </section>
 
-        <button className="map-action" type="button" data-scroll-drag="ignore">
+        <button className="map-action" type="button" onClick={() => onNavigate("carte")} data-scroll-drag="ignore">
           <DrawingPinFilledIcon />
           Voir la localisation sur la carte
         </button>
