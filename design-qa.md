@@ -38,8 +38,8 @@ Checks performed:
 - Accueil "Prochain niveau" has a gamified glow: card pulse, shine sweep, rail comet, active-level halo.
 - Accueil content remains scrollable when the game progression card needs more breathing room.
 - Official cropped YARA logo asset is used in login, Accueil, and app headers.
-- Carte tournée / GPS shows clients on a stylized route map, route summary, next stop, GPS actions, and distance per client.
-- Carte tournée / GPS is reachable from Clients / Tournée and keeps Tournée active in the bottom navigation.
+- Carte tournée / GPS opens directly from the Tournée bottom tab and from Accueil "Continuer ma tournée".
+- Carte tournée / GPS shows Meknès points of sale, six hanout/épicerie pins, a blinking nearest-store pin, a selected-store bubble, and a "Visiter cette épicerie" action.
 - Historique ventes shows completed sales, receipts, canceled sales, payment mode, receipt references, and cancellation reasons.
 - Historique ventes is reachable from Plus / Synchronisation and keeps Plus active in the bottom navigation.
 - Caisse / Remise de caisse shows cash detail, cheque detail, total amount to remit, closing checks, and day-closing status.
@@ -56,6 +56,8 @@ Build verification:
 - Browser measurement passed: level animations active, Accueil scroll enabled, bottom navigation fixed.
 - Browser measurement passed: official YARA logo loads from `/assets/yara/logo-yara-lockup.png` on login and Accueil.
 - Browser flow passed: login -> Tournée -> Carte tournée / GPS -> Fiche client -> Carte tournée / GPS.
+- Browser flow passed: login -> Accueil -> Continuer ma tournée -> Carte points de vente Meknès.
+- Browser flow passed: login -> Tournée -> click Hanout Lahdim pin -> bubble updates -> Visiter cette épicerie.
 - Browser flow passed: login -> Plus -> Historique ventes -> Annulations filter.
 - Browser flow passed: login -> Plus -> Caisse / Remise de caisse -> Clôturer la journée.
 - Browser flow passed: login -> Stock -> Ruptures filter -> Ouvrir catalogue vente.

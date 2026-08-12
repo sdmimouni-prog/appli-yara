@@ -129,7 +129,7 @@ const dashboardStats = [
 
 const bottomTabs = [
   { label: "Accueil", icon: HomeIcon, screen: "accueil" },
-  { label: "Tournée", icon: SewingPinIcon, screen: "clients" },
+  { label: "Tournée", icon: SewingPinIcon, screen: "carte" },
   { label: "Vendre", icon: PlusIcon, screen: "panier", featured: true },
   { label: "Stock", icon: CubeIcon, screen: "stock" },
   { label: "Plus", icon: DotsHorizontalIcon, screen: "synchronisation" },
@@ -149,36 +149,36 @@ const clientFilters = [
 
 const sectorClients = [
   {
-    name: "Épicerie Al Manar",
-    locality: "Ain Sebaâ · 1,2 km",
+    name: "Épicerie Bab Mansour",
+    locality: "Médina · 350 m",
     lastPurchase: "11/08/2026 · 2 450 DH",
     status: "À visiter",
     priority: true,
   },
   {
-    name: "Bazar Saada",
-    locality: "Hay Mohammadi · 2,1 km",
+    name: "Hanout Lahdim",
+    locality: "Place Lahdim · 900 m",
     lastPurchase: "09/08/2026 · 3 120 DH",
     status: "À visiter",
     priority: true,
   },
   {
-    name: "Supérette Al Amal",
-    locality: "Sidi Moumen · 3,0 km",
+    name: "Supérette Hamria",
+    locality: "Hamria · 1,8 km",
     lastPurchase: "05/08/2026 · 1 890 DH",
     status: "À visiter",
     priority: false,
   },
   {
-    name: "Kiosque El Fath",
-    locality: "Roches Noires · 3,4 km",
+    name: "Épicerie Zitoune",
+    locality: "Riad Zitoune · 2,4 km",
     lastPurchase: "02/08/2026 · 980 DH",
     status: "À visiter",
     priority: false,
   },
   {
-    name: "Épicerie Badr",
-    locality: "Oulfa · 3,8 km",
+    name: "Hanout Bassatine",
+    locality: "Bassatine · 3,1 km",
     lastPurchase: "30/07/2026 · 2 200 DH",
     status: "À relancer",
     priority: true,
@@ -188,67 +188,108 @@ const sectorClients = [
 const tourMapStops = [
   {
     index: 1,
-    name: "Épicerie Al Manar",
-    locality: "Ain Sebaâ",
-    distance: "1,2 km",
-    eta: "6 min",
+    name: "Épicerie Bab Mansour",
+    locality: "Médina",
+    address: "Rue Dar Smen, près Bab Mansour",
+    phone: "06 61 23 45 67",
+    distance: "350 m",
+    eta: "3 min",
+    lastPurchase: "11/08/2026 · 2 450 DH",
+    potential: "Fort potentiel K/V",
     status: "À visiter",
     priority: true,
-    x: 24,
-    y: 34,
+    nearest: true,
+    x: 46,
+    y: 48,
   },
   {
     index: 2,
-    name: "Bazar Saada",
-    locality: "Hay Mohammadi",
-    distance: "2,1 km",
-    eta: "11 min",
+    name: "Hanout Lahdim",
+    locality: "Place Lahdim",
+    address: "Angle souk Lahdim",
+    phone: "06 62 11 20 33",
+    distance: "900 m",
+    eta: "7 min",
+    lastPurchase: "09/08/2026 · 3 120 DH",
+    potential: "Réassort Blue VIP",
     status: "À visiter",
     priority: true,
-    x: 52,
-    y: 24,
+    x: 34,
+    y: 32,
   },
   {
     index: 3,
-    name: "Supérette Al Amal",
-    locality: "Sidi Moumen",
-    distance: "3,0 km",
-    eta: "16 min",
+    name: "Supérette Hamria",
+    locality: "Hamria",
+    address: "Avenue Mohammed V, Hamria",
+    phone: "06 70 44 18 92",
+    distance: "1,8 km",
+    eta: "12 min",
+    lastPurchase: "05/08/2026 · 1 890 DH",
+    potential: "Prospect miniatures",
     status: "À visiter",
     priority: false,
-    x: 74,
-    y: 45,
+    x: 68,
+    y: 28,
   },
   {
     index: 4,
-    name: "Kiosque El Fath",
-    locality: "Roches Noires",
-    distance: "3,4 km",
-    eta: "18 min",
+    name: "Épicerie Zitoune",
+    locality: "Riad Zitoune",
+    address: "Lotissement Zitoune, rue 12",
+    phone: "06 55 89 30 12",
+    distance: "2,4 km",
+    eta: "16 min",
+    lastPurchase: "02/08/2026 · 980 DH",
+    potential: "À développer S",
     status: "À visiter",
     priority: false,
-    x: 61,
-    y: 70,
+    x: 76,
+    y: 62,
   },
   {
     index: 5,
-    name: "Épicerie Badr",
-    locality: "Oulfa",
-    distance: "3,8 km",
-    eta: "22 min",
+    name: "Hanout Bassatine",
+    locality: "Bassatine",
+    address: "Bassatine 2, bloc B",
+    phone: "06 67 12 88 45",
+    distance: "3,1 km",
+    eta: "20 min",
+    lastPurchase: "30/07/2026 · 2 200 DH",
+    potential: "Client prioritaire",
     status: "À relancer",
     priority: true,
-    x: 28,
+    x: 24,
     y: 72,
+  },
+  {
+    index: 6,
+    name: "Épicerie Ismailia",
+    locality: "Ismailia",
+    address: "Avenue des FAR, Ismailia",
+    phone: "06 64 91 77 20",
+    distance: "4,2 km",
+    eta: "27 min",
+    lastPurchase: "28/07/2026 · 1 640 DH",
+    potential: "Réactivation",
+    status: "Prospect",
+    priority: false,
+    x: 58,
+    y: 78,
   },
 ] satisfies Array<{
   index: number;
   name: string;
   locality: string;
+  address: string;
+  phone: string;
   distance: string;
   eta: string;
+  lastPurchase: string;
+  potential: string;
   status: string;
   priority: boolean;
+  nearest?: boolean;
   x: number;
   y: number;
 }>;
@@ -267,9 +308,9 @@ const routeSegments = [
 }>;
 
 const tourDistanceStats = [
-  { label: "Distance totale", value: "13,5 km" },
-  { label: "Temps estimé", value: "1h14" },
-  { label: "Clients restants", value: "5" },
+  { label: "Distance totale", value: "8,6 km" },
+  { label: "Temps estimé", value: "52 min" },
+  { label: "Points restants", value: "6" },
 ] satisfies Array<{
   label: string;
   value: string;
@@ -283,12 +324,12 @@ const clientInfo = [
   },
   {
     label: "Localisation",
-    value: "Ain Sebaâ · Zone 5",
+    value: "Médina · Bab Mansour",
     icon: GlobeIcon,
   },
   {
     label: "Adresse",
-    value: "128, Rue 5, Ain Sebaâ, Casablanca",
+    value: "Rue Dar Smen, près Bab Mansour, Meknès",
     icon: DrawingPinFilledIcon,
     wide: true,
   },
@@ -953,8 +994,8 @@ export default function Prototype() {
   const visibleScreen = isAuthenticated ? screen : "activation";
   const hasBottomNavigation = isAuthenticated && visibleScreen !== "activation";
   const activeBottomScreen =
-    visibleScreen === "client" || visibleScreen === "carte"
-      ? "clients"
+    visibleScreen === "client" || visibleScreen === "clients" || visibleScreen === "carte"
+      ? "carte"
       : visibleScreen === "livraison"
         ? "panier"
         : visibleScreen === "historique" || visibleScreen === "caisse" || visibleScreen === "recu"
@@ -1258,7 +1299,7 @@ function DashboardScreen({
 
           <div className="home-seller-copy">
             <h1>Bonjour Karim</h1>
-            <p>RS-4821-CASA · V-204 · Casa Nord</p>
+            <p>RS-4821-MEK · V-204 · Meknès Centre</p>
           </div>
 
           <div className="home-status-stack">
@@ -1436,7 +1477,7 @@ function DashboardScreen({
         </section>
 
         <section className="home-reference-actions" aria-label="Actions rapides">
-          <button className="tour-button" type="button" onClick={() => onNavigate("clients")} data-scroll-drag="ignore">
+          <button className="tour-button" type="button" onClick={() => onNavigate("carte")} data-scroll-drag="ignore">
             Continuer ma tournée
             <ChevronRightIcon />
           </button>
@@ -1467,7 +1508,7 @@ function ClientsScreen({
       <section className="clients-content">
         <div className="clients-topline">
           <div>
-            <p className="eyebrow">Casablanca Nord</p>
+            <p className="eyebrow">Meknès Centre</p>
             <h1>Clients / Tournée</h1>
             <p className="assignment-summary">19 clients secteur · 8 à visiter</p>
           </div>
@@ -1571,7 +1612,11 @@ function TourMapScreen({
   onToggleTheme: () => void;
   onNavigate: (screen: ScreenName) => void;
 }) {
-  const nextStop = tourMapStops[0];
+  const nearestStop = tourMapStops.find((stop) => stop.nearest) ?? tourMapStops[0];
+  const [selectedStopName, setSelectedStopName] = useState(nearestStop.name);
+  const selectedStop = tourMapStops.find((stop) => stop.name === selectedStopName) ?? nearestStop;
+  const bubbleLeft = Math.min(Math.max(selectedStop.x, 30), 70);
+  const bubbleTop = selectedStop.y > 56 ? selectedStop.y - 30 : selectedStop.y + 12;
 
   return (
     <main className="tour-map-shell" aria-label="Carte tournée GPS">
@@ -1579,8 +1624,8 @@ function TourMapScreen({
         <button
           className="header-icon-button"
           type="button"
-          aria-label="Retour aux clients"
-          onClick={() => onNavigate("clients")}
+          aria-label="Retour à la carte tournée"
+          onClick={() => onNavigate("carte")}
           data-scroll-drag="ignore"
         >
           <ArrowLeftIcon />
@@ -1606,8 +1651,8 @@ function TourMapScreen({
         <div className="tour-map-topline">
           <div>
             <p className="eyebrow">Tournée GPS</p>
-            <h1>Carte tournée</h1>
-            <p className="assignment-summary">Casa Nord · Départ dépôt 08:30</p>
+            <h1>Carte points de vente</h1>
+            <p className="assignment-summary">Meknès Centre · Départ dépôt 08:30</p>
           </div>
           <span className="tour-gps-chip">
             <GlobeIcon />
@@ -1628,12 +1673,12 @@ function TourMapScreen({
           <div className="tour-map-toolbar">
             <span>
               <SewingPinIcon />
-              Itinéraire optimisé
+              Meknès · points de vente
             </span>
-            <strong>+18 % rapide</strong>
+            <strong>Plus proche : {nearestStop.distance}</strong>
           </div>
 
-          <div className="tour-map-canvas" aria-hidden="true">
+          <div className="tour-map-canvas" aria-label="Carte interactive des épiceries de Meknès">
             <div className="tour-map-grid tour-map-grid-a" />
             <div className="tour-map-grid tour-map-grid-b" />
             <div className="tour-map-road tour-map-road-main" />
@@ -1655,17 +1700,45 @@ function TourMapScreen({
               <RocketIcon />
             </span>
             {tourMapStops.map((stop) => (
-              <span
-                className={`tour-client-marker ${stop.priority ? "tour-client-marker-priority" : ""}`}
+              <button
+                className={`tour-client-marker ${
+                  stop.priority ? "tour-client-marker-priority" : ""
+                } ${stop.nearest ? "tour-client-marker-nearest" : ""} ${
+                  selectedStop.name === stop.name ? "tour-client-marker-selected" : ""
+                }`}
                 style={{ left: `${stop.x}%`, top: `${stop.y}%` }}
                 key={stop.name}
+                type="button"
+                aria-label={`${stop.name}, ${stop.locality}, ${stop.distance}`}
+                onClick={() => setSelectedStopName(stop.name)}
+                data-scroll-drag="ignore"
               >
-                {stop.index}
-              </span>
+                <span>{stop.index}</span>
+              </button>
             ))}
-            <div className="tour-map-zone tour-map-zone-north">Casa Nord</div>
-            <div className="tour-map-zone tour-map-zone-east">Sidi Moumen</div>
-            <div className="tour-map-zone tour-map-zone-south">Roches Noires</div>
+            <article
+              className={`tour-store-bubble ${selectedStop.nearest ? "tour-store-bubble-nearest" : ""}`}
+              style={{ left: `${bubbleLeft}%`, top: `${bubbleTop}%` }}
+              aria-live="polite"
+            >
+              <span className="tour-store-bubble-chip">
+                {selectedStop.nearest ? "Le plus proche" : selectedStop.status}
+              </span>
+              <strong>{selectedStop.name}</strong>
+              <p>{selectedStop.address}</p>
+              <div className="tour-store-bubble-meta">
+                <span>{selectedStop.distance}</span>
+                <span>{selectedStop.eta}</span>
+                <span>{selectedStop.potential}</span>
+              </div>
+              <button type="button" onClick={() => onNavigate("client")} data-scroll-drag="ignore">
+                Visiter cette épicerie
+                <ChevronRightIcon />
+              </button>
+            </article>
+            <div className="tour-map-zone tour-map-zone-north">Médina</div>
+            <div className="tour-map-zone tour-map-zone-east">Hamria</div>
+            <div className="tour-map-zone tour-map-zone-south">Bassatine</div>
           </div>
         </section>
 
@@ -1674,12 +1747,12 @@ function TourMapScreen({
             <DrawingPinFilledIcon />
           </span>
           <div>
-            <span className="detail-eyebrow">Prochain arrêt</span>
-            <strong>{nextStop.name}</strong>
-            <p>{nextStop.locality} · {nextStop.distance} · arrivée estimée {nextStop.eta}</p>
+            <span className="detail-eyebrow">Point sélectionné</span>
+            <strong>{selectedStop.name}</strong>
+            <p>{selectedStop.locality} · {selectedStop.distance} · arrivée estimée {selectedStop.eta}</p>
           </div>
           <button type="button" onClick={() => onNavigate("client")} data-scroll-drag="ignore">
-            Ouvrir
+            Visiter
           </button>
         </section>
 
@@ -1698,7 +1771,7 @@ function TourMapScreen({
           <div className="tour-stop-title">
             <div>
               <span className="detail-eyebrow">Itinéraire</span>
-              <h2>5 arrêts programmés</h2>
+              <h2>{tourMapStops.length} arrêts programmés</h2>
             </div>
             <button type="button" onClick={() => onNavigate("clients")} data-scroll-drag="ignore">
               Liste
@@ -1707,11 +1780,11 @@ function TourMapScreen({
 
           <div className="tour-stop-list">
             {tourMapStops.map((stop) => (
-              <article className={`tour-stop-row ${stop.priority ? "tour-stop-priority" : ""}`} key={stop.name}>
+              <article className={`tour-stop-row ${stop.priority ? "tour-stop-priority" : ""} ${stop.nearest ? "tour-stop-nearest" : ""}`} key={stop.name}>
                 <span className="tour-stop-number">{stop.index}</span>
                 <div>
                   <strong>{stop.name}</strong>
-                  <p>{stop.locality} · {stop.status}</p>
+                  <p>{stop.locality} · {stop.status} · {stop.lastPurchase}</p>
                 </div>
                 <div className="tour-stop-distance">
                   <strong>{stop.distance}</strong>
@@ -1774,10 +1847,10 @@ function ClientDetailScreen({
           <div className="client-hero-copy">
             <span className="detail-eyebrow">Nom commercial</span>
             <div className="client-heading-row">
-              <h1 id="client-title">Épicerie Al Manar</h1>
+              <h1 id="client-title">Épicerie Bab Mansour</h1>
               <StarFilledIcon />
             </div>
-            <p>Code client : CLT-01452</p>
+            <p>Code client : MEK-0107</p>
             <div className="client-status-row">
               <span className="status-pill status-pill-active">
                 <CheckCircledIcon />
