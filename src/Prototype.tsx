@@ -54,6 +54,7 @@ type ScreenName =
   | "recu"
   | "historique"
   | "caisse"
+  | "profil"
   | "synchronisation";
 
 type SaleCycleStep = "commande" | "livraison" | "encaissement" | "recu";
@@ -911,6 +912,39 @@ const cashClosingChecks = [
   success?: boolean;
 }>;
 
+const profileIdentityItems = [
+  { label: "Identifiant RS", value: "RS-4821-MEK", icon: IdCardIcon },
+  { label: "Rôle", value: "Responsable de secteur", icon: PersonIcon },
+  { label: "Agence", value: "YARA Meknès", icon: HomeIcon },
+  { label: "Statut", value: "Actif · autorisé", icon: CheckCircledIcon, success: true },
+] satisfies Array<{
+  label: string;
+  value: string;
+  icon: typeof IdCardIcon;
+  success?: boolean;
+}>;
+
+const profileVehicleItems = [
+  { label: "Véhicule", value: "Sprinter V-204", detail: "Affecté aujourd'hui" },
+  { label: "Immatriculation", value: "MEK-204-26", detail: "Contrôle OK" },
+  { label: "Stock chargé", value: "89 unités", detail: "48 350 DH" },
+  { label: "Kilométrage", value: "42 180 km", detail: "Départ dépôt 08:30" },
+] satisfies Array<{
+  label: string;
+  value: string;
+  detail: string;
+}>;
+
+const profileSectorItems = [
+  { label: "Secteur", value: "Meknès Centre", detail: "Médina · Hamria · Bassatine" },
+  { label: "Clients actifs", value: "19", detail: "6 à visiter aujourd'hui" },
+  { label: "Point le plus proche", value: "Épicerie Bab Mansour", detail: "350 m · 3 min" },
+] satisfies Array<{
+  label: string;
+  value: string;
+  detail: string;
+}>;
+
 function parseDhAmount(value: string) {
   return Number(value.replace(/\D/g, "")) || 0;
 }
@@ -939,6 +973,7 @@ export default function Prototype() {
       initialScreen === "recu" ||
       initialScreen === "historique" ||
       initialScreen === "caisse" ||
+      initialScreen === "profil" ||
       initialScreen === "synchronisation"
     ) {
       return initialScreen;
@@ -998,7 +1033,7 @@ export default function Prototype() {
       ? "carte"
       : visibleScreen === "livraison"
         ? "panier"
-        : visibleScreen === "historique" || visibleScreen === "caisse" || visibleScreen === "recu"
+        : visibleScreen === "historique" || visibleScreen === "caisse" || visibleScreen === "recu" || visibleScreen === "profil"
           ? "synchronisation"
           : visibleScreen === "catalogue"
             ? "stock"
@@ -1079,6 +1114,13 @@ export default function Prototype() {
           />
         ) : visibleScreen === "caisse" ? (
           <CashClosingScreen
+            theme={theme}
+            themeLabel={themeLabel}
+            onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
+            onNavigate={showScreen}
+          />
+        ) : visibleScreen === "profil" ? (
+          <ProfileRSScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
@@ -3053,6 +3095,157 @@ function CashClosingScreen({
   );
 }
 
+function ProfileRSScreen({
+  theme,
+  themeLabel,
+  onToggleTheme,
+  onNavigate,
+}: {
+  theme: "light" | "dark";
+  themeLabel: string;
+  onToggleTheme: () => void;
+  onNavigate: (screen: ScreenName) => void;
+}) {
+  return (
+    <main className="profile-rs-shell" aria-label="Profil RS">
+      <header className="detail-header">
+        <button
+          className="header-icon-button"
+          type="button"
+          aria-label="Retour à Plus"
+          onClick={() => onNavigate("synchronisation")}
+          data-scroll-drag="ignore"
+        >
+          <ArrowLeftIcon />
+        </button>
+        <img className="detail-logo" src={yaraLogoLockup} alt="YARA" draggable={false} />
+        <div className="header-actions">
+          <button
+            className="header-icon-button"
+            type="button"
+            aria-label={themeLabel}
+            onClick={onToggleTheme}
+            data-scroll-drag="ignore"
+          >
+            {theme === "light" ? <MoonIcon /> : <SunIcon />}
+          </button>
+          <button className="header-icon-button" type="button" aria-label="Paramètres profil" data-scroll-drag="ignore">
+            <GearIcon />
+          </button>
+        </div>
+      </header>
+
+      <section className="profile-rs-content">
+        <div className="profile-rs-topline">
+          <div>
+            <p className="eyebrow">Profil commercial</p>
+            <h1>Profil RS</h1>
+            <p className="assignment-summary">Karim Bennani · Meknès Centre</p>
+          </div>
+          <span className="profile-status-chip">
+            <CheckCircledIcon />
+            Actif
+          </span>
+        </div>
+
+        <section className="profile-hero-card" aria-label="Identité commerciale">
+          <span className="profile-avatar" aria-hidden="true">
+            <PersonIcon />
+          </span>
+          <div>
+            <span className="detail-eyebrow">Responsable de secteur</span>
+            <strong>Karim BENNANI</strong>
+            <p>RS-4821-MEK · Affectation validée aujourd'hui à 08:30</p>
+          </div>
+        </section>
+
+        <section className="profile-identity-grid" aria-label="Informations commercial">
+          {profileIdentityItems.map(({ label, value, icon: Icon, success }) => (
+            <article className={`profile-info-card ${success ? "profile-info-success" : ""}`} key={label}>
+              <span className="profile-info-icon" aria-hidden="true">
+                <Icon />
+              </span>
+              <div>
+                <span>{label}</span>
+                <strong>{value}</strong>
+              </div>
+            </article>
+          ))}
+        </section>
+
+        <section className="profile-phone-card" aria-label="Téléphone affecté">
+          <span className="profile-phone-icon" aria-hidden="true">
+            <MobileIcon />
+          </span>
+          <div>
+            <span className="detail-eyebrow">Téléphone affecté</span>
+            <strong>+212 6 72 45 81 09</strong>
+            <p>Terminal Android RS-204 · SIM YARA · liaison sécurisée active</p>
+          </div>
+          <em>En ligne</em>
+        </section>
+
+        <section className="profile-section-card" aria-label="Véhicule affecté">
+          <div className="profile-section-title">
+            <div>
+              <span className="detail-eyebrow">Véhicule affecté</span>
+              <h2>Sprinter V-204</h2>
+            </div>
+            <RocketIcon />
+          </div>
+          <div className="profile-data-list">
+            {profileVehicleItems.map((item) => (
+              <div className="profile-data-row" key={item.label}>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+                <em>{item.detail}</em>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="profile-section-card" aria-label="Secteur affecté">
+          <div className="profile-section-title">
+            <div>
+              <span className="detail-eyebrow">Secteur affecté</span>
+              <h2>Meknès Centre</h2>
+            </div>
+            <SewingPinIcon />
+          </div>
+          <div className="profile-data-list">
+            {profileSectorItems.map((item) => (
+              <div className="profile-data-row" key={item.label}>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+                <em>{item.detail}</em>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="profile-security-card" aria-label="Sécurité profil">
+          <CheckCircledIcon />
+          <div>
+            <strong>Profil synchronisé et sécurisé</strong>
+            <p>Ce terminal est lié au commercial, au véhicule et au secteur affectés.</p>
+          </div>
+        </section>
+
+        <section className="profile-actions" aria-label="Actions profil RS">
+          <button className="profile-primary-action" type="button" onClick={() => onNavigate("carte")} data-scroll-drag="ignore">
+            <SewingPinIcon />
+            Voir ma tournée
+          </button>
+          <button className="profile-secondary-action" type="button" onClick={() => onNavigate("synchronisation")} data-scroll-drag="ignore">
+            <ReloadIcon />
+            Synchronisation
+          </button>
+        </section>
+      </section>
+    </main>
+  );
+}
+
 function ReceiptScreen({
   theme,
   themeLabel,
@@ -3301,6 +3494,17 @@ function SynchronisationScreen({
             </article>
           ))}
         </section>
+
+        <button className="sync-history-shortcut sync-profile-shortcut" type="button" onClick={() => onNavigate("profil")} data-scroll-drag="ignore">
+          <span className="sync-history-icon" aria-hidden="true">
+            <PersonIcon />
+          </span>
+          <span>
+            <strong>Profil RS</strong>
+            <small>Commercial, véhicule, secteur et téléphone</small>
+          </span>
+          <ChevronRightIcon />
+        </button>
 
         <button className="sync-history-shortcut sync-cash-shortcut" type="button" onClick={() => onNavigate("caisse")} data-scroll-drag="ignore">
           <span className="sync-history-icon" aria-hidden="true">

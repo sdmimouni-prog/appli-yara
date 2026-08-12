@@ -18,6 +18,7 @@ Prototype checked:
 - Reçu complet
 - Historique ventes
 - Caisse / Remise de caisse
+- Profil RS
 - Synchronisation
 
 Checks performed:
@@ -44,6 +45,8 @@ Checks performed:
 - Historique ventes is reachable from Plus / Synchronisation and keeps Plus active in the bottom navigation.
 - Caisse / Remise de caisse shows cash detail, cheque detail, total amount to remit, closing checks, and day-closing status.
 - Caisse / Remise de caisse is reachable from Plus / Synchronisation and keeps Plus active in the bottom navigation.
+- Profil RS shows commercial identity, assigned vehicle, assigned sector, assigned phone, and secure profile status.
+- Profil RS is reachable from Plus / Synchronisation and keeps Plus active in the bottom navigation.
 - Stock détaillé shows vehicle inventory, stock value, remaining units, low-stock references, ruptures, and movement history.
 - Stock détaillé is reachable from the bottom Stock tab, with filters for all inventory, stock faible, and ruptures.
 - Main CTAs remain dominant and readable.
@@ -60,6 +63,7 @@ Build verification:
 - Browser flow passed: login -> Tournée -> click Hanout Lahdim pin -> bubble updates -> Visiter cette épicerie.
 - Browser flow passed: login -> Plus -> Historique ventes -> Annulations filter.
 - Browser flow passed: login -> Plus -> Caisse / Remise de caisse -> Clôturer la journée.
+- Browser flow passed: login -> Plus -> Profil RS -> Voir ma tournée.
 - Browser flow passed: login -> Stock -> Ruptures filter -> Ouvrir catalogue vente.
 - Browser flow passed: login -> Accueil -> Synchronisation -> logout -> login.
 - Cart flow passed: login -> Panier -> quantity update -> client change -> confirmation -> empty cart.
