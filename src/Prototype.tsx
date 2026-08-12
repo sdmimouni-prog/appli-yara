@@ -51,6 +51,7 @@ type ScreenName =
   | "stock"
   | "panier"
   | "livraison"
+  | "recu"
   | "historique"
   | "caisse"
   | "synchronisation";
@@ -582,6 +583,46 @@ const cartItems = [
   },
 ];
 
+const receiptShareActions = [
+  {
+    label: "WhatsApp",
+    detail: "Envoyer au client",
+    icon: ChatBubbleIcon,
+    tone: "whatsapp",
+  },
+  {
+    label: "PDF",
+    detail: "Télécharger",
+    icon: FileTextIcon,
+    tone: "pdf",
+  },
+  {
+    label: "Imprimer",
+    detail: "Format ticket",
+    icon: DashboardIcon,
+    tone: "print",
+  },
+] satisfies Array<{
+  label: string;
+  detail: string;
+  icon: typeof ChatBubbleIcon;
+  tone: "whatsapp" | "pdf" | "print";
+}>;
+
+const receiptMetaItems = [
+  { label: "Date", value: "12/08/2026 · 12:46" },
+  { label: "Commercial", value: "Karim Bennani" },
+  { label: "Véhicule", value: "Sprinter V-204" },
+  { label: "Secteur", value: "Casa Nord · Tit Mellil" },
+  { label: "Client", value: "Épicerie Al Manar" },
+  { label: "Téléphone", value: "06 61 23 45 67" },
+  { label: "Adresse", value: "128, Rue 5, Ain Sebaâ" },
+  { label: "Commande", value: "CMD-20260812-014" },
+] satisfies Array<{
+  label: string;
+  value: string;
+}>;
+
 const syncStats = [
   {
     label: "À envoyer",
@@ -854,6 +895,7 @@ export default function Prototype() {
       initialScreen === "stock" ||
       initialScreen === "panier" ||
       initialScreen === "livraison" ||
+      initialScreen === "recu" ||
       initialScreen === "historique" ||
       initialScreen === "caisse" ||
       initialScreen === "synchronisation"
@@ -874,7 +916,20 @@ export default function Prototype() {
   }, [setDeviceId]);
 
   function showScreen(nextScreen: ScreenName) {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     keyboard.hide();
+    window.scrollTo(0, 0);
+    document.querySelectorAll<HTMLElement>(".device-screen, .mobile-scroll").forEach((element) => {
+      element.scrollTop = 0;
+    });
+    window.requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      document.querySelectorAll<HTMLElement>(".device-screen, .mobile-scroll").forEach((element) => {
+        element.scrollTop = 0;
+      });
+    });
     setScreen(nextScreen);
     const url = new URL(window.location.href);
     if (nextScreen === "accueil") {
@@ -898,19 +953,15 @@ export default function Prototype() {
   const visibleScreen = isAuthenticated ? screen : "activation";
   const hasBottomNavigation = isAuthenticated && visibleScreen !== "activation";
   const activeBottomScreen =
-    visibleScreen === "client"
+    visibleScreen === "client" || visibleScreen === "carte"
       ? "clients"
-      : visibleScreen === "carte"
-        ? "clients"
       : visibleScreen === "livraison"
         ? "panier"
-        : visibleScreen === "historique"
+        : visibleScreen === "historique" || visibleScreen === "caisse" || visibleScreen === "recu"
           ? "synchronisation"
-          : visibleScreen === "caisse"
-            ? "synchronisation"
-            : visibleScreen === "catalogue"
-              ? "stock"
-          : visibleScreen;
+          : visibleScreen === "catalogue"
+            ? "stock"
+            : visibleScreen;
 
   return (
     <div className={`seller-app-shell seller-screen theme-${theme} ${hasBottomNavigation ? "seller-app-shell-with-nav" : ""}`}>
@@ -966,6 +1017,13 @@ export default function Prototype() {
           />
         ) : visibleScreen === "livraison" ? (
           <DeliveryPaymentScreen
+            theme={theme}
+            themeLabel={themeLabel}
+            onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
+            onNavigate={showScreen}
+          />
+        ) : visibleScreen === "recu" ? (
+          <ReceiptScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
@@ -2304,6 +2362,7 @@ function DeliveryPaymentScreen({
   onToggleTheme: () => void;
   onNavigate: (screen: ScreenName) => void;
 }) {
+  const keyboard = useKeyboard();
   const [cycleState, setCycleState] = useState<DeliveryCycleState>("livraison");
   const currentCycleStep: SaleCycleStep = cycleState === "termine" ? "recu" : cycleState;
   const currentCycleIndex = saleCycleSteps.findIndex((step) => step.key === currentCycleStep);
@@ -2321,6 +2380,11 @@ function DeliveryPaymentScreen({
   }
 
   function handleCycleAction() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    keyboard.hide();
+
     if (cycleState === "livraison") {
       setCycleState("encaissement");
       return;
@@ -2336,7 +2400,7 @@ function DeliveryPaymentScreen({
       return;
     }
 
-    onNavigate("historique");
+    onNavigate("recu");
   }
 
   const primaryActionLabel =
@@ -2346,7 +2410,7 @@ function DeliveryPaymentScreen({
         ? "Valider encaissement exact"
         : cycleState === "recu"
           ? "Générer reçu"
-          : "Voir historique ventes";
+          : "Voir reçu complet";
 
   return (
     <main className="delivery-shell" aria-label="Livraison et encaissement">
@@ -2371,7 +2435,13 @@ function DeliveryPaymentScreen({
           >
             {theme === "light" ? <MoonIcon /> : <SunIcon />}
           </button>
-          <button className="header-icon-button" type="button" aria-label="Aperçu reçu" data-scroll-drag="ignore">
+          <button
+            className="header-icon-button"
+            type="button"
+            aria-label="Aperçu reçu"
+            onClick={() => onNavigate("recu")}
+            data-scroll-drag="ignore"
+          >
             <FileTextIcon />
           </button>
         </div>
@@ -2457,20 +2527,13 @@ function DeliveryPaymentScreen({
               <span>Montant TTC attendu</span>
               <strong>330 DH</strong>
             </article>
-            <label className="amount-card amount-card-received" htmlFor="received-amount">
+            <article className="amount-card amount-card-received" aria-label="Montant encaissé">
               <span>Montant encaissé</span>
-              <div className="amount-input-wrap">
-                <KeyboardInput
-                  id="received-amount"
-                  aria-label="Montant encaissé"
-                  defaultValue="330"
-                  inputMode="numeric"
-                  disabled={!deliveryDone || paymentDone}
-                  data-testid="received-amount"
-                />
+              <div className="amount-static-value">
+                <strong>330</strong>
                 <em>DH</em>
               </div>
-            </label>
+            </article>
           </div>
 
           <button className="payment-method-select" type="button" data-scroll-drag="ignore">
@@ -2711,7 +2774,11 @@ function SalesHistoryScreen({
 
                   <div className="history-sale-footer">
                     <em>{item.status}</em>
-                    <button type="button" data-scroll-drag="ignore">
+                    <button
+                      type="button"
+                      onClick={() => (isCanceled ? setActiveFilter("canceled") : onNavigate("recu"))}
+                      data-scroll-drag="ignore"
+                    >
                       {isCanceled ? "Voir annulation" : "Voir reçu"}
                       <ChevronRightIcon />
                     </button>
@@ -2908,6 +2975,193 @@ function CashClosingScreen({
         <button className="close-day-button" type="button" onClick={() => setIsClosed(true)} data-scroll-drag="ignore">
           {isClosed ? "Journée clôturée" : "Clôturer la journée"}
         </button>
+      </section>
+    </main>
+  );
+}
+
+function ReceiptScreen({
+  theme,
+  themeLabel,
+  onToggleTheme,
+  onNavigate,
+}: {
+  theme: "light" | "dark";
+  themeLabel: string;
+  onToggleTheme: () => void;
+  onNavigate: (screen: ScreenName) => void;
+}) {
+  return (
+    <main className="receipt-shell" aria-label="Reçu complet">
+      <header className="detail-header">
+        <button
+          className="header-icon-button"
+          type="button"
+          aria-label="Retour à l'historique"
+          onClick={() => onNavigate("historique")}
+          data-scroll-drag="ignore"
+        >
+          <ArrowLeftIcon />
+        </button>
+        <img className="detail-logo" src={yaraLogoLockup} alt="YARA" draggable={false} />
+        <div className="header-actions">
+          <button
+            className="header-icon-button"
+            type="button"
+            aria-label={themeLabel}
+            onClick={onToggleTheme}
+            data-scroll-drag="ignore"
+          >
+            {theme === "light" ? <MoonIcon /> : <SunIcon />}
+          </button>
+          <button className="header-icon-button" type="button" aria-label="Imprimer le reçu" data-scroll-drag="ignore">
+            <FileTextIcon />
+          </button>
+        </div>
+      </header>
+
+      <section className="receipt-content">
+        <div className="receipt-topline">
+          <div>
+            <p className="eyebrow">Document client</p>
+            <h1>Reçu complet</h1>
+            <p className="assignment-summary">RC-2026-0812-014 · Épicerie Al Manar</p>
+          </div>
+          <span className="receipt-ready-chip">
+            <CheckCircledIcon />
+            Prêt
+          </span>
+        </div>
+
+        <section className="receipt-total-hero" aria-label="Résumé reçu">
+          <span className="receipt-hero-icon" aria-hidden="true">
+            <FileTextIcon />
+          </span>
+          <div>
+            <span className="detail-eyebrow">Reçu N° RC-2026-0812-014</span>
+            <strong>330 DH</strong>
+            <p>Payé en espèces · montant exact reçu · reçu disponible pour partage.</p>
+          </div>
+        </section>
+
+        <section className="receipt-action-grid" aria-label="Actions du reçu">
+          {receiptShareActions.map(({ label, detail, icon: Icon, tone }) => (
+            <button className={`receipt-action-button receipt-action-${tone}`} type="button" key={label} data-scroll-drag="ignore">
+              <span aria-hidden="true">
+                <Icon />
+              </span>
+              <strong>{label}</strong>
+              <small>{detail}</small>
+            </button>
+          ))}
+        </section>
+
+        <section className="receipt-document-card" aria-label="Reçu imprimable">
+          <div className="receipt-paper">
+            <div className="receipt-paper-head">
+              <div className="receipt-paper-brand">
+                <img src={yaraLogoLockup} alt="YARA" draggable={false} />
+              </div>
+              <div>
+                <span>Reçu de vente</span>
+                <strong>RC-2026-0812-014</strong>
+              </div>
+            </div>
+
+            <div className="receipt-meta-grid">
+              {receiptMetaItems.map((item) => (
+                <div key={item.label}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
+            </div>
+
+            <div className="receipt-line-list" aria-label="Produits vendus">
+              <div className="receipt-line-header">
+                <span>Produit</span>
+                <span>Qté</span>
+                <span>PU</span>
+                <span>Total</span>
+              </div>
+              {cartItems.map((item) => (
+                <div className="receipt-line-row" key={item.name}>
+                  <div>
+                    <strong>{item.name}</strong>
+                    <span>Famille {item.family} · Prix TTC</span>
+                  </div>
+                  <em>x{item.quantity}</em>
+                  <em>{item.unitPrice}</em>
+                  <strong>{item.total}</strong>
+                </div>
+              ))}
+            </div>
+
+            <div className="receipt-total-list">
+              <div>
+                <span>Sous-total TTC</span>
+                <strong>330 DH</strong>
+              </div>
+              <div>
+                <span>Remise</span>
+                <strong>0 DH</strong>
+              </div>
+              <div className="receipt-grand-total">
+                <span>Total payé</span>
+                <strong>330 DH</strong>
+              </div>
+            </div>
+
+            <div className="receipt-paper-footer">
+              <div className="receipt-qr" aria-label="Code reçu">
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+              </div>
+              <p>Merci pour votre achat. Reçu généré hors ligne puis sauvegardé pour synchronisation.</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="receipt-status-card" aria-label="Cycle validé">
+          <div className="receipt-status-title">
+            <span className="detail-eyebrow">Statut vente</span>
+            <strong>Cycle terminé</strong>
+          </div>
+          <div className="receipt-status-timeline">
+            {saleCycleSteps.map(({ key, label, icon: Icon }) => (
+              <article className="receipt-status-step" key={key}>
+                <span aria-hidden="true">
+                  {key === "recu" ? <FileTextIcon /> : <Icon />}
+                </span>
+                <strong>{label}</strong>
+                <small>Validé</small>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="receipt-safety-card" aria-label="Contrôle du reçu">
+          <CheckCircledIcon />
+          <div>
+            <strong>Montant exact confirmé</strong>
+            <p>Le reçu reprend la commande, la livraison et l'encaissement validés pour éviter toute erreur.</p>
+          </div>
+        </section>
+
+        <div className="receipt-share-footer">
+          <button className="receipt-primary-share" type="button" data-scroll-drag="ignore">
+            <ChatBubbleIcon />
+            Partager par WhatsApp
+          </button>
+          <button className="receipt-secondary-share" type="button" data-scroll-drag="ignore">
+            <FileTextIcon />
+            Télécharger PDF
+          </button>
+        </div>
       </section>
     </main>
   );

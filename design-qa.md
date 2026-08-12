@@ -15,6 +15,7 @@ Prototype checked:
 - Stock détaillé
 - Panier / Vente
 - Livraison + Encaissement
+- Reçu complet
 - Historique ventes
 - Caisse / Remise de caisse
 - Synchronisation
@@ -27,6 +28,8 @@ Checks performed:
 - Cart controls are interactive: quantity +/-, client change, sale confirmation, and empty-cart state.
 - Panier starts the sale cycle as Commande and no longer uses the single "Confirmer vente" action.
 - Livraison + Encaissement separates Commande, Livraison, Encaissement, and Reçu with clear current/done/locked states.
+- Reçu complet shows the printable client receipt, WhatsApp sharing action, PDF download action, print action, sale metadata, line items, totals, and validated cycle.
+- Reçu complet is reachable from the completed sale cycle and from Historique ventes.
 - Logout is available from the in-app Plus / Synchronisation area and returns to login.
 - Dark premium YARA visual language applied across all routes.
 - Orange/gold accents, black panels, cream performance cards, green status states, and bottom navigation are consistent.
@@ -59,6 +62,8 @@ Build verification:
 - Browser flow passed: login -> Accueil -> Synchronisation -> logout -> login.
 - Cart flow passed: login -> Panier -> quantity update -> client change -> confirmation -> empty cart.
 - Browser flow passed: panier -> Enregistrer commande -> Confirmer livraison -> Valider encaissement exact -> Générer reçu.
+- Browser flow passed: panier -> Enregistrer commande -> Confirmer livraison -> Valider encaissement exact -> Générer reçu -> Voir reçu complet.
+- Browser flow passed: login -> Plus -> Historique ventes -> Voir reçu -> Reçu complet.
 
 Visual verification:
 - Contact sheet: `implementation-yara-all-screens-contact-sheet.jpg`.
