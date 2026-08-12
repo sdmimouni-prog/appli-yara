@@ -19,6 +19,7 @@ Prototype checked:
 - Historique ventes
 - Caisse / Remise de caisse
 - Profil RS
+- Alertes détaillées
 - Synchronisation
 
 Checks performed:
@@ -47,6 +48,8 @@ Checks performed:
 - Caisse / Remise de caisse is reachable from Plus / Synchronisation and keeps Plus active in the bottom navigation.
 - Profil RS shows commercial identity, assigned vehicle, assigned sector, assigned phone, and secure profile status.
 - Profil RS is reachable from Plus / Synchronisation and keeps Plus active in the bottom navigation.
+- Alertes détaillées shows stock faible, clients à risque, and synchro bloquée in separated action sections.
+- Alertes détaillées is reachable from Accueil and Plus / Synchronisation and keeps Plus active in the bottom navigation.
 - Stock détaillé shows vehicle inventory, stock value, remaining units, low-stock references, ruptures, and movement history.
 - Stock détaillé is reachable from the bottom Stock tab, with filters for all inventory, stock faible, and ruptures.
 - Main CTAs remain dominant and readable.
@@ -64,6 +67,8 @@ Build verification:
 - Browser flow passed: login -> Plus -> Historique ventes -> Annulations filter.
 - Browser flow passed: login -> Plus -> Caisse / Remise de caisse -> Clôturer la journée.
 - Browser flow passed: login -> Plus -> Profil RS -> Voir ma tournée.
+- Browser flow passed: login -> Accueil -> Alertes détaillées -> Voir stock détaillé.
+- Browser flow passed: login -> Plus -> Alertes détaillées -> Voir carte tournée.
 - Browser flow passed: login -> Stock -> Ruptures filter -> Ouvrir catalogue vente.
 - Browser flow passed: login -> Accueil -> Synchronisation -> logout -> login.
 - Cart flow passed: login -> Panier -> quantity update -> client change -> confirmation -> empty cart.

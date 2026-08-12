@@ -55,6 +55,7 @@ type ScreenName =
   | "historique"
   | "caisse"
   | "profil"
+  | "alertes"
   | "synchronisation";
 
 type SaleCycleStep = "commande" | "livraison" | "encaissement" | "recu";
@@ -707,6 +708,115 @@ const pendingSyncItems = [
   },
 ];
 
+const alertSummaryCards = [
+  {
+    label: "Stock faible",
+    value: "3",
+    detail: "2 limites · 1 rupture critique",
+    icon: BoxIcon,
+    tone: "stock",
+  },
+  {
+    label: "Clients à risque",
+    value: "4",
+    detail: "visites en retard ou baisse achat",
+    icon: PersonIcon,
+    tone: "clients",
+  },
+  {
+    label: "Synchro bloquée",
+    value: "1",
+    detail: "vente gardée sur le téléphone",
+    icon: ReloadIcon,
+    tone: "sync",
+  },
+] satisfies Array<{
+  label: string;
+  value: string;
+  detail: string;
+  icon: typeof BoxIcon;
+  tone: "stock" | "clients" | "sync";
+}>;
+
+const stockAlertItems = [
+  {
+    product: "Borus",
+    detail: "Rupture complète · 4 clients habituels à prévenir",
+    level: "0 restant",
+    status: "Critique",
+    tone: "danger",
+  },
+  {
+    product: "Miniatures Blue VIP",
+    detail: "Reste 3 unités · seuil minimum 5 · forte demande tournée",
+    level: "3 restants",
+    status: "Faible",
+    tone: "warning",
+  },
+  {
+    product: "Monsieur",
+    detail: "Stock limite avant Supérette Hamria et Hanout Bassatine",
+    level: "5 restants",
+    status: "Limite",
+    tone: "warning",
+  },
+] satisfies Array<{
+  product: string;
+  detail: string;
+  level: string;
+  status: string;
+  tone: "danger" | "warning";
+}>;
+
+const clientRiskItems = [
+  {
+    name: "Hanout Bassatine",
+    locality: "Bassatine · 3,1 km",
+    reason: "À relancer · dernier achat le 30/07/2026",
+    risk: "Haute",
+  },
+  {
+    name: "Épicerie Ismailia",
+    locality: "Ismailia · 4,2 km",
+    reason: "Prospect non visité depuis 15 jours",
+    risk: "Moyenne",
+  },
+  {
+    name: "Supérette Hamria",
+    locality: "Hamria · 1,8 km",
+    reason: "Baisse panier moyen sur les deux dernières ventes",
+    risk: "À suivre",
+  },
+  {
+    name: "Épicerie Zitoune",
+    locality: "Riad Zitoune · 2,4 km",
+    reason: "Demande Borus impossible à servir aujourd'hui",
+    risk: "Stock",
+  },
+] satisfies Array<{
+  name: string;
+  locality: string;
+  reason: string;
+  risk: string;
+}>;
+
+const blockedSyncItems = [
+  {
+    title: "Vente VNT-20260812-014",
+    detail: "Épicerie Al Manar · reçu RC-2026-0812-014",
+    status: "À renvoyer",
+  },
+  {
+    title: "Photo reçu chèque",
+    detail: "Bazar Saada · image gardée localement",
+    status: "Réseau faible",
+  },
+] satisfies Array<{
+  title: string;
+  detail: string;
+  status: string;
+}>;
+
 const salesHistoryFilters = [
   { key: "all", label: "Toutes", count: 9 },
   { key: "today", label: "Aujourd'hui", count: 6 },
@@ -974,6 +1084,7 @@ export default function Prototype() {
       initialScreen === "historique" ||
       initialScreen === "caisse" ||
       initialScreen === "profil" ||
+      initialScreen === "alertes" ||
       initialScreen === "synchronisation"
     ) {
       return initialScreen;
@@ -1033,7 +1144,11 @@ export default function Prototype() {
       ? "carte"
       : visibleScreen === "livraison"
         ? "panier"
-        : visibleScreen === "historique" || visibleScreen === "caisse" || visibleScreen === "recu" || visibleScreen === "profil"
+        : visibleScreen === "historique" ||
+            visibleScreen === "caisse" ||
+            visibleScreen === "recu" ||
+            visibleScreen === "profil" ||
+            visibleScreen === "alertes"
           ? "synchronisation"
           : visibleScreen === "catalogue"
             ? "stock"
@@ -1121,6 +1236,13 @@ export default function Prototype() {
           />
         ) : visibleScreen === "profil" ? (
           <ProfileRSScreen
+            theme={theme}
+            themeLabel={themeLabel}
+            onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
+            onNavigate={showScreen}
+          />
+        ) : visibleScreen === "alertes" ? (
+          <AlertsDetailScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
@@ -1517,6 +1639,17 @@ function DashboardScreen({
             </div>
           </article>
         </section>
+
+        <button className="alerts-reference-button" type="button" onClick={() => onNavigate("alertes")} data-scroll-drag="ignore">
+          <span aria-hidden="true">
+            <ExclamationTriangleIcon />
+          </span>
+          <div>
+            <strong>Alertes détaillées</strong>
+            <small>Stock faible · clients à risque · synchro bloquée</small>
+          </div>
+          <em>8</em>
+        </button>
 
         <section className="home-reference-actions" aria-label="Actions rapides">
           <button className="tour-button" type="button" onClick={() => onNavigate("carte")} data-scroll-drag="ignore">
@@ -3246,6 +3379,203 @@ function ProfileRSScreen({
   );
 }
 
+function AlertsDetailScreen({
+  theme,
+  themeLabel,
+  onToggleTheme,
+  onNavigate,
+}: {
+  theme: "light" | "dark";
+  themeLabel: string;
+  onToggleTheme: () => void;
+  onNavigate: (screen: ScreenName) => void;
+}) {
+  return (
+    <main className="alerts-shell" aria-label="Alertes détaillées">
+      <header className="detail-header">
+        <button
+          className="header-icon-button"
+          type="button"
+          aria-label="Retour à Plus"
+          onClick={() => onNavigate("synchronisation")}
+          data-scroll-drag="ignore"
+        >
+          <ArrowLeftIcon />
+        </button>
+        <img className="detail-logo" src={yaraLogoLockup} alt="YARA" draggable={false} />
+        <div className="header-actions">
+          <button
+            className="header-icon-button"
+            type="button"
+            aria-label={themeLabel}
+            onClick={onToggleTheme}
+            data-scroll-drag="ignore"
+          >
+            {theme === "light" ? <MoonIcon /> : <SunIcon />}
+          </button>
+          <button
+            className="header-icon-button"
+            type="button"
+            aria-label="Synchroniser les alertes"
+            onClick={() => onNavigate("synchronisation")}
+            data-scroll-drag="ignore"
+          >
+            <ReloadIcon />
+          </button>
+        </div>
+      </header>
+
+      <section className="alerts-content">
+        <div className="alerts-topline">
+          <div>
+            <p className="eyebrow">Centre de contrôle</p>
+            <h1>Alertes détaillées</h1>
+            <p className="assignment-summary">Karim Bennani · Meknès Centre</p>
+          </div>
+          <span className="alerts-urgent-chip">
+            <ExclamationTriangleIcon />
+            3 urgences
+          </span>
+        </div>
+
+        <section className="alerts-hero-card" aria-label="Priorité du jour">
+          <span className="alerts-hero-icon" aria-hidden="true">
+            <ExclamationTriangleIcon />
+          </span>
+          <div>
+            <span className="detail-eyebrow">À traiter maintenant</span>
+            <strong>8 alertes ouvertes</strong>
+            <p>Stock, clients et synchronisation regroupés pour éviter les oublis pendant la tournée.</p>
+          </div>
+        </section>
+
+        <section className="alerts-summary-grid" aria-label="Résumé des alertes">
+          {alertSummaryCards.map(({ label, value, detail, icon: Icon, tone }) => (
+            <article className={`alerts-summary-card alerts-summary-${tone}`} key={label}>
+              <span className="alerts-summary-icon" aria-hidden="true">
+                <Icon />
+              </span>
+              <strong>{value}</strong>
+              <span>{label}</span>
+              <small>{detail}</small>
+            </article>
+          ))}
+        </section>
+
+        <section className="alerts-section-card alerts-stock-card" aria-label="Stock faible">
+          <div className="alerts-section-title">
+            <div>
+              <span className="detail-eyebrow">Inventaire véhicule</span>
+              <h2>Stock faible</h2>
+            </div>
+            <strong>3</strong>
+          </div>
+
+          <div className="alerts-list">
+            {stockAlertItems.map((item) => (
+              <article className={`alerts-row alerts-stock-row alerts-row-${item.tone}`} key={item.product}>
+                <span className="alerts-row-icon" aria-hidden="true">
+                  <BoxIcon />
+                </span>
+                <div className="alerts-row-main">
+                  <strong>{item.product}</strong>
+                  <p>{item.detail}</p>
+                </div>
+                <div className="alerts-row-status">
+                  <strong>{item.level}</strong>
+                  <em>{item.status}</em>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <button className="alerts-row-action" type="button" onClick={() => onNavigate("stock")} data-scroll-drag="ignore">
+            Voir stock détaillé
+            <ChevronRightIcon />
+          </button>
+        </section>
+
+        <section className="alerts-section-card alerts-clients-card" aria-label="Clients à risque">
+          <div className="alerts-section-title">
+            <div>
+              <span className="detail-eyebrow">Tournée commerciale</span>
+              <h2>Clients à risque</h2>
+            </div>
+            <strong>4</strong>
+          </div>
+
+          <div className="alerts-list">
+            {clientRiskItems.map((item) => (
+              <article className="alerts-row alerts-client-row" key={item.name}>
+                <span className="alerts-row-icon" aria-hidden="true">
+                  <PersonIcon />
+                </span>
+                <div className="alerts-row-main">
+                  <strong>{item.name}</strong>
+                  <p>{item.locality} · {item.reason}</p>
+                </div>
+                <em className="alerts-risk-pill">{item.risk}</em>
+              </article>
+            ))}
+          </div>
+
+          <button className="alerts-row-action" type="button" onClick={() => onNavigate("carte")} data-scroll-drag="ignore">
+            Voir carte tournée
+            <ChevronRightIcon />
+          </button>
+        </section>
+
+        <section className="alerts-section-card alerts-sync-card" aria-label="Synchronisation bloquée">
+          <div className="alerts-section-title">
+            <div>
+              <span className="detail-eyebrow">Sauvegarde</span>
+              <h2>Synchro bloquée</h2>
+            </div>
+            <strong>1</strong>
+          </div>
+
+          <div className="alerts-sync-message">
+            <ReloadIcon />
+            <div>
+              <strong>Réseau instable sur 1 opération</strong>
+              <p>La donnée reste sauvegardée localement. Appuyez sur synchroniser dès que le réseau revient.</p>
+            </div>
+          </div>
+
+          <div className="alerts-list">
+            {blockedSyncItems.map((item) => (
+              <article className="alerts-row alerts-sync-row" key={item.title}>
+                <span className="alerts-row-icon" aria-hidden="true">
+                  <ClockIcon />
+                </span>
+                <div className="alerts-row-main">
+                  <strong>{item.title}</strong>
+                  <p>{item.detail}</p>
+                </div>
+                <em className="alerts-risk-pill">{item.status}</em>
+              </article>
+            ))}
+          </div>
+
+          <button className="alerts-row-action" type="button" onClick={() => onNavigate("synchronisation")} data-scroll-drag="ignore">
+            Ouvrir synchronisation
+            <ChevronRightIcon />
+          </button>
+        </section>
+
+        <section className="alerts-actions" aria-label="Actions alertes">
+          <button className="alerts-primary-action" type="button" onClick={() => onNavigate("stock")} data-scroll-drag="ignore">
+            Traiter les alertes critiques
+          </button>
+          <button className="alerts-secondary-action" type="button" onClick={() => onNavigate("synchronisation")} data-scroll-drag="ignore">
+            Retour Plus
+          </button>
+        </section>
+      </section>
+    </main>
+  );
+}
+
 function ReceiptScreen({
   theme,
   themeLabel,
@@ -3502,6 +3832,17 @@ function SynchronisationScreen({
           <span>
             <strong>Profil RS</strong>
             <small>Commercial, véhicule, secteur et téléphone</small>
+          </span>
+          <ChevronRightIcon />
+        </button>
+
+        <button className="sync-history-shortcut sync-alerts-shortcut" type="button" onClick={() => onNavigate("alertes")} data-scroll-drag="ignore">
+          <span className="sync-history-icon" aria-hidden="true">
+            <ExclamationTriangleIcon />
+          </span>
+          <span>
+            <strong>Alertes détaillées</strong>
+            <small>Stock faible, clients à risque et synchro bloquée</small>
           </span>
           <ChevronRightIcon />
         </button>
