@@ -38,7 +38,7 @@ import {
   TrashIcon,
   ValueIcon,
 } from "@radix-ui/react-icons";
-import { KeyboardInput, MobileScroll } from "./mobile";
+import { KeyboardInput, MobileScroll, useKeyboard } from "./mobile";
 import { useMobileDevice } from "./mobile";
 
 type ScreenName =
@@ -53,30 +53,19 @@ type ScreenName =
 
 const activationRows = [
   {
-    label: "Code commercial",
-    value: "RS0158",
+    label: "Identifiant RS",
+    value: "RS-4821-CASA",
     icon: IdCardIcon,
   },
   {
-    label: "Téléphone assigné",
-    value: "+212 6 72 45 81 09",
-    icon: MobileIcon,
-  },
-  {
     label: "Véhicule",
-    value: "Dacia Dokker | 12345 | 26",
+    value: "Sprinter V-204",
     icon: RocketIcon,
   },
   {
     label: "Secteur",
-    value: "Casablanca Nord",
+    value: "Casa Nord · Tit Mellil",
     icon: SewingPinIcon,
-  },
-  {
-    label: "État de connexion",
-    value: "En ligne",
-    icon: GearIcon,
-    status: true,
   },
 ];
 
@@ -331,6 +320,7 @@ const pendingSyncItems = [
 // runtime is template-owned and intentionally lives outside this component.
 export default function Prototype() {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [screen, setScreen] = useState<ScreenName>(() => {
     const params = new URLSearchParams(window.location.search);
     const initialScreen = params.get("screen");
@@ -348,6 +338,7 @@ export default function Prototype() {
     return "accueil";
   });
   const { setDeviceId } = useMobileDevice();
+  const keyboard = useKeyboard();
   const themeLabel = useMemo(
     () => (theme === "light" ? "Passer en mode sombre" : "Passer en mode clair"),
     [theme],
@@ -358,6 +349,7 @@ export default function Prototype() {
   }, [setDeviceId]);
 
   function showScreen(nextScreen: ScreenName) {
+    keyboard.hide();
     setScreen(nextScreen);
     const url = new URL(window.location.href);
     if (nextScreen === "accueil") {
@@ -368,61 +360,73 @@ export default function Prototype() {
     window.history.replaceState({}, "", url);
   }
 
-  const hasBottomNavigation = screen !== "activation";
+  function handleLogin() {
+    setIsAuthenticated(true);
+    showScreen("accueil");
+  }
+
+  function handleLogout() {
+    setIsAuthenticated(false);
+    showScreen("activation");
+  }
+
+  const visibleScreen = isAuthenticated ? screen : "activation";
+  const hasBottomNavigation = isAuthenticated && visibleScreen !== "activation";
   const activeBottomScreen =
-    screen === "client" ? "clients" : screen === "livraison" ? "panier" : screen;
+    visibleScreen === "client" ? "clients" : visibleScreen === "livraison" ? "panier" : visibleScreen;
 
   return (
     <div className={`seller-app-shell seller-screen theme-${theme} ${hasBottomNavigation ? "seller-app-shell-with-nav" : ""}`}>
       <MobileScroll className="seller-scroll-page">
-        {screen === "activation" ? (
+        {visibleScreen === "activation" ? (
           <ActivationScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
-            onActivate={() => showScreen("accueil")}
+            onActivate={handleLogin}
           />
-        ) : screen === "clients" ? (
+        ) : visibleScreen === "clients" ? (
           <ClientsScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
             onNavigate={showScreen}
           />
-        ) : screen === "client" ? (
+        ) : visibleScreen === "client" ? (
           <ClientDetailScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
             onNavigate={showScreen}
           />
-        ) : screen === "catalogue" ? (
+        ) : visibleScreen === "catalogue" ? (
           <CatalogueScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
             onNavigate={showScreen}
           />
-        ) : screen === "panier" ? (
+        ) : visibleScreen === "panier" ? (
           <CartScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
             onNavigate={showScreen}
           />
-        ) : screen === "livraison" ? (
+        ) : visibleScreen === "livraison" ? (
           <DeliveryPaymentScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
             onNavigate={showScreen}
           />
-        ) : screen === "synchronisation" ? (
+        ) : visibleScreen === "synchronisation" ? (
           <SynchronisationScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
             onNavigate={showScreen}
+            onLogout={handleLogout}
           />
         ) : (
           <DashboardScreen
@@ -484,43 +488,206 @@ function ActivationScreen({
   onToggleTheme: () => void;
   onActivate: () => void;
 }) {
+  const [activationCode, setActivationCode] = useState("");
+  const [pinSetup, setPinSetup] = useState("");
+  const [pinConfirm, setPinConfirm] = useState("");
+  const [pinLogin, setPinLogin] = useState("");
+  const pinKeys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "fingerprint", "0", "delete"];
+
+  function submitLogin() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    onActivate();
+  }
+
+  function handlePinKey(key: string) {
+    if (key === "fingerprint") {
+      submitLogin();
+      return;
+    }
+
+    if (key === "delete") {
+      setPinLogin((current) => current.slice(0, -1));
+      return;
+    }
+
+    setPinLogin((current) => (current.length >= 6 ? current : `${current}${key}`));
+  }
+
   return (
-      <main className="activation-shell" aria-label="Connexion et activation RS">
-        <BrandHeader theme={theme} themeLabel={themeLabel} onToggleTheme={onToggleTheme} />
-
-        <section className="identity-panel" aria-labelledby="activation-title">
-          <div className="seller-mark" aria-hidden="true">
-            <IdCardIcon />
+    <main className="activation-shell activation-reference-shell" aria-label="Connexion et activation RS">
+      <header className="login-topbar">
+        <div className="login-brand-lockup" aria-label="YARA application RS">
+          <span className="login-brand-mark" aria-hidden="true">
+            <CheckCircledIcon />
+          </span>
+          <div>
+            <strong>YARA</strong>
+            <span>Application RS</span>
           </div>
-          <h1 id="activation-title">Activation responsable de secteur</h1>
-          <p>Connectez-vous pour commencer votre journée.</p>
-        </section>
+        </div>
 
-        <section className="assignment-card" aria-label="Affectation du commercial">
-          {activationRows.map(({ label, value, icon: Icon, status }) => (
-            <div className="assignment-row" key={label}>
-              <span className="row-icon" aria-hidden="true">
+        <div className="login-security-actions">
+          <button
+            className="login-theme-toggle"
+            type="button"
+            aria-label={themeLabel}
+            onClick={onToggleTheme}
+            data-scroll-drag="ignore"
+          >
+            {theme === "light" ? <MoonIcon /> : <SunIcon />}
+          </button>
+          <span className="secure-terminal-chip">
+            <CheckCircledIcon />
+            Terminal sécurisé
+          </span>
+        </div>
+      </header>
+
+      <section className="login-welcome" aria-labelledby="activation-title">
+        <h1 id="activation-title">
+          Bienvenue chez <span>YARA</span>
+        </h1>
+        <p>Activez votre terminal avant de commencer votre tournée.</p>
+      </section>
+
+      <section className="rs-profile-card" aria-label="Responsable de secteur">
+        <span className="rs-profile-badge" aria-hidden="true">
+          <CheckCircledIcon />
+        </span>
+        <div className="rs-profile-copy">
+          <p>Responsable de secteur</p>
+          <h2>Karim BENNANI</h2>
+          <div className="rs-profile-list">
+            {activationRows.map(({ label, value, icon: Icon }) => (
+              <span key={label}>
                 <Icon />
+                {label} : <strong>{value}</strong>
               </span>
-              <span className="row-label">{label}</span>
-              {status ? (
-                <span className="connection-chip">
-                  <CheckCircledIcon />
-                  {value}
-                </span>
-              ) : (
-                <span className="row-value">{value}</span>
-              )}
-            </div>
-          ))}
-        </section>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        <button className="primary-action" type="button" onClick={onActivate} data-scroll-drag="ignore">
-          Activer / Se connecter
+      <form
+        className="terminal-activation-card"
+        aria-label="Activation du terminal"
+        onSubmit={(event) => {
+          event.preventDefault();
+          submitLogin();
+        }}
+      >
+        <div className="terminal-card-title">
+          <CheckCircledIcon />
+          <h2>Activation du terminal</h2>
+        </div>
+
+        <label className="terminal-input-row" htmlFor="activation-code">
+          <ValueIcon aria-hidden="true" />
+          <KeyboardInput
+            id="activation-code"
+            aria-label="Code d'activation temporaire"
+            placeholder="Code d'activation temporaire"
+            value={activationCode}
+            onChange={(event) => setActivationCode(event.currentTarget.value)}
+            data-testid="activation-code"
+          />
+          <CrossCircledIcon aria-hidden="true" />
+        </label>
+
+        <label className="terminal-input-row" htmlFor="pin-setup">
+          <GearIcon aria-hidden="true" />
+          <KeyboardInput
+            id="pin-setup"
+            aria-label="Créer mon code PIN"
+            placeholder="Créer mon code PIN"
+            value={pinSetup}
+            onChange={(event) => setPinSetup(event.currentTarget.value)}
+            inputMode="numeric"
+            data-testid="pin-setup"
+          />
+          <CrossCircledIcon aria-hidden="true" />
+        </label>
+
+        <label className="terminal-input-row" htmlFor="pin-confirm">
+          <GearIcon aria-hidden="true" />
+          <KeyboardInput
+            id="pin-confirm"
+            aria-label="Confirmer mon code PIN"
+            placeholder="Confirmer mon code PIN"
+            value={pinConfirm}
+            onChange={(event) => setPinConfirm(event.currentTarget.value)}
+            inputMode="numeric"
+            data-testid="pin-confirm"
+          />
+          <CrossCircledIcon aria-hidden="true" />
+        </label>
+
+        <p className="terminal-link-note">
+          <GearIcon />
+          Ce terminal sera lié à votre profil RS et à votre véhicule.
+        </p>
+
+        <button className="terminal-activate-button" type="submit" data-scroll-drag="ignore">
+          Activer ce terminal
+        </button>
+      </form>
+
+      <div className="terminal-divider" aria-hidden="true">
+        <span />
+        <p>Terminal déjà activé ?</p>
+        <span />
+      </div>
+
+      <section className="pin-login-card" aria-label="Connexion par code PIN">
+        <h2>Entrez votre code PIN</h2>
+        <div className="pin-dots" aria-label={`${pinLogin.length} chiffre(s) saisi(s)`}>
+          {Array.from({ length: 6 }, (_, index) => (
+            <span className={index < pinLogin.length ? "pin-dot pin-dot-filled" : "pin-dot"} key={index} />
+          ))}
+        </div>
+
+        <div className="pin-keypad" aria-label="Clavier numérique">
+          {pinKeys.map((key) => (
+            <button
+              className={`pin-key ${key === "fingerprint" || key === "delete" ? "pin-key-action" : ""}`}
+              type="button"
+              key={key}
+              aria-label={key === "fingerprint" ? "Connexion par empreinte" : key === "delete" ? "Effacer" : `Chiffre ${key}`}
+              onClick={() => handlePinKey(key)}
+              data-scroll-drag="ignore"
+            >
+              {key === "fingerprint" ? <IdCardIcon /> : key === "delete" ? <CrossCircledIcon /> : key}
+            </button>
+          ))}
+        </div>
+
+        <button className="pin-login-button" type="button" onClick={submitLogin} data-scroll-drag="ignore">
+          Se connecter
         </button>
 
-        <p className="sync-note">Dernière sync : 12/08/2026 09:28</p>
-      </main>
+        <p className="fingerprint-note">
+          <IdCardIcon />
+          Empreinte disponible
+        </p>
+      </section>
+
+      <footer className="login-footer">
+        <p>
+          <CheckCircledIcon />
+          Données chiffrées · Accès personnel · Révocation à distance
+        </p>
+        <p>
+          <ClockIcon />
+          Dernière configuration reçue : <strong>aujourd'hui à 08:30</strong>
+        </p>
+        <p>
+          <MobileIcon />
+          Besoin d'aide ? <strong>Contacter le superviseur</strong>
+        </p>
+      </footer>
+    </main>
   );
 }
 
@@ -1328,11 +1495,13 @@ function SynchronisationScreen({
   themeLabel,
   onToggleTheme,
   onNavigate,
+  onLogout,
 }: {
   theme: "light" | "dark";
   themeLabel: string;
   onToggleTheme: () => void;
   onNavigate: (screen: ScreenName) => void;
+  onLogout: () => void;
 }) {
   return (
     <main className="sync-shell" aria-label="Synchronisation">
@@ -1417,6 +1586,11 @@ function SynchronisationScreen({
         <button className="sync-now-button" type="button" data-scroll-drag="ignore">
           <ReloadIcon />
           Synchroniser maintenant
+        </button>
+
+        <button className="logout-button" type="button" onClick={onLogout} data-scroll-drag="ignore">
+          <CrossCircledIcon />
+          Se déconnecter
         </button>
       </section>
     </main>

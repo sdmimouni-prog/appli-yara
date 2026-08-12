@@ -1,6 +1,8 @@
 # YARA Seller Mobile Design QA
 
-Source reference: WhatsApp Accueil du jour screenshot provided by the user.
+Source references:
+- WhatsApp Accueil du jour screenshot provided by the user.
+- WhatsApp login / activation screenshot provided by the user.
 
 Prototype checked:
 - Activation
@@ -13,6 +15,10 @@ Prototype checked:
 - Synchronisation
 
 Checks performed:
+- First screen is now the login / terminal activation interface.
+- Activation accepts any temporary code/PIN and enters the app.
+- PIN keypad accepts digits and can enter the app.
+- Logout is available from the in-app Plus / Synchronisation area and returns to login.
 - Dark premium YARA visual language applied across all routes.
 - Orange/gold accents, black panels, cream performance cards, green status states, and bottom navigation are consistent.
 - Bottom navigation is fixed outside the scrollable content.
@@ -24,8 +30,10 @@ Checks performed:
 Build verification:
 - `npm run build` passed.
 - Mobile runtime integrity check passed.
+- Browser flow passed: login -> Accueil -> Synchronisation -> logout -> login.
 
 Visual verification:
 - Contact sheet: `implementation-yara-all-screens-contact-sheet.jpg`.
+- Login capture: `implementation-login-device-final.png`.
 
 final result: passed
