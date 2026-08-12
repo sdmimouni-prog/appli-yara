@@ -953,8 +953,47 @@
   border: 1px solid rgba(255, 180, 72, 0.68);
   border-radius: 8px;
   background:
+    linear-gradient(115deg, transparent 0 38%, rgba(255, 255, 255, 0.42) 46%, transparent 56%),
     linear-gradient(100deg, rgba(255, 122, 26, 0.96), rgba(117, 59, 0, 0.62) 48%, rgba(21, 15, 7, 0.94)),
     #11100d;
+  background-size: 220% 100%, 100% 100%, 100% 100%;
+  box-shadow:
+    0 0 0 1px rgba(255, 242, 185, 0.08) inset,
+    0 0 24px rgba(255, 122, 26, 0.28),
+    0 14px 34px rgba(0, 0, 0, 0.32);
+  animation: levelCardPulse 2.8s ease-in-out infinite, levelCardShine 3.4s linear infinite;
+}
+
+.next-level-card::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 222, 141, 0.16) 0 1px, transparent 1px 18px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 42%);
+  mix-blend-mode: screen;
+  opacity: 0.42;
+  content: "";
+}
+
+.next-level-card::after {
+  position: absolute;
+  right: -18%;
+  bottom: -46%;
+  width: 74%;
+  height: 150%;
+  background:
+    linear-gradient(115deg, transparent 16%, rgba(255, 221, 139, 0.22) 44%, rgba(255, 122, 26, 0.28) 54%, transparent 76%);
+  filter: blur(10px);
+  opacity: 0.9;
+  transform: rotate(-8deg);
+  content: "";
+  animation: levelEnergySweep 2.9s ease-in-out infinite;
+}
+
+.next-level-card > div {
+  position: relative;
+  z-index: 1;
 }
 
 .next-level-label {
@@ -980,6 +1019,9 @@
   font-size: 31px;
   font-weight: 900;
   line-height: 0.92;
+  text-shadow:
+    0 0 12px rgba(255, 255, 255, 0.42),
+    0 0 24px rgba(255, 122, 26, 0.72);
 }
 
 .next-level-card p {
@@ -1020,6 +1062,7 @@
 
 .level-rail {
   position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   align-items: center;
@@ -1031,10 +1074,34 @@
   right: 10px;
   left: 10px;
   top: 50%;
+  z-index: 0;
   height: 3px;
   transform: translateY(-50%);
-  background: rgba(255, 222, 141, 0.82);
+  background:
+    linear-gradient(90deg, rgba(255, 122, 26, 0.95), rgba(255, 236, 165, 1), rgba(255, 122, 26, 0.95)),
+    rgba(255, 222, 141, 0.82);
+  background-size: 180% 100%;
+  box-shadow:
+    0 0 10px rgba(255, 222, 141, 0.92),
+    0 0 22px rgba(255, 122, 26, 0.62);
+  animation: levelRailFlow 1.7s linear infinite;
   content: "";
+}
+
+.level-rail::after {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  z-index: 0;
+  width: 45px;
+  height: 9px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(255, 250, 210, 0.95), transparent);
+  filter: blur(1px);
+  opacity: 0.95;
+  transform: translate(-42%, -50%);
+  content: "";
+  animation: levelComet 1.45s ease-in-out infinite;
 }
 
 .level-dot {
@@ -1050,13 +1117,126 @@
   color: #ffffff;
   font-size: 11px;
   font-weight: 900;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 0 12px rgba(255, 222, 141, 0.34);
 }
 
 .level-dot-active {
   width: 34px;
   height: 34px;
-  background: var(--home-orange);
-  box-shadow: 0 0 18px rgba(255, 122, 26, 0.65);
+  border-color: #fff3be;
+  background:
+    radial-gradient(circle at 35% 28%, #fff6bf 0 12%, transparent 13%),
+    linear-gradient(180deg, #ffb347, var(--home-orange));
+  box-shadow:
+    0 0 0 3px rgba(255, 122, 26, 0.22),
+    0 0 18px rgba(255, 236, 165, 0.9),
+    0 0 34px rgba(255, 122, 26, 0.82);
+  animation: levelDotPulse 1.2s ease-in-out infinite;
+}
+
+.level-dot-active::before {
+  position: absolute;
+  inset: -8px;
+  z-index: -1;
+  border: 1px solid rgba(255, 242, 185, 0.72);
+  border-radius: inherit;
+  background: radial-gradient(circle, rgba(255, 147, 26, 0.42), rgba(255, 147, 26, 0));
+  content: "";
+  animation: levelAura 1.2s ease-in-out infinite;
+}
+
+@keyframes levelCardShine {
+  0% {
+    background-position: 180% 0, 0 0, 0 0;
+  }
+
+  100% {
+    background-position: -80% 0, 0 0, 0 0;
+  }
+}
+
+@keyframes levelCardPulse {
+  0%,
+  100% {
+    border-color: rgba(255, 180, 72, 0.64);
+    box-shadow:
+      0 0 0 1px rgba(255, 242, 185, 0.08) inset,
+      0 0 24px rgba(255, 122, 26, 0.28),
+      0 14px 34px rgba(0, 0, 0, 0.32);
+  }
+
+  50% {
+    border-color: rgba(255, 240, 172, 0.94);
+    box-shadow:
+      0 0 0 1px rgba(255, 242, 185, 0.18) inset,
+      0 0 32px rgba(255, 190, 68, 0.46),
+      0 16px 38px rgba(0, 0, 0, 0.36);
+  }
+}
+
+@keyframes levelEnergySweep {
+  0%,
+  100% {
+    transform: translateX(12%) rotate(-8deg);
+    opacity: 0.55;
+  }
+
+  50% {
+    transform: translateX(-8%) rotate(-8deg);
+    opacity: 0.95;
+  }
+}
+
+@keyframes levelRailFlow {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 180% 0;
+  }
+}
+
+@keyframes levelComet {
+  0% {
+    transform: translate(-42%, -50%);
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(170%, -50%);
+    opacity: 0;
+  }
+}
+
+@keyframes levelDotPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes levelAura {
+  0%,
+  100% {
+    opacity: 0.52;
+    transform: scale(0.92);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
 }
 
 .remuneration-card,
@@ -1364,8 +1544,10 @@
 }
 
 .dashboard-reference-shell .home-reference-content {
-  gap: 5px;
-  padding: 36px 10px 6px;
+  flex: 0 0 auto;
+  gap: 8px;
+  min-height: max-content;
+  padding: 36px 10px 20px;
 }
 
 .dashboard-reference-shell .home-reference-header {
@@ -1555,10 +1737,10 @@
 }
 
 .dashboard-reference-shell .next-level-card {
-  min-height: 72px;
+  min-height: 82px;
   grid-template-columns: minmax(0, 1fr) 120px;
   gap: 6px;
-  padding: 8px 10px;
+  padding: 10px 11px;
 }
 
 .dashboard-reference-shell .next-level-label {
@@ -1687,7 +1869,7 @@
 }
 
 .dashboard-reference-shell .home-reference-actions {
-  margin-top: auto;
+  margin-top: 2px;
 }
 
 .dashboard-reference-shell .bottom-nav {

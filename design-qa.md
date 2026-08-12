@@ -25,6 +25,8 @@ Checks performed:
 - Orange/gold accents, black panels, cream performance cards, green status states, and bottom navigation are consistent.
 - Bottom navigation is fixed outside the scrollable content.
 - Top content is offset below the Pixel camera/status-bar safe area.
+- Accueil "Prochain niveau" has a gamified glow: card pulse, shine sweep, rail comet, active-level halo.
+- Accueil content remains scrollable when the game progression card needs more breathing room.
 - Main CTAs remain dominant and readable.
 - Static data remains visible in the Pixel 10 mobile frame.
 - Runtime integrity and production build passed.
@@ -32,6 +34,7 @@ Checks performed:
 Build verification:
 - `npm run build` passed.
 - Mobile runtime integrity check passed.
+- Browser measurement passed: level animations active, Accueil scroll enabled, bottom navigation fixed.
 - Browser flow passed: login -> Accueil -> Synchronisation -> logout -> login.
 - Cart flow passed: login -> Panier -> quantity update -> client change -> confirmation -> empty cart.
 
