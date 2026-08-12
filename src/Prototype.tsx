@@ -47,6 +47,7 @@ type ScreenName =
   | "clients"
   | "client"
   | "catalogue"
+  | "stock"
   | "panier"
   | "livraison"
   | "historique"
@@ -55,6 +56,7 @@ type ScreenName =
 
 type SaleCycleStep = "commande" | "livraison" | "encaissement" | "recu";
 type DeliveryCycleState = "livraison" | "encaissement" | "recu" | "termine";
+type StockDetailFilter = "all" | "low" | "rupture";
 
 const yaraLogoLockup = "/assets/yara/logo-yara-lockup.png";
 
@@ -127,7 +129,7 @@ const bottomTabs = [
   { label: "Accueil", icon: HomeIcon, screen: "accueil" },
   { label: "Tournée", icon: SewingPinIcon, screen: "clients" },
   { label: "Vendre", icon: PlusIcon, screen: "panier", featured: true },
-  { label: "Stock", icon: CubeIcon, screen: "catalogue" },
+  { label: "Stock", icon: CubeIcon, screen: "stock" },
   { label: "Plus", icon: DotsHorizontalIcon, screen: "synchronisation" },
 ] satisfies Array<{
   label: string;
@@ -262,6 +264,201 @@ const vehicleProducts = [
     image: "/assets/yara/products/monsieur.jpg",
   },
 ];
+
+const stockDetailFilters = [
+  { key: "all", label: "Inventaire", count: 26 },
+  { key: "low", label: "Stock faible", count: 3 },
+  { key: "rupture", label: "Ruptures", count: 2 },
+] satisfies Array<{
+  key: StockDetailFilter;
+  label: string;
+  count: number;
+}>;
+
+const stockInventoryItems = [
+  {
+    sku: "Y-S-BVIP-100",
+    name: "Blue VIP",
+    family: "S",
+    price: "50 DH",
+    loaded: 24,
+    sold: 6,
+    reserved: 0,
+    remaining: 18,
+    threshold: 6,
+    value: "900 DH",
+    coverage: "OK",
+    status: "ok",
+    image: "/assets/yara/products/blue-vip.jpg",
+  },
+  {
+    sku: "Y-K-BOOUS-100",
+    name: "Boous",
+    family: "K",
+    price: "50 DH",
+    loaded: 18,
+    sold: 6,
+    reserved: 0,
+    remaining: 12,
+    threshold: 6,
+    value: "600 DH",
+    coverage: "OK",
+    status: "ok",
+    image: "/assets/yara/products/boous.jpg",
+  },
+  {
+    sku: "Y-V-MBV-4X15",
+    name: "Miniatures Blue VIP",
+    family: "V",
+    price: "60 DH",
+    loaded: 14,
+    sold: 10,
+    reserved: 1,
+    remaining: 3,
+    threshold: 5,
+    value: "180 DH",
+    coverage: "Faible",
+    status: "low",
+    image: "/assets/yara/products/miniatures-blue-vip.jpg",
+  },
+  {
+    sku: "Y-V-MONS-100",
+    name: "Monsieur",
+    family: "V",
+    price: "80 DH",
+    loaded: 10,
+    sold: 5,
+    reserved: 0,
+    remaining: 5,
+    threshold: 5,
+    value: "400 DH",
+    coverage: "Limite",
+    status: "low",
+    image: "/assets/yara/products/monsieur.jpg",
+  },
+  {
+    sku: "Y-V-MANA-4X15",
+    name: "Miniatures Al Anama",
+    family: "V",
+    price: "60 DH",
+    loaded: 12,
+    sold: 5,
+    reserved: 0,
+    remaining: 7,
+    threshold: 5,
+    value: "420 DH",
+    coverage: "OK",
+    status: "ok",
+    image: "/assets/yara/products/miniatures-anana.jpg",
+  },
+  {
+    sku: "Y-K-BORUS-100",
+    name: "Borus",
+    family: "K",
+    price: "50 DH",
+    loaded: 8,
+    sold: 8,
+    reserved: 0,
+    remaining: 0,
+    threshold: 4,
+    value: "0 DH",
+    coverage: "Rupture",
+    status: "rupture",
+    image: "/assets/yara/products/boous.jpg",
+  },
+  {
+    sku: "Y-S-BLACK-100",
+    name: "Black Legend",
+    family: "S",
+    price: "70 DH",
+    loaded: 6,
+    sold: 6,
+    reserved: 0,
+    remaining: 0,
+    threshold: 3,
+    value: "0 DH",
+    coverage: "Rupture",
+    status: "rupture",
+    image: "/assets/yara/products/monsieur.jpg",
+  },
+] satisfies Array<{
+  sku: string;
+  name: string;
+  family: "S" | "K" | "V";
+  price: string;
+  loaded: number;
+  sold: number;
+  reserved: number;
+  remaining: number;
+  threshold: number;
+  value: string;
+  coverage: string;
+  status: "ok" | "low" | "rupture";
+  image: string;
+}>;
+
+const stockMovementItems = [
+  {
+    time: "12:46",
+    title: "Sortie vente",
+    detail: "Épicerie Al Manar · Blue VIP x2 · Boous x1 · Miniatures Blue VIP x3",
+    quantity: "-6",
+    tone: "sale",
+  },
+  {
+    time: "11:58",
+    title: "Sortie vente",
+    detail: "Bazar Saada · Monsieur x1 · Blue VIP x2",
+    quantity: "-3",
+    tone: "sale",
+  },
+  {
+    time: "08:30",
+    title: "Chargement véhicule",
+    detail: "Dépôt Casa Nord · 26 références confirmées",
+    quantity: "+89",
+    tone: "load",
+  },
+  {
+    time: "08:10",
+    title: "Contrôle initial",
+    detail: "Écart 0 DH · scellé véhicule validé",
+    quantity: "OK",
+    tone: "check",
+  },
+] satisfies Array<{
+  time: string;
+  title: string;
+  detail: string;
+  quantity: string;
+  tone: "sale" | "load" | "check";
+}>;
+
+const stockRuptureItems = [
+  {
+    product: "Borus",
+    detail: "Rupture complète · 4 clients habituels à prévenir",
+    needed: "+12 unités",
+    priority: "Critique",
+  },
+  {
+    product: "Black Legend",
+    detail: "Rupture complète · demandé par 2 prospects",
+    needed: "+8 unités",
+    priority: "Haute",
+  },
+  {
+    product: "Miniatures Blue VIP",
+    detail: "Reste 3 unités · seuil minimum 5",
+    needed: "+10 unités",
+    priority: "À recharger",
+  },
+] satisfies Array<{
+  product: string;
+  detail: string;
+  needed: string;
+  priority: string;
+}>;
 
 const cartItems = [
   {
@@ -562,6 +759,7 @@ export default function Prototype() {
       initialScreen === "clients" ||
       initialScreen === "client" ||
       initialScreen === "catalogue" ||
+      initialScreen === "stock" ||
       initialScreen === "panier" ||
       initialScreen === "livraison" ||
       initialScreen === "historique" ||
@@ -616,6 +814,8 @@ export default function Prototype() {
           ? "synchronisation"
           : visibleScreen === "caisse"
             ? "synchronisation"
+            : visibleScreen === "catalogue"
+              ? "stock"
           : visibleScreen;
 
   return (
@@ -637,6 +837,13 @@ export default function Prototype() {
           />
         ) : visibleScreen === "client" ? (
           <ClientDetailScreen
+            theme={theme}
+            themeLabel={themeLabel}
+            onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
+            onNavigate={showScreen}
+          />
+        ) : visibleScreen === "stock" ? (
+          <StockDetailScreen
             theme={theme}
             themeLabel={themeLabel}
             onToggleTheme={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
@@ -1303,6 +1510,217 @@ function ClientDetailScreen({
             Nouvelle vente
           </button>
         </section>
+      </section>
+    </main>
+  );
+}
+
+function StockDetailScreen({
+  theme,
+  themeLabel,
+  onToggleTheme,
+  onNavigate,
+}: {
+  theme: "light" | "dark";
+  themeLabel: string;
+  onToggleTheme: () => void;
+  onNavigate: (screen: ScreenName) => void;
+}) {
+  const [activeFilter, setActiveFilter] = useState<StockDetailFilter>("all");
+  const displayedStockItems = stockInventoryItems.filter((item) => {
+    if (activeFilter === "low") return item.status === "low";
+    if (activeFilter === "rupture") return item.status === "rupture";
+    return true;
+  });
+
+  return (
+    <main className="stock-detail-shell" aria-label="Stock détaillé véhicule">
+      <BrandHeader theme={theme} themeLabel={themeLabel} onToggleTheme={onToggleTheme} compact />
+
+      <section className="stock-detail-content">
+        <div className="stock-detail-topline">
+          <div>
+            <p className="eyebrow">Inventaire véhicule</p>
+            <h1>Stock détaillé</h1>
+            <p className="assignment-summary">Sprinter V-204 · Casa Nord</p>
+          </div>
+          <span className="stock-status-chip">
+            <CubeIcon />
+            89 unités
+          </span>
+        </div>
+
+        <section className="stock-detail-hero-card" aria-label="Valeur du stock véhicule">
+          <span className="stock-detail-hero-icon" aria-hidden="true">
+            <BoxIcon />
+          </span>
+          <div>
+            <span className="detail-eyebrow">Valeur embarquée</span>
+            <strong>48 350 DH</strong>
+            <p>26 références · 3 stocks faibles · 2 ruptures à traiter</p>
+          </div>
+          <em>Contrôle 12:40</em>
+        </section>
+
+        <section className="stock-detail-kpi-grid" aria-label="Indicateurs stock">
+          <article className="stock-detail-kpi-card">
+            <span className="stock-detail-kpi-icon" aria-hidden="true">
+              <CubeIcon />
+            </span>
+            <strong>89</strong>
+            <span>Unités restantes</span>
+          </article>
+          <article className="stock-detail-kpi-card">
+            <span className="stock-detail-kpi-icon" aria-hidden="true">
+              <CardStackIcon />
+            </span>
+            <strong>26</strong>
+            <span>Références</span>
+          </article>
+          <article className="stock-detail-kpi-card stock-detail-kpi-warning">
+            <span className="stock-detail-kpi-icon" aria-hidden="true">
+              <ExclamationTriangleIcon />
+            </span>
+            <strong>3</strong>
+            <span>À recharger</span>
+          </article>
+          <article className="stock-detail-kpi-card stock-detail-kpi-danger">
+            <span className="stock-detail-kpi-icon" aria-hidden="true">
+              <CrossCircledIcon />
+            </span>
+            <strong>2</strong>
+            <span>Ruptures</span>
+          </article>
+        </section>
+
+        <label className="stock-detail-search" htmlFor="stock-detail-search">
+          <MagnifyingGlassIcon aria-hidden="true" />
+          <KeyboardInput
+            id="stock-detail-search"
+            aria-label="Rechercher dans le stock détaillé"
+            placeholder="Produit, famille, référence..."
+            data-testid="stock-detail-search"
+          />
+        </label>
+
+        <div className="stock-detail-filter-row" aria-label="Filtres stock détaillé">
+          {stockDetailFilters.map((filter) => (
+            <button
+              className={`stock-detail-filter ${filter.key === activeFilter ? "stock-detail-filter-active" : ""}`}
+              type="button"
+              key={filter.key}
+              onClick={() => setActiveFilter(filter.key)}
+              data-scroll-drag="ignore"
+            >
+              {filter.label}
+              <strong>{filter.count}</strong>
+            </button>
+          ))}
+        </div>
+
+        <section className="stock-inventory-card" aria-label="Inventaire détaillé">
+          <div className="stock-detail-section-title">
+            <div>
+              <span className="detail-eyebrow">Inventaire</span>
+              <h2>{displayedStockItems.length} référence(s)</h2>
+            </div>
+            <strong>{activeFilter === "all" ? "Complet" : stockDetailFilters.find((filter) => filter.key === activeFilter)?.label}</strong>
+          </div>
+
+          <div className="stock-inventory-list">
+            {displayedStockItems.map((item) => {
+              const remainingPercent = Math.min(100, Math.round((item.remaining / Math.max(item.loaded, 1)) * 100));
+
+              return (
+                <article className={`stock-inventory-row stock-inventory-${item.status}`} key={item.sku}>
+                  <img className="stock-inventory-thumb" src={item.image} alt={item.name} draggable={false} />
+                  <div className="stock-inventory-main">
+                    <div className="stock-inventory-head">
+                      <div>
+                        <span>{item.sku}</span>
+                        <h2>{item.name}</h2>
+                      </div>
+                      <span className={`family-badge family-${item.family.toLowerCase()}`}>{item.family}</span>
+                    </div>
+                    <div className="stock-inventory-meta">
+                      <span>Chargé <strong>{item.loaded}</strong></span>
+                      <span>Sorti <strong>{item.sold}</strong></span>
+                      <span>Réservé <strong>{item.reserved}</strong></span>
+                    </div>
+                    <div className="stock-progress-line" aria-label={`${item.remaining} unités restantes`}>
+                      <span style={{ width: `${remainingPercent}%` }} />
+                    </div>
+                  </div>
+                  <div className="stock-inventory-balance">
+                    <strong>{item.remaining}</strong>
+                    <span>reste</span>
+                    <em className={`stock-detail-status stock-detail-status-${item.status}`}>{item.coverage}</em>
+                    <small>{item.value}</small>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="stock-movements-card" aria-label="Mouvements de stock">
+          <div className="stock-detail-section-title">
+            <div>
+              <span className="detail-eyebrow">Mouvements</span>
+              <h2>Journal du jour</h2>
+            </div>
+            <strong>12 août</strong>
+          </div>
+
+          <div className="stock-movement-list">
+            {stockMovementItems.map((item) => (
+              <article className={`stock-movement-row stock-movement-${item.tone}`} key={`${item.time}-${item.title}`}>
+                <span className="stock-movement-time">{item.time}</span>
+                <span className="stock-movement-icon" aria-hidden="true">
+                  {item.tone === "sale" ? <MinusIcon /> : item.tone === "load" ? <PlusIcon /> : <CheckCircledIcon />}
+                </span>
+                <div>
+                  <strong>{item.title}</strong>
+                  <p>{item.detail}</p>
+                </div>
+                <em>{item.quantity}</em>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="stock-ruptures-card" aria-label="Ruptures et actions">
+          <div className="stock-detail-section-title">
+            <div>
+              <span className="detail-eyebrow">Ruptures</span>
+              <h2>À traiter</h2>
+            </div>
+            <strong>3 alertes</strong>
+          </div>
+
+          <div className="stock-rupture-list">
+            {stockRuptureItems.map((item) => (
+              <article className="stock-rupture-row" key={item.product}>
+                <span className="stock-rupture-icon" aria-hidden="true">
+                  <ExclamationTriangleIcon />
+                </span>
+                <div>
+                  <strong>{item.product}</strong>
+                  <p>{item.detail}</p>
+                </div>
+                <div className="stock-rupture-need">
+                  <strong>{item.needed}</strong>
+                  <em>{item.priority}</em>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <button className="stock-detail-primary-button" type="button" onClick={() => onNavigate("catalogue")} data-scroll-drag="ignore">
+          Ouvrir catalogue vente
+          <ChevronRightIcon />
+        </button>
       </section>
     </main>
   );

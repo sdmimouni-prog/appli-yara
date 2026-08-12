@@ -11,6 +11,7 @@ Prototype checked:
 - Clients / Tournée
 - Fiche client
 - Catalogue / Produits
+- Stock détaillé
 - Panier / Vente
 - Livraison + Encaissement
 - Historique ventes
@@ -37,6 +38,8 @@ Checks performed:
 - Historique ventes is reachable from Plus / Synchronisation and keeps Plus active in the bottom navigation.
 - Caisse / Remise de caisse shows cash detail, cheque detail, total amount to remit, closing checks, and day-closing status.
 - Caisse / Remise de caisse is reachable from Plus / Synchronisation and keeps Plus active in the bottom navigation.
+- Stock détaillé shows vehicle inventory, stock value, remaining units, low-stock references, ruptures, and movement history.
+- Stock détaillé is reachable from the bottom Stock tab, with filters for all inventory, stock faible, and ruptures.
 - Main CTAs remain dominant and readable.
 - Static data remains visible in the Pixel 10 mobile frame.
 - Runtime integrity and production build passed.
@@ -48,6 +51,7 @@ Build verification:
 - Browser measurement passed: official YARA logo loads from `/assets/yara/logo-yara-lockup.png` on login and Accueil.
 - Browser flow passed: login -> Plus -> Historique ventes -> Annulations filter.
 - Browser flow passed: login -> Plus -> Caisse / Remise de caisse -> Clôturer la journée.
+- Browser flow passed: login -> Stock -> Ruptures filter -> Ouvrir catalogue vente.
 - Browser flow passed: login -> Accueil -> Synchronisation -> logout -> login.
 - Cart flow passed: login -> Panier -> quantity update -> client change -> confirmation -> empty cart.
 - Browser flow passed: panier -> Enregistrer commande -> Confirmer livraison -> Valider encaissement exact -> Générer reçu.
